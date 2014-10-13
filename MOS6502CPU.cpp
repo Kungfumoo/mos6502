@@ -246,6 +246,22 @@ void MOS6502CPU::ASL7()
     _memory->write(operand, address);
 }
 
+void MOS6502CPU::ASL2()
+{
+    unsigned short address = getAbsolute();
+    byte operand = _memory->read(address);
+    ASL(operand);
+    _memory->write(operand, address);
+}
+
+void MOS6502CPU::ASL6()
+{
+    unsigned short address = getAbsolute();
+    byte operand = _memory->read(address + _x);
+    ASL(operand);
+    _memory->write(operand, address);
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -452,6 +468,9 @@ void MOS6502CPU::runCommand(byte opcode)
     switch(opcode)
     {
     case 0x06: ASL3(); break;
+    case 0x0E: ASL2(); break;
+    case 0x16: ASL7(); break;
+    case 0x1E: ASL6(); break;
     case 0x21: AND9(); break;
     case 0x25: AND3(); break;
     case 0x29: AND1(); break;
