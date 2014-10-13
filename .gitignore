@@ -1,0 +1,5 @@
+bin/
+obj/
+6502cpu.cbp
+6502cpu.depend
+6502cpu.layout
