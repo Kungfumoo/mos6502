@@ -66,6 +66,18 @@ unsigned short MOS6502CPU::getZeroPageIndexed()
     return address;
 }
 
+unsigned short MOS6502CPU::getRelative(byte value)
+{
+    unsigned short newAddress = _programCounter;
+
+    if(value > 127) //negative number 128 = -128(twos complement)
+        newAddress -= value;
+    else //positive
+        newAddress += value;
+
+    return newAddress;
+}
+
 //--ASSEMBLY PROCEDURES(private):
 void MOS6502CPU::ADC(byte operand)
 {
@@ -260,6 +272,20 @@ void MOS6502CPU::ASL6()
     byte operand = _memory->read(address + _x);
     ASL(operand);
     _memory->write(operand, address);
+}
+
+void MOS6502CPU::BCC11()
+{
+    //If carry clear, then branch to x destination
+    if(!_status->getC())
+        _programCounter = getRelative(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::BCS11()
+{
+    //if carry set, then branch to x destination
+    if(_status->getC())
+        _programCounter = getRelative(_memory->read(_programCounter++));
 }
 
 void MOS6502CPU::LDA1()

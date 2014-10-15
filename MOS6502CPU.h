@@ -48,6 +48,15 @@ namespace MOS_6502
         unsigned short getPostIndirect(); //will get a post-indexed indirext address from the next byte from the pc
         unsigned short getZeroPageIndexed(); //will get a zero-page indexed address from the next byte from the program counter.
 
+        /*Ok so relative...
+         *Basically used for all branch instructions, to work out the start of the next 'branch'
+         *The value passed is treated as a sign number, eg -127 ~ 127.
+         *If the value treated is a negative number, then 'add' that value to the pc, which will take it back x spots
+         *Same for if its a positive, add it, and it will move upto x spots.
+         *This is displacement.
+         */
+        unsigned short getRelative(byte value);
+
         //--ASSEMBLY PROCEDURES(private). Formatted as <operation><addressing mode>
         /*Addressing Modes:
          * 1 - Immediate
