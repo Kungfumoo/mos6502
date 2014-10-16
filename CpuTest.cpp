@@ -2255,6 +2255,55 @@ bool CpuTest::testASL3()
     return true;
 }
 
+bool CpuTest::testBCC()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Branch with Positive number
+     *2 - Branch with negative number
+     *3 - Branch with branch condition as false
+     */
+
+    //Test 1
+    /*Operation: Branch to 0xA3 (-36)
+     *Expected result: 0x5DC, All status bits false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0x90, counter++); //operation
+    memory->write(0xA3, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x5DC &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testBCC(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+}
+
 bool CpuTest::testLDA1()
 {
     //Locals

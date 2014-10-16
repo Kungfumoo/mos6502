@@ -288,6 +288,13 @@ void MOS6502CPU::BCS11()
         _programCounter = getRelative(_memory->read(_programCounter++));
 }
 
+void MOS6502CPU::BEQ11()
+{
+    //if zero set, then branch
+    if(_status->getZ())
+        _programCounter = getRelative(_memory->read(_programCounter++));
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -513,8 +520,11 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x75: ADC7(); break;
     case 0x79: ADC6_Y(); break;
     case 0x7D: ADC6_X(); break;
+    case 0x90: BCC11(); break;
     case 0x0A: ASL5(); break;
     case 0xA9: LDA1(); break;
+    case 0xB0: BCS11(); break;
+    case 0xF0: BEQ11(); break;
 
     default:
         throw new UnknownOpCodeException(opcode);

@@ -30,6 +30,8 @@ namespace MOS_6502
         bool testASL5();
         bool testASL3();
 
+        bool testBCC();
+
         bool testLDA1();
 
         void runTests(); //runs all tests
