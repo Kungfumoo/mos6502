@@ -54,6 +54,7 @@ namespace MOS_6502
          *If the value treated is a negative number, then 'add' that value to the pc, which will take it back x spots
          *Same for if its a positive, add it, and it will move upto x spots.
          *This is displacement.
+         *This uses SIGNED MAGNITUDE, eg 1011 = -3; 0011 = +3
          */
         unsigned short getRelative(byte value);
 

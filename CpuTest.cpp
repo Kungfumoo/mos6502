@@ -2265,13 +2265,13 @@ bool CpuTest::testBCC()
     int operations = 0; //SET THIS WHEN SETTING UP CASES
 
     /*Test Cases:
-     *1 - Branch with Positive number
-     *2 - Branch with negative number
+     *1 - Branch with Negative number
+     *2 - Branch with Positive number
      *3 - Branch with branch condition as false
      */
 
     //Test 1
-    /*Operation: Branch to 0xA3 (-36)
+    /*Operation: Branch to 0xA7 (-39)
      *Expected result: 0x5DC, All status bits false
      */
     operations = 1;
@@ -2281,14 +2281,14 @@ bool CpuTest::testBCC()
 
     //setup memory
     memory->write(0x90, counter++); //operation
-    memory->write(0xA3, counter++);
+    memory->write(0xA7, counter++);
 
     //run operations
     for(int i = 0; i < operations; i++)
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x5DC &&
+    if(!(cpu->_programCounter == 0x5DB &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -2302,6 +2302,14 @@ bool CpuTest::testBCC()
 
         return false;
     }
+
+    //all tests passed
+    cout << "testBCC(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
 }
 
 bool CpuTest::testLDA1()
@@ -2454,6 +2462,9 @@ void CpuTest::runTests()
 
     if(!testASL5()) testsFailed++;
     if(!testASL3()) testsFailed++;
+    cout << endl;
+
+    if(!testBCC()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;
