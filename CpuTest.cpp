@@ -2303,6 +2303,79 @@ bool CpuTest::testBCC()
         return false;
     }
 
+    //Test 2
+    /*Operation: Branch to 0x6E (+110)
+     *Expected result: 0x670, All status bits false
+     */
+
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup memory
+    memory->write(0x90, counter++); //operation
+    memory->write(0x6E, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x670 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testBCC(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: Branch to 0x6E (+110) with carry true
+     *Expected result: 0x602, C = 1, others = 0
+     */
+
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setC(true);
+
+    //setup memory
+    memory->write(0x90, counter++); //operation
+    memory->write(0x6E, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x602 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == true &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testBCC(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
     //all tests passed
     cout << "testBCC(): all passed!" << endl;
 

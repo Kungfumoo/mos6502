@@ -276,23 +276,29 @@ void MOS6502CPU::ASL6()
 
 void MOS6502CPU::BCC11()
 {
+    byte arg = _memory->read(_programCounter++);
+
     //If carry clear, then branch to x destination
     if(!_status->getC())
-        _programCounter = getRelative(_memory->read(_programCounter++));
+        _programCounter = getRelative(arg);
 }
 
 void MOS6502CPU::BCS11()
 {
+    byte arg = _memory->read(_programCounter++);
+
     //if carry set, then branch to x destination
     if(_status->getC())
-        _programCounter = getRelative(_memory->read(_programCounter++));
+        _programCounter = getRelative(arg);
 }
 
 void MOS6502CPU::BEQ11()
 {
+    byte arg = _memory->read(_programCounter++);
+
     //if zero set, then branch
     if(_status->getZ())
-        _programCounter = getRelative(_memory->read(_programCounter++));
+        _programCounter = getRelative(arg);
 }
 
 void MOS6502CPU::LDA1()
