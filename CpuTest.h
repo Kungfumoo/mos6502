@@ -31,6 +31,8 @@ namespace MOS_6502
         bool testASL3();
 
         bool testBCC();
+        bool testBCS();
+        bool testBEQ();
 
         bool testLDA1();
 
