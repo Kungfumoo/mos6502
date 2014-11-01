@@ -4,6 +4,7 @@
 #include "Memory.h"
 #include "Compiler.h"
 #include "Exceptions.h"
+#include "Utility.h"
 #include <iostream>
 
 using namespace MOS_6502;
@@ -301,6 +302,26 @@ void MOS6502CPU::BEQ11()
         _programCounter = getRelative(arg);
 }
 
+void MOS6502CPU::BIT(byte operand)
+{
+    bitset<8> binOperand = Utility::toBinary(operand);
+
+    _status->setV(binOperand[6]);
+    _status->setS(binOperand[7]);
+    _status->setZ((operand & _accumulator) == 0);
+}
+
+void MOS6502CPU::BIT3()
+{
+    BIT(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::BIT2()
+{
+    unsigned short address = getAbsolute();
+    BIT(_memory->read(address));
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -511,8 +532,10 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x16: ASL7(); break;
     case 0x1E: ASL6(); break;
     case 0x21: AND9(); break;
+    case 0x24: BIT3(); break;
     case 0x25: AND3(); break;
     case 0x29: AND1(); break;
+    case 0x2C: BIT2(); break;
     case 0x2D: AND2(); break;
     case 0x31: AND10(); break;
     case 0x35: AND7(); break;

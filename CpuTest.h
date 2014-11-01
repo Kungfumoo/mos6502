@@ -34,6 +34,8 @@ namespace MOS_6502
         bool testBCS();
         bool testBEQ();
 
+        bool testBIT();
+
         bool testLDA1();
 
         void runTests(); //runs all tests

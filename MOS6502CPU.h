@@ -239,6 +239,7 @@ namespace MOS_6502
              3 2
          */
 
+         void BIT(byte operand);
          void BIT3();
          void BIT2();
 
