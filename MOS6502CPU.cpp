@@ -322,6 +322,33 @@ void MOS6502CPU::BIT2()
     BIT(_memory->read(address));
 }
 
+void MOS6502CPU::BMI11()
+{
+    byte arg = _memory->read(_programCounter++);
+
+    //if negative, then branch
+    if(_status->getS())
+        _programCounter = getRelative(arg);
+}
+
+void MOS6502CPU::BNE11()
+{
+    byte arg = _memory->read(_programCounter++);
+
+    //if not zero, then branch
+    if(!_status->getZ())
+        _programCounter = getRelative(arg);
+}
+
+void MOS6502CPU::BPL11()
+{
+    byte arg = _memory->read(_programCounter++);
+
+    //if not negative, then branch
+    if(!_status->getS())
+        _programCounter = getRelative(arg);
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -529,6 +556,7 @@ void MOS6502CPU::runCommand(byte opcode)
     {
     case 0x06: ASL3(); break;
     case 0x0E: ASL2(); break;
+    case 0x10: BPL11(); break;
     case 0x16: ASL7(); break;
     case 0x1E: ASL6(); break;
     case 0x21: AND9(); break;
@@ -537,6 +565,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x29: AND1(); break;
     case 0x2C: BIT2(); break;
     case 0x2D: AND2(); break;
+    case 0x30: BMI11(); break;
     case 0x31: AND10(); break;
     case 0x35: AND7(); break;
     case 0x39: AND6_Y(); break;
@@ -553,6 +582,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x0A: ASL5(); break;
     case 0xA9: LDA1(); break;
     case 0xB0: BCS11(); break;
+    case 0xD0: BNE11(); break;
     case 0xF0: BEQ11(); break;
 
     default:

@@ -33,6 +33,9 @@ namespace MOS_6502
         bool testBCC();
         bool testBCS();
         bool testBEQ();
+        bool testBMI();
+        bool testBNE();
+        bool testBPL();
 
         bool testBIT();
 
