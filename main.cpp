@@ -1,8 +1,8 @@
 #include <iostream>
 #include <exception>
 #include "MOS6502CPU.h"
-#include "Memory.h";
-#include "CpuTest.h";
+#include "Memory.h"
+#include "CpuTest.h"
 
 using namespace std;
 using namespace MOS_6502;
