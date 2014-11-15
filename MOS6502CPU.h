@@ -42,6 +42,10 @@ namespace MOS_6502
         byte* _cycleLookup; //array storing the cycles that each procedure should take
         bool _debug;
 
+        //--STATE METHODS
+        void saveCurrentState(); //will save the current state of the status reg and program counter and push it on the stack
+        void getLastState(); //will obtain the last state of the above and restore it
+
         //--ADDRESSING MODE METHODS
         unsigned short getAbsolute(); //will get an absolute address based on the next two bytes from the program counter.
         unsigned short getPreIndirect(); //will get a pre-indexed indirect address from the next byte from the program counter.
@@ -301,6 +305,15 @@ namespace MOS_6502
              4
          */
 
+         /*Notes on BRK:
+          * -Although it is a single byte operation, it needs an extra byte for padding,
+          *  so treat it as two.
+          *
+          * -The B bit in the status register will need to be tested in the STACKED record,
+          *  not the status register itself, as a result it needs to be set before you save the state.
+          *
+          * Reference: http://6502.org/tutorials/interrupts.html#2.2
+          */
          void BRK4();
 
          /*

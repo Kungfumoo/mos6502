@@ -349,6 +349,11 @@ void MOS6502CPU::BPL11()
         _programCounter = getRelative(arg);
 }
 
+void MOS6502CPU::BRK4()
+{
+
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
