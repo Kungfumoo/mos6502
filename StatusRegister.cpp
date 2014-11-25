@@ -1,5 +1,6 @@
 //StatusRegister class implementation
 #include "StatusRegister.h"
+#include "Utility.h"
 
 using namespace std;
 using namespace MOS_6502;
@@ -95,6 +96,16 @@ string StatusRegister::toString()
         binaryString += (_register[i] == true) ? '1' : '0';
 
     return binaryString;
+}
+
+byte StatusRegister::toByte()
+{
+    return Utility::toByte(_register);
+}
+
+void StatusRegister::fromByte(byte value)
+{
+    _register = Utility::toBinary(value);
 }
 
 //--Constructors

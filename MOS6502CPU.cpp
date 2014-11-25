@@ -13,6 +13,31 @@ using namespace std;
 //Constant Definitions
 byte MOS6502CPU::MAX_CLOCK_SPEED_MHZ = 2;
 
+//--STATE METHODS(private)
+void MOS6502CPU::saveCurrentState()
+{
+    byte pc[] = {(_programCounter >> 8) & 255, _programCounter & 255}; //split PC into two parts
+    byte status = _status->toByte();
+
+    _stack.push(pc[0]);
+    _stack.push(pc[1]);
+    _stack.push(status);
+    _stackPointer += 3; //TODO: Check this
+}
+
+void MOS6502CPU::getLastState()
+{
+    byte status = _stack.top(); _stack.pop();
+    byte pc[2];
+
+    pc[1] = _stack.top(); _stack.pop();
+    pc[0] = _stack.top(); _stack.pop();
+
+    _programCounter = (pc[0] << 8) | pc[1];
+    _status->fromByte(status);
+    _stackPointer -= 3; //TODO: Check this
+}
+
 //--ADRESSING MODE METHODS(private):
 unsigned short MOS6502CPU::getAbsolute()
 {

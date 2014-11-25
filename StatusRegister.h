@@ -51,6 +51,12 @@ namespace MOS_6502
         //Returns a binary string representation of the register
         std::string toString();
 
+        //Returns the status register as a byte.
+        byte toByte();
+
+        //builds status register based on value
+        void fromByte(byte value);
+
         //--Constructors
         //Constructor
         StatusRegister();
