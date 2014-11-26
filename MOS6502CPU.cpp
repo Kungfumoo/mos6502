@@ -22,7 +22,7 @@ void MOS6502CPU::saveCurrentState()
     _stack.push(pc[0]);
     _stack.push(pc[1]);
     _stack.push(status);
-    _stackPointer += 3; //TODO: Check this
+    //_stackPointer += 3; //TODO: Check this
 }
 
 void MOS6502CPU::getLastState()
@@ -35,7 +35,7 @@ void MOS6502CPU::getLastState()
 
     _programCounter = (pc[0] << 8) | pc[1];
     _status->fromByte(status);
-    _stackPointer -= 3; //TODO: Check this
+    //_stackPointer -= 3; //TODO: Check this
 }
 
 //--ADRESSING MODE METHODS(private):
@@ -376,7 +376,15 @@ void MOS6502CPU::BPL11()
 
 void MOS6502CPU::BRK4()
 {
+    _programCounter++;
 
+    //Set break and interupt and save the state
+    _status->setB(true);
+    saveCurrentState();
+    _status->setI(true);
+
+    //Move program counter
+    _programCounter = (_memory->read(0xFFFF) << 8) | _memory->read(0xFFFE);
 }
 
 void MOS6502CPU::LDA1()
@@ -584,6 +592,7 @@ void MOS6502CPU::runCommand(byte opcode)
 {
     switch(opcode)
     {
+    case 0x00: BRK4(); break;
     case 0x06: ASL3(); break;
     case 0x0E: ASL2(); break;
     case 0x10: BPL11(); break;
@@ -679,30 +688,14 @@ void MOS6502CPU::runNext(bool status)
 
 void MOS6502CPU::status()
 {
-    cout << "\n======================STATUS======================" << endl;
-    cout << "Registers:" << endl;
-    cout << "PC: 0x" << hex << _programCounter << endl;
-    cout << "AC: 0x" << hex << (int)_accumulator << endl; //int cast because its interpreting it as char, not a number
-    cout << "XR: 0x" << hex << (int)_x << endl;
-    cout << "YR: 0x" << hex << (int)_y << endl;
-    cout << "SP: 0x" << hex << (int)_stackPointer << endl << endl;
-
-    cout << "Status Register:" << endl;
-    cout << "|S|V| |B|D|I|Z|C|" << endl;
-    cout << "|" << (_status->getS()) ? 1 : 0;
-    cout << "|" << (_status->getV()) ? 1 : 0;
-    cout << "|1";
-    cout << "|" << (_status->getB()) ? 1 : 0;
-    cout << "|" << (_status->getD()) ? 1 : 0;
-    cout << "|" << (_status->getI()) ? 1 : 0;
-    cout << "|" << (_status->getZ()) ? 1 : 0;
-    cout << "|" << ((_status->getC()) ? 1 : 0) << endl;
-
-    cout << "\n=======================END========================\n" << endl;
+    status("STATUS");
 }
 
 void MOS6502CPU::status(string header)
 {
+    //Locals
+    byte stackSize = _stack.size();
+
     cout << "\n======================" << header << "======================" << endl;
     cout << "Registers:" << endl;
     cout << "PC: 0x" << hex << _programCounter << endl;
@@ -720,7 +713,24 @@ void MOS6502CPU::status(string header)
     cout << "|" << (_status->getD()) ? 1 : 0;
     cout << "|" << (_status->getI()) ? 1 : 0;
     cout << "|" << (_status->getZ()) ? 1 : 0;
-    cout << "|" << ((_status->getC()) ? 1 : 0) << endl;
+    cout << "|" << ((_status->getC()) ? 1 : 0) << endl << endl;
+
+    cout << "Stack:" << endl;
+    cout << "Size: " << (int)stackSize << endl;
+
+    if(stackSize > 0)
+    {
+        cout << "Contents:" << endl;
+
+        /*TODO:
+         *Print stack contents here, make a copy of the current stack and then pop the elements.
+         *Make it view like this:
+         *  [Top] = <element>
+         *  [1] = <element>
+         *  ...
+         *  [n] = <element>
+         */
+    }
 
     cout << "\n=======================END========================\n" << endl;
 }

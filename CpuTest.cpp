@@ -3,6 +3,7 @@
 #include "MOS6502CPU.h"
 #include "Memory.h"
 #include "StatusRegister.h"
+#include <stack>
 #include <iostream>
 
 using namespace MOS_6502;
@@ -3144,6 +3145,66 @@ bool CpuTest::testBIT()
     return true;
 }
 
+bool CpuTest::testBRK()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test BRK
+     */
+
+    //Test 1
+    /*Operation: BRK interupt
+     *Expected result: PC = 0, Stack contains 3 values(both parts of the pc, and the status reg),
+     *B = 1, I = 1, Others = false
+     *
+     *TODO: Should test stack values.
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0x00, counter++); //operation(BRK)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_stack.size() == 3 &&
+         cpu->_programCounter == 0x0 &&
+         cpu->_status->getI() == true &&
+         cpu->_status->getB() == true &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testBRK(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testBRK(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testLDA1()
 {
     //Locals
@@ -3305,6 +3366,9 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testBIT()) testsFailed++;
+    cout << endl;
+
+    if(!testBRK()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;
