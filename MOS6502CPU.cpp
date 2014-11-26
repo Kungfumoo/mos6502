@@ -730,6 +730,18 @@ void MOS6502CPU::status(string header)
          *  ...
          *  [n] = <element>
          */
+
+        stack<byte> copy(_stack);
+
+        for(int i = 0; i < stackSize; i++)
+        {
+            if(i == 0)
+                cout << "[Top] = " << std::hex << copy.top() << endl;
+            else
+                cout << "[" << i << "] = " << std::hex << copy.top() << endl;
+
+            copy.pop();
+        }
     }
 
     cout << "\n=======================END========================\n" << endl;
