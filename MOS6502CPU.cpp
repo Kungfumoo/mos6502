@@ -16,7 +16,7 @@ byte MOS6502CPU::MAX_CLOCK_SPEED_MHZ = 2;
 //--STATE METHODS(private)
 void MOS6502CPU::saveCurrentState()
 {
-    byte pc[] = {(_programCounter >> 8) & 255, _programCounter & 255}; //split PC into two parts
+    byte pc[] = {(byte)((_programCounter >> 8) & 255), (byte)(_programCounter & 255)}; //split PC into two parts
     byte status = _status->toByte();
 
     _stack.push(pc[0]);
