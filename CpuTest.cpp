@@ -3049,6 +3049,271 @@ bool CpuTest::testBPL()
     return true;
 }
 
+bool CpuTest::testBVC()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Branch with Negative number
+     *2 - Branch with Positive number
+     *3 - Branch with branch condition as false
+     */
+
+    //Test 1
+    /*Operation: Branch to 0xA7 (-39)
+     *Expected result: 0x5DC, others = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0x50, counter++); //operation
+    memory->write(0xA7, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x5DB &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testBVC(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: Branch to 0x6E (+110)
+     *Expected result: 0x670, others = false
+     */
+
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0x50, counter++); //operation
+    memory->write(0x6E, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x670 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testBVC(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: Branch to 0x6E (+110)
+     *Expected result: 0x602, S = 1, others = false
+     */
+
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setV(true);
+
+    //setup memory
+    memory->write(0x50, counter++); //operation
+    memory->write(0x6E, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x602 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == true))
+    {
+        cout << "testBVC(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testBVC(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
+bool CpuTest::testBVS()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Branch with Negative number
+     *2 - Branch with Positive number
+     *3 - Branch with branch condition as false
+     */
+
+    //Test 1
+    /*Operation: Branch to 0xA7 (-39)
+     *Expected result: 0x5DC, others = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setV(true);
+
+    //setup memory
+    memory->write(0x70, counter++); //operation
+    memory->write(0xA7, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x5DB &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == true))
+    {
+        cout << "testBVS(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: Branch to 0x6E (+110)
+     *Expected result: 0x670, others = false
+     */
+
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setV(true);
+
+    //setup memory
+    memory->write(0x70, counter++); //operation
+    memory->write(0x6E, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x670 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == true))
+    {
+        cout << "testBVS(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: Branch to 0x6E (+110)
+     *Expected result: 0x602, S = 1, others = false
+     */
+
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0x70, counter++); //operation
+    memory->write(0x6E, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x602 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testBVS(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testBVS(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testBIT()
 {
     //Locals
@@ -3194,6 +3459,26 @@ bool CpuTest::testBRK()
         delete cpu;
 
         return false;
+    }
+
+    //test stack
+    std::stack<byte> copy(cpu->_stack);
+    byte expected[] = {0x30, 0x2, 0x6};
+
+    for(int i = 0; i < copy.size(); i++)
+    {
+        byte value = copy.top(); copy.pop();
+
+        if(value != expected[i])
+        {
+            cout << "testBRK(): test case 1 failed! {Stack related: value at " << i << " expected as 0x" << std::hex << (int)expected[i] << "}" << endl;
+            cpu->status("TEST CPU STATUS");
+
+            //free resources
+            delete cpu;
+
+            return false;
+        }
     }
 
     //all tests passed
@@ -3363,6 +3648,8 @@ void CpuTest::runTests()
     if(!testBMI()) testsFailed++;
     if(!testBNE()) testsFailed++;
     if(!testBPL()) testsFailed++;
+    if(!testBVC()) testsFailed++;
+    if(!testBVS()) testsFailed++;
     cout << endl;
 
     if(!testBIT()) testsFailed++;

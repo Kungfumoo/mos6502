@@ -374,6 +374,24 @@ void MOS6502CPU::BPL11()
         _programCounter = getRelative(arg);
 }
 
+void MOS6502CPU::BVC11()
+{
+    byte arg = _memory->read(_programCounter++);
+
+    //if no overflow then branch
+    if(!_status->getV())
+        _programCounter = getRelative(arg);
+}
+
+void MOS6502CPU::BVS11()
+{
+    byte arg = _memory->read(_programCounter++);
+
+    //if overflow then branch
+    if(_status->getV())
+        _programCounter = getRelative(arg);
+}
+
 void MOS6502CPU::BRK4()
 {
     _programCounter++;
@@ -609,10 +627,12 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x35: AND7(); break;
     case 0x39: AND6_Y(); break;
     case 0x3D: AND6_X(); break;
+    case 0x50: BVC11(); break;
     case 0x61: ADC9(); break;
     case 0x65: ADC3(); break;
     case 0x69: ADC1(); break;
     case 0x6D: ADC2(); break;
+    case 0x70: BVS11(); break;
     case 0x71: ADC10(); break;
     case 0x75: ADC7(); break;
     case 0x79: ADC6_Y(); break;
