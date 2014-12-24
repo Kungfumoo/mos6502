@@ -41,6 +41,8 @@ namespace MOS_6502
 
         bool testBIT();
 
+        bool testClears();
+
         bool testBRK();
 
         bool testLDA1();

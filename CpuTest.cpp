@@ -3410,6 +3410,173 @@ bool CpuTest::testBIT()
     return true;
 }
 
+bool CpuTest::testClears()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test CLC4 - carry clear
+     *2 - Test CLD4 - decimal clear
+     *3 - Test CLI4 - interupt clear
+     *4 - Test CLV4 - overflow clear
+     */
+
+    //Test 1
+    /*Operation: CLC4 - carry clear
+     *Expected result: all false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setC(true);
+
+    //setup memory
+    memory->write(0x18, counter++); //operation(CLC4)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testClear(): test case CLC4 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: CLD4 - decimal clear
+     *Expected result: all false
+     */
+
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setD(true);
+
+    //setup memory
+    memory->write(0xD8, counter++); //operation(CLD4)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testClears(): test case CLD4 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: CLI4 - interupt clear
+     *Expected result: all false
+     */
+
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setI(true);
+
+    //setup memory
+    memory->write(0x58, counter++); //operation(CLI4)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getI() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testClears(): test case CLI4 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 4
+    /*Operation: CLV4 - overflow clear
+     *Expected result: all false
+     */
+
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setV(true);
+
+    //setup memory
+    memory->write(0xB8, counter++); //operation(CLV4)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getI() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testClears(): test case CLV4 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testClears(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testBRK()
 {
     //Locals
@@ -3653,6 +3820,9 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testBIT()) testsFailed++;
+    cout << endl;
+
+    if(!testClears()) testsFailed++;
     cout << endl;
 
     if(!testBRK()) testsFailed++;

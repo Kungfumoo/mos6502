@@ -405,6 +405,26 @@ void MOS6502CPU::BRK4()
     _programCounter = (_memory->read(0xFFFF) << 8) | _memory->read(0xFFFE);
 }
 
+void MOS6502CPU::CLC4()
+{
+    _status->setC(false);
+}
+
+void MOS6502CPU::CLD4()
+{
+    _status->setD(false);
+}
+
+void MOS6502CPU::CLI4()
+{
+    _status->setI(false);
+}
+
+void MOS6502CPU::CLV4()
+{
+    _status->setV(false);
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -615,6 +635,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x0E: ASL2(); break;
     case 0x10: BPL11(); break;
     case 0x16: ASL7(); break;
+    case 0x18: CLC4(); break;
     case 0x1E: ASL6(); break;
     case 0x21: AND9(); break;
     case 0x24: BIT3(); break;
@@ -628,6 +649,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x39: AND6_Y(); break;
     case 0x3D: AND6_X(); break;
     case 0x50: BVC11(); break;
+    case 0x58: CLI4(); break;
     case 0x61: ADC9(); break;
     case 0x65: ADC3(); break;
     case 0x69: ADC1(); break;
@@ -641,7 +663,9 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x0A: ASL5(); break;
     case 0xA9: LDA1(); break;
     case 0xB0: BCS11(); break;
+    case 0xB8: CLV4(); break;
     case 0xD0: BNE11(); break;
+    case 0xD8: CLD4(); break;
     case 0xF0: BEQ11(); break;
 
     default:
