@@ -3595,7 +3595,6 @@ bool CpuTest::testBRK()
      *Expected result: PC = 0, Stack contains 3 values(both parts of the pc, and the status reg),
      *B = 1, I = 1, Others = false
      *
-     *TODO: Should test stack values.
      */
     operations = 1;
     cpu->setPC(start);
@@ -3650,6 +3649,132 @@ bool CpuTest::testBRK()
 
     //all tests passed
     cout << "testBRK(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
+bool CpuTest::testCMP()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test CMP with A > O
+     *2 - Test CMP with A = O
+     *3 - Test CMP with A < 0
+     */
+
+    //Test 1
+    /*Operation: CMP 10(A) with 5(O)
+     *Expected result: C = 1, others = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x0A;
+
+    //setup memory
+    memory->write(0xC9, counter++); //operation(CMP)
+    memory->write(0x05, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == true))
+    {
+        cout << "testCMP(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: CMP 10(A) with 10(O)
+     *Expected result: C = 1, Z = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x0A;
+
+    //setup memory
+    memory->write(0xC9, counter++); //operation(CMP)
+    memory->write(0x0A, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == true))
+    {
+        cout << "testCMP(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: CMP 10(A) with 11(O)
+     *Expected result: S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x0A;
+
+    //setup memory
+    memory->write(0xC9, counter++); //operation(CMP)
+    memory->write(0x0B, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false))
+    {
+        cout << "testCMP(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testCMP(): all passed!" << endl;
 
     //free resources
     delete cpu;
@@ -3826,6 +3951,9 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testBRK()) testsFailed++;
+    cout << endl;
+
+    if(!testCMP()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;

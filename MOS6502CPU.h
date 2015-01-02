@@ -412,7 +412,7 @@ namespace MOS_6502
              CMP  Compare Memory with Accumulator
 
              A - M                            N Z C I D V
-                                            + + + - - -
+                                              + + + - - -
 
              addressing    assembler    opc  bytes  cyles
              --------------------------------------------
@@ -428,6 +428,7 @@ namespace MOS_6502
              1 3 7 2 6 6 9 10
          */
 
+         void CMP(byte operand);
          void CMP1();
          void CMP3();
          void CMP7();

@@ -47,6 +47,8 @@ namespace MOS_6502
 
         bool testBRK();
 
+        bool testCMP(); //just one, addressing modes are already being tested.
+
         bool testLDA1();
 
         void runTests(); //runs all tests

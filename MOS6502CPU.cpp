@@ -425,6 +425,75 @@ void MOS6502CPU::CLV4()
     _status->setV(false);
 }
 
+void MOS6502CPU::CMP(byte operand)
+{
+    /* Sets status C, Z and S depending on results
+     * C = if A >= O
+     * Z = if A = 0
+     * S = above is false
+     */
+
+    _status->setS(false);
+    _status->setC(false);
+    _status->setZ(false);
+
+    if(_accumulator > operand)
+        _status->setC(true);
+    else if(_accumulator == operand)
+    {
+        _status->setC(true);
+        _status->setZ(true);
+    }
+    else
+        _status->setS(true);
+}
+
+void MOS6502CPU::CMP1()
+{
+    CMP(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::CMP3()
+{
+    CMP(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::CMP7()
+{
+    unsigned short address = getZeroPageIndexed();
+    CMP(_memory->read(address));
+}
+
+void MOS6502CPU::CMP2()
+{
+    unsigned short address = getAbsolute();
+    CMP(_memory->read(address));
+}
+
+void MOS6502CPU::CMP6_X()
+{
+    unsigned short address = getAbsolute();
+    CMP(_memory->read(address + _x));
+}
+
+void MOS6502CPU::CMP6_Y()
+{
+    unsigned short address = getAbsolute();
+    CMP(_memory->read(address + _y));
+}
+
+void MOS6502CPU::CMP9()
+{
+    unsigned short address = getPreIndirect();
+    CMP(_memory->read(address));
+}
+
+void MOS6502CPU::CMP10()
+{
+    unsigned short address = getPostIndirect();
+    CMP(_memory->read(address));
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -664,8 +733,16 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xA9: LDA1(); break;
     case 0xB0: BCS11(); break;
     case 0xB8: CLV4(); break;
+    case 0xC1: CMP9(); break;
+    case 0xC5: CMP3(); break;
+    case 0xC9: CMP1(); break;
+    case 0xCD: CMP2(); break;
     case 0xD0: BNE11(); break;
+    case 0xD1: CMP10(); break;
+    case 0xD5: CMP7(); break;
     case 0xD8: CLD4(); break;
+    case 0xD9: CMP6_Y(); break;
+    case 0xDD: CMP6_X(); break;
     case 0xF0: BEQ11(); break;
 
     default:
