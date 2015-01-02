@@ -6,6 +6,8 @@
 
 typedef unsigned char byte;
 
+#ifndef _MEMORY_H_
+#define _MEMORY_H_
 namespace MOS_6502
 {
     class Memory
@@ -34,3 +36,4 @@ namespace MOS_6502
         ~Memory();
     };
 }
+#endif

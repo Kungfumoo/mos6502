@@ -7,6 +7,8 @@
 
 typedef unsigned char byte;
 
+#ifndef _UTILITY_H_
+#define _UTILITY_H_
 namespace MOS_6502
 {
     class Utility
@@ -17,3 +19,4 @@ namespace MOS_6502
         static byte toByte(std::bitset<8>& bits);
     };
 }
+#endif

@@ -7,6 +7,8 @@
 
 #include <string>
 
+#ifndef _COMPILER_H_
+#define _COMPILER_H_
 namespace MOS_6502
 {
     //Forward decs
@@ -28,3 +30,4 @@ namespace MOS_6502
         Compiler(MOS6502CPU* cpuRef);
     };
 }
+#endif

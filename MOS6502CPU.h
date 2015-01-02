@@ -10,6 +10,8 @@
 
 typedef unsigned char byte;
 
+#ifndef _MOS_6502_CPU_H_
+#define _MOS_6502_CPU_H_
 namespace MOS_6502
 {
     //forward decs
@@ -1177,3 +1179,4 @@ namespace MOS_6502
             ~MOS6502CPU();
     };
 }
+#endif

@@ -6,6 +6,8 @@
 
 #include <exception>
 
+#ifndef _EXCEPTIONS_H_
+#define _EXCEPTIONS_H_
 namespace MOS_6502
 {
     class UnknownOpCodeException : public std::exception
@@ -21,3 +23,4 @@ namespace MOS_6502
         UnknownOpCodeException(unsigned int opcode);
     };
 }
+#endif

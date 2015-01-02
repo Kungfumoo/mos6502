@@ -7,6 +7,8 @@
  *To ensure accuracy of tests, a new memory and cpu object is built for every test case.
  */
 
+#ifndef _CPU_TEST_H_
+#define _CPU_TEST_H_
 namespace MOS_6502
 {
     class CpuTest
@@ -50,3 +52,4 @@ namespace MOS_6502
         void runTests(); //runs all tests
     };
 }
+#endif
