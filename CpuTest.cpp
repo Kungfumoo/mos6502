@@ -3782,6 +3782,258 @@ bool CpuTest::testCMP()
     return true;
 }
 
+bool CpuTest::testCPX()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test CPX with X > O
+     *2 - Test CPX with X = O
+     *3 - Test CPX with X < 0
+     */
+
+    //Test 1
+    /*Operation: CPX 10(X) with 5(O)
+     *Expected result: C = 1, others = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_x = 0x0A;
+
+    //setup memory
+    memory->write(0xE0, counter++); //operation(CPX)
+    memory->write(0x05, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == true))
+    {
+        cout << "testCPX(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: CPX 10(X) with 10(O)
+     *Expected result: C = 1, Z = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_x = 0x0A;
+
+    //setup memory
+    memory->write(0xE0, counter++); //operation(CPX)
+    memory->write(0x0A, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == true))
+    {
+        cout << "testCPX(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: CPX 10(X) with 11(O)
+     *Expected result: S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_x = 0x0A;
+
+    //setup memory
+    memory->write(0xE0, counter++); //operation(CPX)
+    memory->write(0x0B, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false))
+    {
+        cout << "testCPX(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testCPX(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
+bool CpuTest::testCPY()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test CPY with Y > O
+     *2 - Test CPY with Y = O
+     *3 - Test CPY with Y < 0
+     */
+
+    //Test 1
+    /*Operation: CPY 10(Y) with 5(O)
+     *Expected result: C = 1, others = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_y = 0x0A;
+
+    //setup memory
+    memory->write(0xC0, counter++); //operation(CPY)
+    memory->write(0x05, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == true))
+    {
+        cout << "testCPY(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: CPY 10(Y) with 10(O)
+     *Expected result: C = 1, Z = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_y = 0x0A;
+
+    //setup memory
+    memory->write(0xC0, counter++); //operation(CPY)
+    memory->write(0x0A, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == true))
+    {
+        cout << "testCPY(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: CPY 10(Y) with 11(O)
+     *Expected result: S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_y = 0x0A;
+
+    //setup memory
+    memory->write(0xC0, counter++); //operation(CPY)
+    memory->write(0x0B, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false))
+    {
+        cout << "testCPY(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testCPY(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testLDA1()
 {
     //Locals
@@ -3954,6 +4206,8 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testCMP()) testsFailed++;
+    if(!testCPX()) testsFailed++;
+    if(!testCPY()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;

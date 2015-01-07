@@ -494,6 +494,84 @@ void MOS6502CPU::CMP10()
     CMP(_memory->read(address));
 }
 
+void MOS6502CPU::CPX(byte operand)
+{
+    /* Sets status C, Z and S depending on results
+     * C = if X >= O
+     * Z = if X = 0
+     * S = above is false
+     */
+
+    _status->setS(false);
+    _status->setC(false);
+    _status->setZ(false);
+
+    if(_x > operand)
+        _status->setC(true);
+    else if(_x == operand)
+    {
+        _status->setC(true);
+        _status->setZ(true);
+    }
+    else
+        _status->setS(true);
+}
+
+void MOS6502CPU::CPX1()
+{
+    CPX(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::CPX3()
+{
+    CPX(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::CPX2()
+{
+    unsigned short address = getAbsolute();
+    CPX(_memory->read(address));
+}
+
+void MOS6502CPU::CPY(byte operand)
+{
+    /* Sets status C, Z and S depending on results
+     * C = if Y >= O
+     * Z = if Y = 0
+     * S = above is false
+     */
+
+    _status->setS(false);
+    _status->setC(false);
+    _status->setZ(false);
+
+    if(_y > operand)
+        _status->setC(true);
+    else if(_y == operand)
+    {
+        _status->setC(true);
+        _status->setZ(true);
+    }
+    else
+        _status->setS(true);
+}
+
+void MOS6502CPU::CPY1()
+{
+    CPY(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::CPY3()
+{
+    CPY(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::CPY2()
+{
+    unsigned short address = getAbsolute();
+    CPY(_memory->read(address));
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -733,9 +811,12 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xA9: LDA1(); break;
     case 0xB0: BCS11(); break;
     case 0xB8: CLV4(); break;
+    case 0xC0: CPY1(); break;
     case 0xC1: CMP9(); break;
+    case 0xC4: CPY3(); break;
     case 0xC5: CMP3(); break;
     case 0xC9: CMP1(); break;
+    case 0xCC: CPY2(); break;
     case 0xCD: CMP2(); break;
     case 0xD0: BNE11(); break;
     case 0xD1: CMP10(); break;
@@ -743,6 +824,9 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xD8: CLD4(); break;
     case 0xD9: CMP6_Y(); break;
     case 0xDD: CMP6_X(); break;
+    case 0xE0: CPX1(); break;
+    case 0xE4: CPX3(); break;
+    case 0xEC: CPX2(); break;
     case 0xF0: BEQ11(); break;
 
     default:

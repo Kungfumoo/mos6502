@@ -453,6 +453,7 @@ namespace MOS_6502
              1 3 2
          */
 
+         void CPX(byte operand);
          void CPX1();
          void CPX3();
          void CPX2();
@@ -472,6 +473,7 @@ namespace MOS_6502
              1 3 2
          */
 
+         void CPY(byte operand);
          void CPY1();
          void CPY3();
          void CPY2();

@@ -48,6 +48,8 @@ namespace MOS_6502
         bool testBRK();
 
         bool testCMP(); //just one, addressing modes are already being tested.
+        bool testCPY();
+        bool testCPX();
 
         bool testLDA1();
 
