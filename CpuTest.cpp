@@ -4034,6 +4034,137 @@ bool CpuTest::testCPY()
     return true;
 }
 
+bool CpuTest::testDEC()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test DEC with value 0x0A, addressing mode: zero page
+     *2 - Test DEC with value 0x01, addressing mode: zero page
+     *3 - Test DEC with value 0x00, addressing mode: indexed X
+     */
+
+    //Test 1
+    /*Operation: DEC 0x0A
+     *Expected result: value @ Memory = 0x09, others = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0xC6, counter++); //operation(DEC)
+    memory->write(0x05, counter++);
+    memory->write(0x0A, 0x05);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(memory->read(0x05) == 0x09 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testDEC(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: DEC 0x01
+     *Expected result: value @ Memory = 0x00, Z = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup memory
+    memory->write(0xC6, counter++); //operation(DEC)
+    memory->write(0x05, counter++);
+    memory->write(0x01, 0x05);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(memory->read(0x05) == 0x00 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testDEC(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: DEC 0x00
+     *Expected result: value @ Memory = 0xFF, S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_x = 0x01;
+
+    //setup memory
+    memory->write(0xDE, counter++); //operation(DEC)
+    memory->write(0x04, counter++);
+    memory->write(0x00, 0x05);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(memory->read(0x05) == 0xFF &&
+         cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testDEC(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testDEC(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testLDA1()
 {
     //Locals
@@ -4208,6 +4339,9 @@ void CpuTest::runTests()
     if(!testCMP()) testsFailed++;
     if(!testCPX()) testsFailed++;
     if(!testCPY()) testsFailed++;
+    cout << endl;
+
+    if(!testDEC()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;

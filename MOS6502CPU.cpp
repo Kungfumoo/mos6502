@@ -12,6 +12,7 @@ using namespace std;
 
 //Constant Definitions
 byte MOS6502CPU::MAX_CLOCK_SPEED_MHZ = 2;
+byte MOS6502CPU::NEGATIVE = 127;
 
 //--STATE METHODS(private)
 void MOS6502CPU::saveCurrentState()
@@ -96,7 +97,7 @@ unsigned short MOS6502CPU::getRelative(byte value)
 {
     unsigned short newAddress = _programCounter;
 
-    if(value > 127) //negative number 128 = 0, 129 = -1, 130 = -2 ...
+    if(value > NEGATIVE) //negative number 128 = 0, 129 = -1, 130 = -2 ...
         newAddress += (128 - value);
     else //positive
         newAddress += value;
@@ -119,7 +120,7 @@ void MOS6502CPU::ADC(byte operand)
     {
         unsigned short result = operand + _accumulator + ((carry) ? 1 : 0);
 
-        if(result > 127) //negative number or overflow
+        if(result > NEGATIVE) //negative number or overflow
         {
             if(result > 255) //overflow + carry
             {
@@ -127,7 +128,7 @@ void MOS6502CPU::ADC(byte operand)
                 _status->setC(true);
                 _status->setV(true);
                 _status->setZ(result == 0);
-                _status->setS(result > 127);
+                _status->setS(result > NEGATIVE);
             }
             else //it's negative
             {
@@ -201,7 +202,7 @@ void MOS6502CPU::AND(byte operand)
 
     //set status
     _status->setZ(_accumulator == 0);
-    _status->setS(_accumulator > 127);
+    _status->setS(_accumulator > NEGATIVE);
 }
 
 void MOS6502CPU::AND1()
@@ -256,9 +257,9 @@ void MOS6502CPU::ASL(byte& operand)
     byte value = operand << 1; //left shift by 1
 
     //set status
-    _status->setC(operand > 127); //if the original operand is higher then 127, then bit 7 is 1, so it will be a carry after this operation
+    _status->setC(operand > NEGATIVE); //if the original operand is higher then 127, then bit 7 is 1, so it will be a carry after this operation
     _status->setZ(value == 0);
-    _status->setS(value > 127); //not to be confused with setC, its using 'value' intentionally
+    _status->setS(value > NEGATIVE); //not to be confused with setC, its using 'value' intentionally
 
     operand = value;
 }
@@ -572,13 +573,53 @@ void MOS6502CPU::CPY2()
     CPY(_memory->read(address));
 }
 
+void MOS6502CPU::DEC(unsigned short address)
+{
+    //locals
+    byte value = _memory->read(address);
+
+    if(value > 0)
+        value--;
+    else //its zero, so make it #FF
+        value = 0xFF;
+
+    _status->setS(value > NEGATIVE);
+    _status->setZ(value == 0);
+
+    //save value back to memory
+    _memory->write(value, address);
+}
+
+void MOS6502CPU::DEC3()
+{
+    DEC(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::DEC7()
+{
+    unsigned short address = getZeroPageIndexed();
+    DEC(address);
+}
+
+void MOS6502CPU::DEC2()
+{
+    unsigned short address = getAbsolute();
+    DEC(address);
+}
+
+void MOS6502CPU::DEC6()
+{
+    unsigned short address = getAbsolute();
+    DEC(address + _x);
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
     byte operand = _memory->read(_programCounter++);
 
     //set status
-    _status->setS(operand > 127);
+    _status->setS(operand > NEGATIVE);
     _status->setZ(operand == 0);
 
     _accumulator = operand;
@@ -815,15 +856,19 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xC1: CMP9(); break;
     case 0xC4: CPY3(); break;
     case 0xC5: CMP3(); break;
+    case 0xC6: DEC3(); break;
     case 0xC9: CMP1(); break;
     case 0xCC: CPY2(); break;
     case 0xCD: CMP2(); break;
+    case 0xCE: DEC2(); break;
     case 0xD0: BNE11(); break;
     case 0xD1: CMP10(); break;
     case 0xD5: CMP7(); break;
+    case 0xD6: DEC7(); break;
     case 0xD8: CLD4(); break;
     case 0xD9: CMP6_Y(); break;
     case 0xDD: CMP6_X(); break;
+    case 0xDE: DEC6(); break;
     case 0xE0: CPX1(); break;
     case 0xE4: CPX3(); break;
     case 0xEC: CPX2(); break;

@@ -51,6 +51,8 @@ namespace MOS_6502
         bool testCPY();
         bool testCPX();
 
+        bool testDEC();
+
         bool testLDA1();
 
         void runTests(); //runs all tests

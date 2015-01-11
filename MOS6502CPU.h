@@ -23,6 +23,7 @@ namespace MOS_6502
     {
         //Constants
         static byte MAX_CLOCK_SPEED_MHZ;
+        static byte NEGATIVE; //represents the number where the CPU starts interpreting as negative
 
         //Registers
         unsigned short _programCounter;
@@ -494,6 +495,7 @@ namespace MOS_6502
              3 7 2 6
          */
 
+         void DEC(unsigned short address);
          void DEC3();
          void DEC7();
          void DEC2();
