@@ -613,6 +613,38 @@ void MOS6502CPU::DEC6()
     DEC(address + _x);
 }
 
+void MOS6502CPU::DEX4()
+{
+    if(_x == 0)
+    {
+        _x = 255;
+        _status->setS(true);
+    }
+    else
+    {
+        _x--;
+
+        _status->setS(_x > NEGATIVE);
+        _status->setZ(_x == 0);
+    }
+}
+
+void MOS6502CPU::DEY4()
+{
+    if(_y == 0)
+    {
+        _y = 255;
+        _status->setS(true);
+    }
+    else
+    {
+        _y--;
+
+        _status->setS(_y > NEGATIVE);
+        _status->setZ(_y == 0);
+    }
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -847,6 +879,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x75: ADC7(); break;
     case 0x79: ADC6_Y(); break;
     case 0x7D: ADC6_X(); break;
+    case 0x88: DEY4(); break;
     case 0x90: BCC11(); break;
     case 0x0A: ASL5(); break;
     case 0xA9: LDA1(); break;
@@ -858,6 +891,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xC5: CMP3(); break;
     case 0xC6: DEC3(); break;
     case 0xC9: CMP1(); break;
+    case 0xCA: DEX4(); break;
     case 0xCC: CPY2(); break;
     case 0xCD: CMP2(); break;
     case 0xCE: DEC2(); break;

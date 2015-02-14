@@ -52,6 +52,8 @@ namespace MOS_6502
         bool testCPX();
 
         bool testDEC();
+        bool testDEY();
+        bool testDEX();
 
         bool testLDA1();
 
