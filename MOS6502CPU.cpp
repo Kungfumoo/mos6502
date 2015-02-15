@@ -645,6 +645,61 @@ void MOS6502CPU::DEY4()
     }
 }
 
+void MOS6502CPU::EOR(byte operand)
+{
+    _accumulator ^= operand;
+
+    //set status
+    _status->setZ(_accumulator == 0);
+    _status->setS(_accumulator > NEGATIVE);
+}
+
+void MOS6502CPU::EOR1()
+{
+    EOR(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::EOR3()
+{
+    EOR(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::EOR7()
+{
+    unsigned short address = getZeroPageIndexed();
+    EOR(_memory->read(address));
+}
+
+void MOS6502CPU::EOR2()
+{
+    unsigned short address = getAbsolute();
+    EOR(_memory->read(address));
+}
+
+void MOS6502CPU::EOR6_X()
+{
+    unsigned short address = getAbsolute();
+    EOR(_memory->read(address + _x));
+}
+
+void MOS6502CPU::EOR6_Y()
+{
+    unsigned short address = getAbsolute();
+    EOR(_memory->read(address + _y));
+}
+
+void MOS6502CPU::EOR9()
+{
+    unsigned short address = getPreIndirect();
+    EOR(_memory->read(address));
+}
+
+void MOS6502CPU::EOR10()
+{
+    unsigned short address = getPostIndirect();
+    EOR(_memory->read(address));
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -868,8 +923,16 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x35: AND7(); break;
     case 0x39: AND6_Y(); break;
     case 0x3D: AND6_X(); break;
+    case 0x41: EOR9(); break;
+    case 0x45: EOR3(); break;
+    case 0x49: EOR1(); break;
+    case 0x4D: EOR2(); break;
     case 0x50: BVC11(); break;
+    case 0x51: EOR10(); break;
+    case 0x55: EOR7(); break;
     case 0x58: CLI4(); break;
+    case 0x59: EOR6_Y(); break;
+    case 0x5D: EOR6_X(); break;
     case 0x61: ADC9(); break;
     case 0x65: ADC3(); break;
     case 0x69: ADC1(); break;

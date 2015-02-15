@@ -55,6 +55,8 @@ namespace MOS_6502
         bool testDEY();
         bool testDEX();
 
+        bool testEOR();
+
         bool testLDA1();
 
         void runTests(); //runs all tests

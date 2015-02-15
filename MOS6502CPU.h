@@ -551,6 +551,7 @@ namespace MOS_6502
              1 3 7 2 6 6 9 10
          */
 
+         void EOR(byte operand);
          void EOR1();
          void EOR3();
          void EOR7();

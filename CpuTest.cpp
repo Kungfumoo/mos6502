@@ -4423,6 +4423,138 @@ bool CpuTest::testDEY()
     return true;
 }
 
+bool CpuTest::testEOR()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test EORing two positive numbers together to yield a positive result
+     *2 - Test EORing a number that yields a negative result(S flag)
+     *3 - Test EORing a 0 + 0 to yield a 0 result(Z flag)
+     */
+
+    //Test 1
+    /*Operation: 0xFF /\ 0xA0
+     *Expected result: 0x5F, All status bits false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0xFF;
+
+    //setup memory
+    memory->write(0x49, counter++); //EOR
+    memory->write(0xA0, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x5F &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testEOR(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: 0x9B /\ 0x1F
+     *Expected result: 0x84, S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x9B;
+
+    //setup memory
+    memory->write(0x49, counter++); //EOR
+    memory->write(0x1F, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x84 &&
+         cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testEOR(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: 0x9B /\ 0x9B
+     *Expected result: 0x00, Z = true, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x9B;
+
+    //setup memory
+    memory->write(0x49, counter++); //EOR
+    memory->write(0x9B, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x00 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testEOR(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testEOR(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testLDA1()
 {
     //Locals
@@ -4602,6 +4734,9 @@ void CpuTest::runTests()
     if(!testDEC()) testsFailed++;
     if(!testDEX()) testsFailed++;
     if(!testDEY()) testsFailed++;
+    cout << endl;
+
+    if(!testEOR()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;
