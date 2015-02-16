@@ -577,6 +577,7 @@ namespace MOS_6502
              3 7 2 6
          */
 
+         void INC(unsigned short address);
          void INC3();
          void INC7();
          void INC2();

@@ -700,6 +700,46 @@ void MOS6502CPU::EOR10()
     EOR(_memory->read(address));
 }
 
+void MOS6502CPU::INC(unsigned short address)
+{
+    //locals
+    byte value = _memory->read(address);
+
+    if(value == 0xFF) //incrementing 255 would make 0
+        value = 0x00;
+    else
+        value++;
+
+    _status->setS(value > NEGATIVE);
+    _status->setZ(value == 0);
+
+    //save value back to memory
+    _memory->write(value, address);
+}
+
+void MOS6502CPU::INC3()
+{
+    INC(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::INC7()
+{
+    unsigned short address = getZeroPageIndexed();
+    INC(address);
+}
+
+void MOS6502CPU::INC2()
+{
+    unsigned short address = getAbsolute();
+    INC(address);
+}
+
+void MOS6502CPU::INC6()
+{
+    unsigned short address = getAbsolute();
+    INC(address + _x);
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -968,8 +1008,12 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xDE: DEC6(); break;
     case 0xE0: CPX1(); break;
     case 0xE4: CPX3(); break;
+    case 0xE6: INC3(); break;
     case 0xEC: CPX2(); break;
+    case 0xEE: INC2(); break;
     case 0xF0: BEQ11(); break;
+    case 0xF6: INC7(); break;
+    case 0xFE: INC6(); break;
 
     default:
         throw new UnknownOpCodeException(opcode);

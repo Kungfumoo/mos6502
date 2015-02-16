@@ -57,6 +57,8 @@ namespace MOS_6502
 
         bool testEOR();
 
+        bool testINC();
+
         bool testLDA1();
 
         void runTests(); //runs all tests

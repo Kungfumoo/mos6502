@@ -4555,6 +4555,137 @@ bool CpuTest::testEOR()
     return true;
 }
 
+bool CpuTest::testINC()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test INC with value 0x0A, addressing mode: zero page
+     *2 - Test INC with value 0x01, addressing mode: zero page
+     *3 - Test INC with value 0x00, addressing mode: indexed X
+     */
+
+    //Test 1
+    /*Operation: INC 0x0A
+     *Expected result: value @ Memory = 0x0B, others = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0xE6, counter++); //operation(INC)
+    memory->write(0x05, counter++);
+    memory->write(0x0A, 0x05);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(memory->read(0x05) == 0x0B &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testINC(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: INC 0xFF
+     *Expected result: value @ Memory = 0x00, Z = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup memory
+    memory->write(0xE6, counter++); //operation(INC)
+    memory->write(0x05, counter++);
+    memory->write(0xFF, 0x05);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(memory->read(0x05) == 0x00 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testINC(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: INC 0xFE
+     *Expected result: value @ Memory = 0xFF, S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_x = 0x01;
+
+    //setup memory
+    memory->write(0xFE, counter++); //operation(INC)
+    memory->write(0x04, counter++);
+    memory->write(0xFE, 0x05);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(memory->read(0x05) == 0xFF &&
+         cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testINC(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testINC(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testLDA1()
 {
     //Locals
@@ -4737,6 +4868,9 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testEOR()) testsFailed++;
+    cout << endl;
+
+    if(!testINC()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;
