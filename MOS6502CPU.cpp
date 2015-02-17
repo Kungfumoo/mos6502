@@ -740,6 +740,36 @@ void MOS6502CPU::INC6()
     INC(address + _x);
 }
 
+void MOS6502CPU::INX4()
+{
+    if(_x == 255)
+    {
+        _x = 0;
+        _status->setZ(true);
+    }
+    else
+    {
+        _x++;
+        _status->setS(_x > NEGATIVE);
+        _status->setZ(_x == 0);
+    }
+}
+
+void MOS6502CPU::INY4()
+{
+    if(_y == 255)
+    {
+        _y = 0;
+        _status->setZ(true);
+    }
+    else
+    {
+        _y++;
+        _status->setS(_y > NEGATIVE);
+        _status->setZ(_y == 0);
+    }
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -993,6 +1023,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xC4: CPY3(); break;
     case 0xC5: CMP3(); break;
     case 0xC6: DEC3(); break;
+    case 0xC8: INY4(); break;
     case 0xC9: CMP1(); break;
     case 0xCA: DEX4(); break;
     case 0xCC: CPY2(); break;
@@ -1009,6 +1040,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xE0: CPX1(); break;
     case 0xE4: CPX3(); break;
     case 0xE6: INC3(); break;
+    case 0xE8: INX4(); break;
     case 0xEC: CPX2(); break;
     case 0xEE: INC2(); break;
     case 0xF0: BEQ11(); break;

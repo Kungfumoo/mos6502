@@ -1,4 +1,7 @@
 --TODO--
+-Some methods such as INX, depending on the state of x, will only set one status bit and not reset the other.
+ Need to check whether this needs to be the case(most likely).
+    -If it is, need to go through the code and change it to reflect this.
 
 11.11.2014
 -Read up on interupts to implement the BRK command.

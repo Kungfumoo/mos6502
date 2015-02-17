@@ -4686,6 +4686,264 @@ bool CpuTest::testINC()
     return true;
 }
 
+bool CpuTest::testINX()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test INX with value 0x0A
+     *2 - Test INX with value 0x01
+     *3 - Test INX with value 0x00
+     */
+
+    //Test 1
+    /*Operation: INX 0x0A
+     *Expected result: x = 0x0B, others = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_x = 0x0A;
+
+    //setup memory
+    memory->write(0xE8, counter++); //operation(INX)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_x == 0x0B &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testINX(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: INX 0xFF
+     *Expected result: x = 0x00, Z = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_x = 0xFF;
+
+    //setup memory
+    memory->write(0xE8, counter++); //operation(INX)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_x == 0x00 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testINX(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: INX 0xFE
+     *Expected result: x = 0xFF, S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_x = 0xFE;
+
+    //setup memory
+    memory->write(0xE8, counter++); //operation(INX)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_x == 0xFF &&
+         cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testINX(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testINX(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
+bool CpuTest::testINY()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test INY with value 0x0A
+     *2 - Test INY with value 0x01
+     *3 - Test INY with value 0x00
+     */
+
+    //Test 1
+    /*Operation: INY 0x0A
+     *Expected result: y = 0x0B, others = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_y = 0x0A;
+
+    //setup memory
+    memory->write(0xC8, counter++); //operation(INY)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_y == 0x0B &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testINY(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: INY 0xFF
+     *Expected result: y = 0x00, Z = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_y = 0xFF;
+
+    //setup memory
+    memory->write(0xC8, counter++); //operation(INY)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_y == 0x00 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testINY(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: INY 0xFE
+     *Expected result: y = 0xFF, S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_y = 0xFE;
+
+    //setup memory
+    memory->write(0xC8, counter++); //operation(INY)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_y == 0xFF &&
+         cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testINY(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testINY(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testLDA1()
 {
     //Locals
@@ -4871,6 +5129,8 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testINC()) testsFailed++;
+    if(!testINX()) testsFailed++;
+    if(!testINY()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;

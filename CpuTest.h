@@ -58,6 +58,8 @@ namespace MOS_6502
         bool testEOR();
 
         bool testINC();
+        bool testINY();
+        bool testINX();
 
         bool testLDA1();
 
