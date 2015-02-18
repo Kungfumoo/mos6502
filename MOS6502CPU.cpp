@@ -770,6 +770,23 @@ void MOS6502CPU::INY4()
     }
 }
 
+void MOS6502CPU::JMP2()
+{
+    _programCounter = getAbsolute();
+}
+
+void MOS6502CPU::JMP8() //only operation that uses 8
+{
+    /*JMP8(indirect) composes a 16bit address just like JMP2,
+     *but the 16bit address obtained is the start address of yet another
+     *composite address.
+     *SO: Get absolute on current position, will get you the 16bit address for obtaining the real address.
+     *Then move to that start address and call getAbsolute again to retreive the REAL address.
+     */
+    for(byte i = 0; i < 2; i++)
+        _programCounter = getAbsolute();
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -996,6 +1013,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x41: EOR9(); break;
     case 0x45: EOR3(); break;
     case 0x49: EOR1(); break;
+    case 0x4C: JMP2(); break;
     case 0x4D: EOR2(); break;
     case 0x50: BVC11(); break;
     case 0x51: EOR10(); break;
@@ -1006,6 +1024,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x61: ADC9(); break;
     case 0x65: ADC3(); break;
     case 0x69: ADC1(); break;
+    case 0x6C: JMP8(); break;
     case 0x6D: ADC2(); break;
     case 0x70: BVS11(); break;
     case 0x71: ADC10(); break;
