@@ -61,6 +61,8 @@ namespace MOS_6502
         bool testINY();
         bool testINX();
 
+        bool testJMP();
+
         bool testLDA1();
 
         void runTests(); //runs all tests

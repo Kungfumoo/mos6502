@@ -4944,6 +4944,102 @@ bool CpuTest::testINY()
     return true;
 }
 
+bool CpuTest::testJMP()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test JMP2 with value 0x0AAB
+     *2 - Test JMP8 with value 0x0AAB->OxFFA1
+     */
+
+    //Test 1
+    /*Operation: JMP2 0x0AAB
+     *Expected result: pc = 0x0AAB, status bits = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0x4C, counter++); //operation(JMP)
+    memory->write(0xAB, counter++);
+    memory->write(0x0A, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x0AAB &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testJMP(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: JMP8 0x0AAB->0xFFA1
+     *Expected result: pc = 0xFFA1
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0x6C, counter++); //operation(JMP)
+    memory->write(0xAB, counter++);
+    memory->write(0x0A, counter++);
+    memory->write(0xA1, 0x0AAB);
+    memory->write(0xFF, 0x0AAB + 1);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0xFFA1 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testJMP(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testJMP(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testLDA1()
 {
     //Locals
@@ -5131,6 +5227,9 @@ void CpuTest::runTests()
     if(!testINC()) testsFailed++;
     if(!testINX()) testsFailed++;
     if(!testINY()) testsFailed++;
+    cout << endl;
+
+    if(!testJMP()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;
