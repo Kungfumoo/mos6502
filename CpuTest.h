@@ -62,6 +62,7 @@ namespace MOS_6502
         bool testINX();
 
         bool testJMP();
+        bool testJSR_RTS(); //makes sense to test both jumping and returning from a subroutine in one unit
 
         bool testLDA1();
 

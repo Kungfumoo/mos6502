@@ -15,27 +15,41 @@ byte MOS6502CPU::MAX_CLOCK_SPEED_MHZ = 2;
 byte MOS6502CPU::NEGATIVE = 127;
 
 //--STATE METHODS(private)
-void MOS6502CPU::saveCurrentState()
+void MOS6502CPU::saveProgramCounter()
 {
     byte pc[] = {(byte)((_programCounter >> 8) & 255), (byte)(_programCounter & 255)}; //split PC into two parts
-    byte status = _status->toByte();
 
     _stack.push(pc[0]);
     _stack.push(pc[1]);
-    _stack.push(status);
-    //_stackPointer += 3; //TODO: Check this
+    //TODO: Adjust stack pointer?
 }
 
-void MOS6502CPU::getLastState()
+void MOS6502CPU::getProgramCounter()
 {
-    byte status = _stack.top(); _stack.pop();
     byte pc[2];
 
     pc[1] = _stack.top(); _stack.pop();
     pc[0] = _stack.top(); _stack.pop();
 
     _programCounter = (pc[0] << 8) | pc[1];
+    //TODO: Adjust stack pointer?
+}
+
+void MOS6502CPU::saveCurrentState()
+{
+    byte status = _status->toByte();
+
+    saveProgramCounter();
+    _stack.push(status);
+    //TODO: Adjust stack pointer?
+}
+
+void MOS6502CPU::getLastState()
+{
+    byte status = _stack.top(); _stack.pop();
+
     _status->fromByte(status);
+    getProgramCounter();
     //_stackPointer -= 3; //TODO: Check this
 }
 
@@ -787,6 +801,17 @@ void MOS6502CPU::JMP8() //only operation that uses 8
         _programCounter = getAbsolute();
 }
 
+void MOS6502CPU::JSR2()
+{
+    //locals
+    unsigned short address = getAbsolute();
+
+    //save program counter
+    _programCounter--;
+    saveProgramCounter();
+    _programCounter = address;
+}
+
 void MOS6502CPU::LDA1()
 {
     //Locals
@@ -797,6 +822,13 @@ void MOS6502CPU::LDA1()
     _status->setZ(operand == 0);
 
     _accumulator = operand;
+}
+
+//Return from JSR2
+void MOS6502CPU::RTS4()
+{
+    getProgramCounter();
+    _programCounter++;
 }
 
 //--General(private)
@@ -999,6 +1031,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x16: ASL7(); break;
     case 0x18: CLC4(); break;
     case 0x1E: ASL6(); break;
+    case 0x20: JSR2(); break;
     case 0x21: AND9(); break;
     case 0x24: BIT3(); break;
     case 0x25: AND3(); break;
@@ -1021,6 +1054,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x58: CLI4(); break;
     case 0x59: EOR6_Y(); break;
     case 0x5D: EOR6_X(); break;
+    case 0x60: RTS4(); break;
     case 0x61: ADC9(); break;
     case 0x65: ADC3(); break;
     case 0x69: ADC1(); break;

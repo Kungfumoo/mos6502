@@ -3630,8 +3630,9 @@ bool CpuTest::testBRK()
     //test stack
     std::stack<byte> copy(cpu->_stack);
     byte expected[] = {0x30, 0x2, 0x6};
+    unsigned int size = copy.size();
 
-    for(int i = 0; i < copy.size(); i++)
+    for(int i = 0; i < size; i++)
     {
         byte value = copy.top(); copy.pop();
 
@@ -5040,6 +5041,118 @@ bool CpuTest::testJMP()
     return true;
 }
 
+bool CpuTest::testJSR_RTS()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test JSR with value 0x0AAB
+     *2 - Test RTS
+     */
+
+    //Test 1
+    /*Operation: JSR 0x0AAB
+     *Expected result: pc = 0x0AAB, stack count = 2, status bits = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+
+    //setup memory
+    memory->write(0x20, counter++); //operation(JSR)
+    memory->write(0xAB, counter++);
+    memory->write(0x0A, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_stack.size() == 2 &&
+         cpu->_programCounter == 0x0AAB &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testJSR_RTS(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //test stack
+    std::stack<byte> copy(cpu->_stack);
+    byte expected[] = {0x2, 0x6};
+    unsigned int size = copy.size();
+
+    for(int i = 0; i < size; i++)
+    {
+        byte value = copy.top(); copy.pop();
+
+        if(value != expected[i])
+        {
+            cout << "testJSR_RTS(): test case 1 failed! {Stack related: value at " << i << " expected as 0x" << std::hex << (int)expected[i] << "}" << endl;
+            cpu->status("TEST CPU STATUS");
+
+            //free resources
+            delete cpu;
+
+            return false;
+        }
+    }
+
+    //Test 2
+    /*Operation: RTS
+     *Expected result: pc = 0x603
+     */
+    //reset variables(NO reset, as we want the last test state...)
+    operations = 1;
+
+    //setup registers
+
+    //setup memory
+    memory->write(0x60, 0x0AAB); //operation(RTS)
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_stack.size() == 0 &&
+         cpu->_programCounter == 0x603 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testJSR_RTS(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testJSR_RTS(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 bool CpuTest::testLDA1()
 {
     //Locals
@@ -5230,6 +5343,7 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testJMP()) testsFailed++;
+    if(!testJSR_RTS()) testsFailed++;
     cout << endl;
 
     if(!testLDA1()) testsFailed++;

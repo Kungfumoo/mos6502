@@ -46,6 +46,8 @@ namespace MOS_6502
         bool _debug;
 
         //--STATE METHODS
+        void saveProgramCounter(); //pushes program counter to stack
+        void getProgramCounter(); //retreives program counter and restores it
         void saveCurrentState(); //will save the current state of the status reg and program counter and push it on the stack
         void getLastState(); //will obtain the last state of the above and restore it
 
