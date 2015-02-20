@@ -812,16 +812,59 @@ void MOS6502CPU::JSR2()
     _programCounter = address;
 }
 
-void MOS6502CPU::LDA1()
+void MOS6502CPU::LDA(byte operand)
 {
-    //Locals
-    byte operand = _memory->read(_programCounter++);
-
     //set status
     _status->setS(operand > NEGATIVE);
     _status->setZ(operand == 0);
 
     _accumulator = operand;
+}
+
+void MOS6502CPU::LDA1()
+{
+    LDA(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::LDA3()
+{
+    LDA(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::LDA7()
+{
+    unsigned short address = getZeroPageIndexed();
+    LDA(_memory->read(address));
+}
+
+void MOS6502CPU::LDA2()
+{
+    unsigned short address = getAbsolute();
+    LDA(_memory->read(address));
+}
+
+void MOS6502CPU::LDA6_X()
+{
+    unsigned short address = getAbsolute();
+    LDA(_memory->read(address + _x));
+}
+
+void MOS6502CPU::LDA6_Y()
+{
+    unsigned short address = getAbsolute();
+    LDA(_memory->read(address + _y));
+}
+
+void MOS6502CPU::LDA9()
+{
+    unsigned short address = getPreIndirect();
+    LDA(_memory->read(address));
+}
+
+void MOS6502CPU::LDA10()
+{
+    unsigned short address = getPostIndirect();
+    LDA(_memory->read(address));
 }
 
 //Return from JSR2
@@ -1026,6 +1069,7 @@ void MOS6502CPU::runCommand(byte opcode)
     {
     case 0x00: BRK4(); break;
     case 0x06: ASL3(); break;
+    case 0x0A: ASL5(); break;
     case 0x0E: ASL2(); break;
     case 0x10: BPL11(); break;
     case 0x16: ASL7(); break;
@@ -1067,10 +1111,16 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x7D: ADC6_X(); break;
     case 0x88: DEY4(); break;
     case 0x90: BCC11(); break;
-    case 0x0A: ASL5(); break;
+    case 0xA1: LDA9(); break;
+    case 0xA5: LDA3(); break;
     case 0xA9: LDA1(); break;
+    case 0xAD: LDA2(); break;
     case 0xB0: BCS11(); break;
+    case 0xB1: LDA10(); break;
+    case 0xB5: LDA7(); break;
     case 0xB8: CLV4(); break;
+    case 0xB9: LDA6_Y(); break;
+    case 0xBD: LDA6_X(); break;
     case 0xC0: CPY1(); break;
     case 0xC1: CMP9(); break;
     case 0xC4: CPY3(); break;

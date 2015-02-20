@@ -668,6 +668,7 @@ namespace MOS_6502
              1 3 7 2 6 6 9 10
          */
 
+         void LDA(byte operand);
          void LDA1();
          void LDA3();
          void LDA7();
