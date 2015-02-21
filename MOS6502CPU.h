@@ -55,7 +55,7 @@ namespace MOS_6502
         unsigned short getAbsolute(); //will get an absolute address based on the next two bytes from the program counter.
         unsigned short getPreIndirect(); //will get a pre-indexed indirect address from the next byte from the program counter.
         unsigned short getPostIndirect(); //will get a post-indexed indirext address from the next byte from the pc
-        unsigned short getZeroPageIndexed(); //will get a zero-page indexed address from the next byte from the program counter.
+        unsigned short getZeroPageIndexed(byte regValue); //will get a zero-page indexed address from the next byte from the program counter.
 
         /*Ok so relative...
          *Basically used for all branch instructions, to work out the start of the next 'branch'
@@ -695,6 +695,7 @@ namespace MOS_6502
              1 3 7 2 6
          */
 
+         void LDX(byte operand);
          void LDX1();
          void LDX3();
          void LDX7();
@@ -718,6 +719,7 @@ namespace MOS_6502
              1 3 7 2 6
          */
 
+         void LDY(byte operand);
          void LDY1();
          void LDY3();
          void LDY7();

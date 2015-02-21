@@ -89,10 +89,10 @@ unsigned short MOS6502CPU::getPostIndirect()
     return address + _y;
 }
 
-unsigned short MOS6502CPU::getZeroPageIndexed()
+unsigned short MOS6502CPU::getZeroPageIndexed(byte regValue)
 {
-    //Work out operand, add actual operand to value in X to form the address to the value we want
-    unsigned short address =  _memory->read(_programCounter++) + _x; //the address of the value
+    //Work out operand, add actual operand to value in X/Y to form the address to the value we want
+    unsigned short address =  _memory->read(_programCounter++) + regValue; //the address of the value
 
     /*NOTE:
      *-Should this always result in a zero-page result?
@@ -176,7 +176,7 @@ void MOS6502CPU::ADC3()
 
 void MOS6502CPU::ADC7() //indexed zero-page, so cannot lookup anything higher then $FF
 {
-    unsigned short address = getZeroPageIndexed();
+    unsigned short address = getZeroPageIndexed(_x);
     ADC(_memory->read(address));
 }
 
@@ -231,7 +231,7 @@ void MOS6502CPU::AND3()
 
 void MOS6502CPU::AND7() //indexed zero-page, so cannot lookup anything higher then $FF
 {
-    unsigned short address = getZeroPageIndexed();
+    unsigned short address = getZeroPageIndexed(_x);
     AND(_memory->read(address));
 }
 
@@ -293,7 +293,7 @@ void MOS6502CPU::ASL3()
 
 void MOS6502CPU::ASL7()
 {
-    unsigned short address = getZeroPageIndexed();
+    unsigned short address = getZeroPageIndexed(_x);
     byte operand = _memory->read(address);
     ASL(operand);
     _memory->write(operand, address);
@@ -475,7 +475,7 @@ void MOS6502CPU::CMP3()
 
 void MOS6502CPU::CMP7()
 {
-    unsigned short address = getZeroPageIndexed();
+    unsigned short address = getZeroPageIndexed(_x);
     CMP(_memory->read(address));
 }
 
@@ -611,7 +611,7 @@ void MOS6502CPU::DEC3()
 
 void MOS6502CPU::DEC7()
 {
-    unsigned short address = getZeroPageIndexed();
+    unsigned short address = getZeroPageIndexed(_x);
     DEC(address);
 }
 
@@ -680,7 +680,7 @@ void MOS6502CPU::EOR3()
 
 void MOS6502CPU::EOR7()
 {
-    unsigned short address = getZeroPageIndexed();
+    unsigned short address = getZeroPageIndexed(_x);
     EOR(_memory->read(address));
 }
 
@@ -738,7 +738,7 @@ void MOS6502CPU::INC3()
 
 void MOS6502CPU::INC7()
 {
-    unsigned short address = getZeroPageIndexed();
+    unsigned short address = getZeroPageIndexed(_x);
     INC(address);
 }
 
@@ -833,7 +833,7 @@ void MOS6502CPU::LDA3()
 
 void MOS6502CPU::LDA7()
 {
-    unsigned short address = getZeroPageIndexed();
+    unsigned short address = getZeroPageIndexed(_x);
     LDA(_memory->read(address));
 }
 
@@ -865,6 +865,80 @@ void MOS6502CPU::LDA10()
 {
     unsigned short address = getPostIndirect();
     LDA(_memory->read(address));
+}
+
+void MOS6502CPU::LDX(byte operand)
+{
+    //set status
+    _status->setS(operand > NEGATIVE);
+    _status->setZ(operand == 0);
+
+    _x = operand;
+}
+
+void MOS6502CPU::LDX1()
+{
+    LDX(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::LDX3()
+{
+    LDX(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::LDX7()
+{
+    unsigned short address = getZeroPageIndexed(_y);
+    LDX(_memory->read(address));
+}
+
+void MOS6502CPU::LDX2()
+{
+    unsigned short address = getAbsolute();
+    LDX(_memory->read(address));
+}
+
+void MOS6502CPU::LDX6()
+{
+    unsigned short address = getAbsolute();
+    LDX(_memory->read(address + _y));
+}
+
+void MOS6502CPU::LDY(byte operand)
+{
+    //set status
+    _status->setS(operand > NEGATIVE);
+    _status->setZ(operand == 0);
+
+    _y = operand;
+}
+
+void MOS6502CPU::LDY1()
+{
+    LDY(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::LDY3()
+{
+    LDY(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::LDY7()
+{
+    unsigned short address = getZeroPageIndexed(_x);
+    LDY(_memory->read(address));
+}
+
+void MOS6502CPU::LDY2()
+{
+    unsigned short address = getAbsolute();
+    LDY(_memory->read(address));
+}
+
+void MOS6502CPU::LDY6()
+{
+    unsigned short address = getAbsolute();
+    LDY(_memory->read(address + _x));
 }
 
 //Return from JSR2
@@ -1111,16 +1185,26 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x7D: ADC6_X(); break;
     case 0x88: DEY4(); break;
     case 0x90: BCC11(); break;
+    case 0xA0: LDY1(); break;
     case 0xA1: LDA9(); break;
+    case 0xA2: LDX1(); break;
+    case 0xA4: LDY3(); break;
     case 0xA5: LDA3(); break;
+    case 0xA6: LDX3(); break;
     case 0xA9: LDA1(); break;
+    case 0xAC: LDY2(); break;
     case 0xAD: LDA2(); break;
+    case 0xAE: LDX2(); break;
     case 0xB0: BCS11(); break;
     case 0xB1: LDA10(); break;
+    case 0xB4: LDY7(); break;
     case 0xB5: LDA7(); break;
+    case 0xB6: LDX7(); break;
     case 0xB8: CLV4(); break;
     case 0xB9: LDA6_Y(); break;
+    case 0xBC: LDY6(); break;
     case 0xBD: LDA6_X(); break;
+    case 0xBE: LDX6(); break;
     case 0xC0: CPY1(); break;
     case 0xC1: CMP9(); break;
     case 0xC4: CPY3(); break;

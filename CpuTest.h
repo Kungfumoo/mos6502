@@ -65,6 +65,8 @@ namespace MOS_6502
         bool testJSR_RTS(); //makes sense to test both jumping and returning from a subroutine in one unit
 
         bool testLDA1();
+        bool testLDX();
+        bool testLDY();
 
         void runTests(); //runs all tests
     };
