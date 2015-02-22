@@ -941,6 +941,48 @@ void MOS6502CPU::LDY6()
     LDY(_memory->read(address + _x));
 }
 
+byte MOS6502CPU::LSR(byte operand)
+{
+    byte value = operand >> 1;
+
+    _status->setZ(value == 0);
+    _status->setS(false); //will always be false as we're effectively making bit 7 a zero
+
+    //bit that represents '1' is used to determine carry, if the original value(operand) is odd then carry will be set.
+    _status->setC((operand % 2) > 0);
+
+    return value;
+}
+
+void MOS6502CPU::LSR5()
+{
+    _accumulator = LSR(_accumulator);
+}
+
+void MOS6502CPU::LSR3()
+{
+    unsigned short address = _memory->read(_programCounter++);
+    _memory->write(LSR(_memory->read(address)), address);
+}
+
+void MOS6502CPU::LSR7()
+{
+    unsigned short address = getZeroPageIndexed(_x);
+    _memory->write(LSR(_memory->read(address)), address);
+}
+
+void MOS6502CPU::LSR2()
+{
+    unsigned short address = getAbsolute();
+    _memory->write(LSR(_memory->read(address)), address);
+}
+
+void MOS6502CPU::LSR6()
+{
+    unsigned short address = getAbsolute() + _x;
+    _memory->write(LSR(_memory->read(address)), address);
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {
@@ -1163,15 +1205,20 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x3D: AND6_X(); break;
     case 0x41: EOR9(); break;
     case 0x45: EOR3(); break;
+    case 0x46: LSR3(); break;
     case 0x49: EOR1(); break;
+    case 0x4A: LSR5(); break;
     case 0x4C: JMP2(); break;
     case 0x4D: EOR2(); break;
+    case 0x4E: LSR2(); break;
     case 0x50: BVC11(); break;
     case 0x51: EOR10(); break;
     case 0x55: EOR7(); break;
+    case 0x56: LSR7(); break;
     case 0x58: CLI4(); break;
     case 0x59: EOR6_Y(); break;
     case 0x5D: EOR6_X(); break;
+    case 0x5E: LSR6(); break;
     case 0x60: RTS4(); break;
     case 0x61: ADC9(); break;
     case 0x65: ADC3(); break;

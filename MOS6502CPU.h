@@ -743,6 +743,7 @@ namespace MOS_6502
              5 3 7 2 6
          */
 
+         byte LSR(byte operand); //return result of right shift
          void LSR5();
          void LSR3();
          void LSR7();
