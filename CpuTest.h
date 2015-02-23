@@ -68,6 +68,8 @@ namespace MOS_6502
         bool testLDX();
         bool testLDY();
 
+        bool testLSR();
+
         void runTests(); //runs all tests
     };
 }

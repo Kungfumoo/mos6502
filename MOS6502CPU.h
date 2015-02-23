@@ -761,9 +761,9 @@ namespace MOS_6502
              implied       NOP           EA    1     2
 
              4
-         */
 
-         void NOP4();
+             NOTE: Implemented in the intepreter as a blank return, no point making a method for it.
+         */
 
          /*
              ORA  OR Memory with Accumulator

@@ -5540,6 +5540,99 @@ bool CpuTest::testLDY()
     return true;
 }
 
+bool CpuTest::testLSR()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test loading number
+     *2 - Test loading zero
+     *3 - Test causing a carry
+     */
+
+    //Test 1
+    /*Operation: LSR 0x0E
+     *Expected result: 0x07, All status bits false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x0E;
+
+    //setup memory
+    memory->write(0x4A, counter++); //LSR operation
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x07 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testLSR(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: LSR 1
+     *Expected result: 0, Status: Z = 1, C = 1 others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x01;
+
+    //setup memory
+    memory->write(0x4A, counter++); //LSR operation
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x00 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == true &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testLSR(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testLSR(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -5607,6 +5700,9 @@ void CpuTest::runTests()
     if(!testLDA1()) testsFailed++;
     if(!testLDX()) testsFailed++;
     if(!testLDY()) testsFailed++;
+    cout << endl;
+
+    if(!testLSR()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

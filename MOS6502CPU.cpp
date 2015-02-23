@@ -1275,6 +1275,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xE4: CPX3(); break;
     case 0xE6: INC3(); break;
     case 0xE8: INX4(); break;
+    case 0xEA: return; //NOP command, do nothing
     case 0xEC: CPX2(); break;
     case 0xEE: INC2(); break;
     case 0xF0: BEQ11(); break;
