@@ -18,9 +18,11 @@ namespace MOS_6502
     {
         //Constants
         static byte TOP; //byte that represents the top value(used for reset and size calcs)
+        static unsigned short HIGH; //high byte of the stack address
 
         //Variables
         MOS6502CPU* _cpu; //pointer to main cpu instance
+        unsigned int _size;
 
     public:
         //--General Methods
@@ -28,6 +30,9 @@ namespace MOS_6502
         byte pop();
         unsigned int size();
         void reset();
+
+        //--Operators
+        byte operator[](byte i); //[0] represents top
 
         //--Constructors
         //Constructor
