@@ -3,6 +3,22 @@
  Need to check whether this needs to be the case(most likely).
     -If it is, need to go through the code and change it to reflect this.
 
+-Stack
+	-Currently I fudge the stack by using the standard C++ stack.
+	-Found some information that will help me emulate the proper stack.
+	-So a mos6502 stack is 256 bytes, and it is located @ memory
+         0x0100 ~ 0x01FF
+        -The stack pointer is a 8 bit register which starts at 0xFF by default.
+	-stack pointer will always store the low bit(eg 0x01FF, the 'FF' part)
+	-Pushing elements on the stack decrements the stack pointer.
+	-Popping elements does the opposite, it also clears that part of memory.
+	-If stack overflows(eg it reaches 0x0100) then i should throw some
+         custom exception.
+
+	-Probably better to write a class for this that takes the CPU instance
+	 in the constructor.
+	-Make it so my stack class mimics the std::stack's methods, eg size(), pop() and push(). As tests and stuff has been written to use this.
+
 11.11.2014
 -Read up on interupts to implement the BRK command.
 -Section 1.3 of http://6502.org/tutorials/interrupts.html is

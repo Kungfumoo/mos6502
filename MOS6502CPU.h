@@ -1166,6 +1166,7 @@ namespace MOS_6502
 
         public:
             //--Friends:
+            friend class Stack;
             friend class Compiler;
             friend class CpuTest;
 
