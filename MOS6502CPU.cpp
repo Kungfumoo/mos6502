@@ -1392,9 +1392,9 @@ void MOS6502CPU::status(string header)
         for(int i = 0; i < stackSize; i++)
         {
             if(i == 0)
-                cout << "[Top] = 0x" << std::hex << copy[i] << endl;
+                cout << "[Top] = 0x" << hex << (int)copy[i] << endl;
             else
-                cout << "[" << i << "] = 0x" << std::hex << copy[i] << endl;
+                cout << "[" << i << "] = 0x" << hex << (int)copy[i] << endl;
         }
     }
 

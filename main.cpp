@@ -4,9 +4,6 @@
 #include "Memory.h"
 #include "CpuTest.h"
 
-//temp
-#include "Stack.h"
-
 using namespace std;
 using namespace MOS_6502;
 
@@ -41,20 +38,7 @@ int main()
 
     //TESTS:
     CpuTest* testSuite = new CpuTest();
-    //testSuite->runTests();
-
-    //TEMP STACK TEST
-    Stack stack(cpu);
-
-    stack.push(1);
-    stack.push(0xFE);
-
-    //cout << (int)stack.pop() << endl;
-
-    cout << stack.size() << endl;
-    cout << (int)stack[0] << endl;
-    cout << (int)stack[1] << endl;
-    //TEMP STACK TEST END
+    testSuite->runTests();
 
     delete cpu;
     delete testSuite;

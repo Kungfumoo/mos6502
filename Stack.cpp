@@ -23,10 +23,10 @@ byte Stack::pop()
 {
     //Locals
     Memory* memory = _cpu->_memory;
-    byte data = memory->read(--(_cpu->_stackPointer) + HIGH);
+    byte data = memory->read(++(_cpu->_stackPointer) + HIGH);
 
     //delete
-    memory->write(0x0, _cpu->_stackPointer);
+    memory->write(0x0, _cpu->_stackPointer + HIGH);
     _size--;
 
     return data;
@@ -55,8 +55,8 @@ byte Stack::operator[](byte i)
     //Locals
     Memory* memory = _cpu->_memory;
 
-    if(i <= TOP)
-        return memory->read(HIGH + (TOP - i));
+    if(i < _size)
+        return memory->read(HIGH + ((_cpu->_stackPointer + 1) + i));
     else
     {
         //TODO: throw some sort of access exception.
