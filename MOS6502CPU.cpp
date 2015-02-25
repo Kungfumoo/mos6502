@@ -1362,14 +1362,14 @@ void MOS6502CPU::status(string header)
 
     cout << "Status Register:" << endl;
     cout << "|S|V| |B|D|I|Z|C|" << endl;
-    cout << "|" << (_status->getS()) ? 1 : 0;
-    cout << "|" << (_status->getV()) ? 1 : 0;
+    cout << "|" << _status->getS();
+    cout << "|" << _status->getV();
     cout << "|1";
-    cout << "|" << (_status->getB()) ? 1 : 0;
-    cout << "|" << (_status->getD()) ? 1 : 0;
-    cout << "|" << (_status->getI()) ? 1 : 0;
-    cout << "|" << (_status->getZ()) ? 1 : 0;
-    cout << "|" << ((_status->getC()) ? 1 : 0) << endl << endl;
+    cout << "|" << _status->getB();
+    cout << "|" << _status->getD();
+    cout << "|" << _status->getI();
+    cout << "|" << _status->getZ();
+    cout << "|" << _status->getC() << endl << endl;
 
     cout << "Stack:" << endl;
     cout << "Size: " << (int)stackSize << endl;

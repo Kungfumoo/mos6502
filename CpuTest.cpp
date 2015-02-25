@@ -3632,7 +3632,7 @@ bool CpuTest::testBRK()
     byte expected[] = {0x30, 0x2, 0x6};
     unsigned int size = copy.size();
 
-    for(int i = 0; i < size; i++)
+    for(unsigned int i = 0; i < size; i++)
     {
         byte value = copy[i];
 
@@ -5095,7 +5095,7 @@ bool CpuTest::testJSR_RTS()
     byte expected[] = {0x2, 0x6};
     unsigned int size = copy.size();
 
-    for(int i = 0; i < size; i++)
+    for(unsigned int i = 0; i < size; i++)
     {
         byte value = copy[i];
 

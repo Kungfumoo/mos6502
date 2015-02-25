@@ -33,7 +33,7 @@ void Memory::write(byte value, unsigned short address)
 
 void Memory::clear()
 {
-    for(int i = 0; i < _size; i++)
+    for(unsigned int i = 0; i < _size; i++)
         _memory[i] = 0;
 }
 
