@@ -2,8 +2,8 @@
 #include "CpuTest.h"
 #include "MOS6502CPU.h"
 #include "Memory.h"
+#include "Stack.h"
 #include "StatusRegister.h"
-#include <stack>
 #include <iostream>
 
 using namespace MOS_6502;
@@ -3609,7 +3609,7 @@ bool CpuTest::testBRK()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_stack.size() == 3 &&
+    if(!(cpu->_stack->size() == 3 &&
          cpu->_programCounter == 0x0 &&
          cpu->_status->getI() == true &&
          cpu->_status->getB() == true &&
@@ -3628,13 +3628,13 @@ bool CpuTest::testBRK()
     }
 
     //test stack
-    std::stack<byte> copy(cpu->_stack);
+    Stack copy = *cpu->_stack;
     byte expected[] = {0x30, 0x2, 0x6};
     unsigned int size = copy.size();
 
     for(int i = 0; i < size; i++)
     {
-        byte value = copy.top(); copy.pop();
+        byte value = copy[i];
 
         if(value != expected[i])
         {
@@ -5074,7 +5074,7 @@ bool CpuTest::testJSR_RTS()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_stack.size() == 2 &&
+    if(!(cpu->_stack->size() == 2 &&
          cpu->_programCounter == 0x0AAB &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
@@ -5091,13 +5091,13 @@ bool CpuTest::testJSR_RTS()
     }
 
     //test stack
-    std::stack<byte> copy(cpu->_stack);
+    Stack copy = *cpu->_stack;
     byte expected[] = {0x2, 0x6};
     unsigned int size = copy.size();
 
     for(int i = 0; i < size; i++)
     {
-        byte value = copy.top(); copy.pop();
+        byte value = copy[i];
 
         if(value != expected[i])
         {
@@ -5128,7 +5128,7 @@ bool CpuTest::testJSR_RTS()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_stack.size() == 0 &&
+    if(!(cpu->_stack->size() == 0 &&
          cpu->_programCounter == 0x603 &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&

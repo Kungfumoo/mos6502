@@ -3,6 +3,7 @@
 #include "StatusRegister.h"
 #include "Memory.h"
 #include "Compiler.h"
+#include "Stack.h"
 #include "Exceptions.h"
 #include "Utility.h"
 #include <iostream>
@@ -19,20 +20,18 @@ void MOS6502CPU::saveProgramCounter()
 {
     byte pc[] = {(byte)((_programCounter >> 8) & 255), (byte)(_programCounter & 255)}; //split PC into two parts
 
-    _stack.push(pc[0]);
-    _stack.push(pc[1]);
-    //TODO: Adjust stack pointer?
+    _stack->push(pc[0]);
+    _stack->push(pc[1]);
 }
 
 void MOS6502CPU::getProgramCounter()
 {
     byte pc[2];
 
-    pc[1] = _stack.top(); _stack.pop();
-    pc[0] = _stack.top(); _stack.pop();
+    pc[1] = _stack->pop();
+    pc[0] = _stack->pop();
 
     _programCounter = (pc[0] << 8) | pc[1];
-    //TODO: Adjust stack pointer?
 }
 
 void MOS6502CPU::saveCurrentState()
@@ -40,17 +39,15 @@ void MOS6502CPU::saveCurrentState()
     byte status = _status->toByte();
 
     saveProgramCounter();
-    _stack.push(status);
-    //TODO: Adjust stack pointer?
+    _stack->push(status);
 }
 
 void MOS6502CPU::getLastState()
 {
-    byte status = _stack.top(); _stack.pop();
+    byte status = _stack->pop();
 
     _status->fromByte(status);
     getProgramCounter();
-    //_stackPointer -= 3; //TODO: Check this
 }
 
 //--ADRESSING MODE METHODS(private):
@@ -1300,11 +1297,12 @@ void MOS6502CPU::reset()
 
     //reset registers
     _status->reset();
+    _stack->reset();
     _accumulator = 0;
     _x = 0;
     _y = 0;
     _programCounter = 0;
-    _stackPointer = 0;
+    _stackPointer = 0xFF;
 }
 
 void MOS6502CPU::start()
@@ -1352,7 +1350,7 @@ void MOS6502CPU::status()
 void MOS6502CPU::status(string header)
 {
     //Locals
-    byte stackSize = _stack.size();
+    byte stackSize = _stack->size();
 
     cout << "\n======================" << header << "======================" << endl;
     cout << "Registers:" << endl;
@@ -1389,18 +1387,14 @@ void MOS6502CPU::status(string header)
          *  [n] = <element>
          */
 
-        stack<byte> copy(_stack);
+        Stack copy = *_stack;
 
         for(int i = 0; i < stackSize; i++)
         {
-            int value = copy.top();
-
             if(i == 0)
-                cout << "[Top] = 0x" << std::hex << value << endl;
+                cout << "[Top] = 0x" << std::hex << copy[i] << endl;
             else
-                cout << "[" << i << "] = 0x" << std::hex << value << endl;
-
-            copy.pop();
+                cout << "[" << i << "] = 0x" << std::hex << copy[i] << endl;
         }
     }
 
@@ -1417,6 +1411,7 @@ MOS6502CPU::MOS6502CPU(unsigned int clockSpeedMhz, Memory* memory, bool debug)
     _cycleLookup = new byte[255]; //0xFF
     _memory = memory;
     _compiler = new Compiler(this);
+    _stack = new Stack(this);
     _running = false;
     _debug = debug;
 
@@ -1426,7 +1421,7 @@ MOS6502CPU::MOS6502CPU(unsigned int clockSpeedMhz, Memory* memory, bool debug)
     _x = 0;
     _y = 0;
     _programCounter = 0;
-    _stackPointer = 0;
+    _stackPointer = 0xFF;
 }
 
 //Destructor
@@ -1434,4 +1429,5 @@ MOS6502CPU::~MOS6502CPU()
 {
     delete _status;
     delete _memory;
+    delete _stack;
 }

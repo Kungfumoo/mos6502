@@ -5,7 +5,6 @@
  *Emulation is done via interpretation.
  */
 
-#include <stack>
 #include <string>
 
 typedef unsigned char byte;
@@ -18,6 +17,7 @@ namespace MOS_6502
     class StatusRegister;
     class Memory;
     class Compiler;
+    class Stack;
 
     class MOS6502CPU
     {
@@ -35,7 +35,7 @@ namespace MOS_6502
 
         //Memory
         Memory* _memory;
-        std::stack<byte> _stack;
+        Stack* _stack;
 
         //Variables
         bool _running;
