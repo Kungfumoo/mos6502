@@ -70,6 +70,8 @@ namespace MOS_6502
 
         bool testLSR();
 
+        bool testORA();
+
         void runTests(); //runs all tests
     };
 }

@@ -980,6 +980,61 @@ void MOS6502CPU::LSR6()
     _memory->write(LSR(_memory->read(address)), address);
 }
 
+void MOS6502CPU::ORA(byte operand)
+{
+    _accumulator |= operand;
+
+    //set status
+    _status->setZ(_accumulator == 0);
+    _status->setS(_accumulator > NEGATIVE);
+}
+
+void MOS6502CPU::ORA1()
+{
+    ORA(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::ORA3()
+{
+    ORA(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::ORA7()
+{
+    unsigned short address = getZeroPageIndexed(_x);
+    ORA(_memory->read(address));
+}
+
+void MOS6502CPU::ORA2()
+{
+    unsigned short address = getAbsolute();
+    ORA(_memory->read(address));
+}
+
+void MOS6502CPU::ORA6_X()
+{
+    unsigned short address = getAbsolute();
+    ORA(_memory->read(address + _x));
+}
+
+void MOS6502CPU::ORA6_Y()
+{
+    unsigned short address = getAbsolute();
+    ORA(_memory->read(address + _y));
+}
+
+void MOS6502CPU::ORA9()
+{
+    unsigned short address = getPreIndirect();
+    ORA(_memory->read(address));
+}
+
+void MOS6502CPU::ORA10()
+{
+    unsigned short address = getPostIndirect();
+    ORA(_memory->read(address));
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {
@@ -1181,12 +1236,20 @@ void MOS6502CPU::runCommand(byte opcode)
     switch(opcode)
     {
     case 0x00: BRK4(); break;
+    case 0x01: ORA9(); break;
+    case 0x05: ORA3(); break;
     case 0x06: ASL3(); break;
+    case 0x09: ORA1(); break;
     case 0x0A: ASL5(); break;
+    case 0x0D: ORA2(); break;
     case 0x0E: ASL2(); break;
     case 0x10: BPL11(); break;
+    case 0x11: ORA10(); break;
+    case 0x15: ORA7(); break;
     case 0x16: ASL7(); break;
     case 0x18: CLC4(); break;
+    case 0x19: ORA6_Y(); break;
+    case 0x1D: ORA6_X(); break;
     case 0x1E: ASL6(); break;
     case 0x20: JSR2(); break;
     case 0x21: AND9(); break;

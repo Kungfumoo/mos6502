@@ -5633,6 +5633,138 @@ bool CpuTest::testLSR()
     return true;
 }
 
+bool CpuTest::testORA()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test ORAing two positive numbers together to yield a positive result
+     *2 - Test ORAing a number that yields a negative result(S flag)
+     *3 - Test ORAing a 0 + 0 to yield a 0 result(Z flag)
+     */
+
+    //Test 1
+    /*Operation: 0xB | 0xA
+     *Expected result: 0xB, All status bits false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0xB;
+
+    //setup memory
+    memory->write(0x09, counter++); //ORA
+    memory->write(0xA, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0xB &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testORA(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: 0x9B | 0x1F
+     *Expected result: 0x9F, S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x9B;
+
+    //setup memory
+    memory->write(0x09, counter++); //ORA
+    memory->write(0x1F, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x9F &&
+         cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testORA(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: 0x0 | 0x0
+     *Expected result: 0x00, Z = true, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x00;
+
+    //setup memory
+    memory->write(0x09, counter++); //ORA
+    memory->write(0x00, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x00 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testORA(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testORA(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -5703,6 +5835,9 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testLSR()) testsFailed++;
+    cout << endl;
+
+    if(!testORA()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

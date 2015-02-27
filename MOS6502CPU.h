@@ -785,6 +785,7 @@ namespace MOS_6502
              1 3 7 2 6 6 9 10
          */
 
+         void ORA(byte operand);
          void ORA1();
          void ORA3();
          void ORA7();
