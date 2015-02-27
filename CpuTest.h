@@ -72,6 +72,8 @@ namespace MOS_6502
 
         bool testORA();
 
+        bool testPHA();
+
         void runTests(); //runs all tests
     };
 }

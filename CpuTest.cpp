@@ -5765,6 +5765,83 @@ bool CpuTest::testORA()
     return true;
 }
 
+bool CpuTest::testPHA()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test pushing accumulator
+     */
+
+    //Test 1
+    /*Operation: Push acc
+     *Expected result: stack size = 1, top = 0xA, All status bits false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0xA;
+
+    //setup memory
+    memory->write(0x48, counter++); //PHA
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_stack->size() == 1 &&
+         cpu->_accumulator == 0xA &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testPHA(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //test stack
+    Stack copy = *cpu->_stack;
+    byte expected[] = {0xA};
+    unsigned int size = copy.size();
+
+    for(unsigned int i = 0; i < size; i++)
+    {
+        byte value = copy[i];
+
+        if(value != expected[i])
+        {
+            cout << "testPHA(): test case 1 failed! {Stack related: value at " << i << " expected as 0x" << std::hex << (int)expected[i] << "}" << endl;
+            cpu->status("TEST CPU STATUS");
+
+            //free resources
+            delete cpu;
+
+            return false;
+        }
+    }
+
+    //all tests passed
+    cout << "testPHA(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -5838,6 +5915,9 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testORA()) testsFailed++;
+    cout << endl;
+
+    if(!testPHA()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

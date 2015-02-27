@@ -1035,6 +1035,11 @@ void MOS6502CPU::ORA10()
     ORA(_memory->read(address));
 }
 
+void MOS6502CPU::PHA4()
+{
+    _stack->push(_accumulator);
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {
@@ -1266,6 +1271,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x41: EOR9(); break;
     case 0x45: EOR3(); break;
     case 0x46: LSR3(); break;
+    case 0x48: PHA4(); break;
     case 0x49: EOR1(); break;
     case 0x4A: LSR5(); break;
     case 0x4C: JMP2(); break;
