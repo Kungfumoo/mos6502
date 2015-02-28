@@ -5842,6 +5842,82 @@ bool CpuTest::testPHA()
     return true;
 }
 
+bool CpuTest::testPHP()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test pushing status
+     */
+
+    //Test 1
+    /*Operation: Push status
+     *Expected result: stack size = 1, top = 0x22, Z = true, others false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setZ(true);
+
+    //setup memory
+    memory->write(0x08, counter++); //PHP
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_stack->size() == 1 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testPHP(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //test stack
+    Stack copy = *cpu->_stack;
+    byte expected[] = {0x22};
+    unsigned int size = copy.size();
+
+    for(unsigned int i = 0; i < size; i++)
+    {
+        byte value = copy[i];
+
+        if(value != expected[i])
+        {
+            cout << "testPHP(): test case 1 failed! {Stack related: value at " << i << " expected as 0x" << std::hex << (int)expected[i] << "}" << endl;
+            cpu->status("TEST CPU STATUS");
+
+            //free resources
+            delete cpu;
+
+            return false;
+        }
+    }
+
+    //all tests passed
+    cout << "testPHP(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -5918,6 +5994,7 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testPHA()) testsFailed++;
+    if(!testPHP()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

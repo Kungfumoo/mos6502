@@ -1040,6 +1040,11 @@ void MOS6502CPU::PHA4()
     _stack->push(_accumulator);
 }
 
+void MOS6502CPU::PHP4()
+{
+    _stack->push(_status->toByte());
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {
@@ -1248,6 +1253,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x0A: ASL5(); break;
     case 0x0D: ORA2(); break;
     case 0x0E: ASL2(); break;
+    case 0x08: PHP4(); break;
     case 0x10: BPL11(); break;
     case 0x11: ORA10(); break;
     case 0x15: ORA7(); break;
