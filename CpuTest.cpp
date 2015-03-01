@@ -6105,6 +6105,137 @@ bool CpuTest::testPLP()
     return true;
 }
 
+bool CpuTest::testROL()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test loading number
+     *2 - Test loading zero & carry
+     *3 - Test causing a carry
+     *4 - Test caussing a 'roll' with a carry
+     */
+
+    //Test 1
+    /*Operation: ROL 0x08
+     *Expected result: 0x10, All status bits false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x08;
+
+    //setup memory
+    memory->write(0x2A, counter++); //ROL operation
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x10 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testROL(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: ROL 0x80
+     *Expected result: 0, Status: Z = 1, C = 1 others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x80;
+
+    //setup memory
+    memory->write(0x2A, counter++); //ROL operation
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x00 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == true &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testROL(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: ROL 0x00 with C = 1
+     *Expected result: 0x01, Status: others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x00;
+    cpu->_status->setC(true);
+
+    //setup memory
+    memory->write(0x2A, counter++); //ROL operation
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x01 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testROL(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testROL(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -6184,6 +6315,9 @@ void CpuTest::runTests()
     if(!testPHP()) testsFailed++;
     if(!testPLA()) testsFailed++;
     if(!testPLP()) testsFailed++;
+    cout << endl;
+
+    if(!testROL()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

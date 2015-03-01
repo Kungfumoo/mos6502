@@ -872,6 +872,7 @@ namespace MOS_6502
              5 3 8 2 6
          */
 
+         byte ROL(byte operand);
          void ROL5();
          void ROL3();
          void ROL7();

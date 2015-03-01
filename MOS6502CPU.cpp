@@ -1057,6 +1057,51 @@ void MOS6502CPU::PLP4()
     _status->fromByte(_stack->pop());
 }
 
+byte MOS6502CPU::ROL(byte operand)
+{
+    //locals
+    byte value = operand << 1; //left shift by 1, if carry is present, add it to right(+1)
+
+    if(_status->getC())
+        value += 1;
+
+    //set status
+    _status->setC(operand > NEGATIVE); //if the original operand is higher then 127, then bit 7 is 1, so it will be a carry after this operation
+    _status->setZ(value == 0);
+    _status->setS(value > NEGATIVE); //not to be confused with setC, its using 'value' intentionally
+
+    return value;
+}
+
+void MOS6502CPU::ROL5()
+{
+    _accumulator = ROL(_accumulator);
+}
+
+void MOS6502CPU::ROL3()
+{
+    unsigned short address = _memory->read(_programCounter++);
+    _memory->write(ROL(_memory->read(address)), address);
+}
+
+void MOS6502CPU::ROL7()
+{
+    unsigned short address = getZeroPageIndexed(_x);
+    _memory->write(ROL(_memory->read(address)), address);
+}
+
+void MOS6502CPU::ROL2()
+{
+    unsigned short address = getAbsolute();
+    _memory->write(ROL(_memory->read(address)), address);
+}
+
+void MOS6502CPU::ROL6()
+{
+    unsigned short address = getAbsolute() + _x;
+    _memory->write(ROL(_memory->read(address)), address);
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {
@@ -1278,15 +1323,20 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x21: AND9(); break;
     case 0x24: BIT3(); break;
     case 0x25: AND3(); break;
+    case 0x26: ROL3(); break;
     case 0x28: PLP4(); break;
     case 0x29: AND1(); break;
+    case 0x2A: ROL5(); break;
     case 0x2C: BIT2(); break;
     case 0x2D: AND2(); break;
+    case 0x2E: ROL2(); break;
     case 0x30: BMI11(); break;
     case 0x31: AND10(); break;
     case 0x35: AND7(); break;
+    case 0x36: ROL7(); break;
     case 0x39: AND6_Y(); break;
     case 0x3D: AND6_X(); break;
+    case 0x3E: ROL6(); break;
     case 0x41: EOR9(); break;
     case 0x45: EOR3(); break;
     case 0x46: LSR3(); break;
