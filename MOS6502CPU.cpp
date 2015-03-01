@@ -1045,6 +1045,13 @@ void MOS6502CPU::PHP4()
     _stack->push(_status->toByte());
 }
 
+void MOS6502CPU::PLA4()
+{
+    _accumulator = _stack->pop();
+    _status->setZ(_accumulator == 0);
+    _status->setS(_accumulator > NEGATIVE);
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {
@@ -1294,6 +1301,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x60: RTS4(); break;
     case 0x61: ADC9(); break;
     case 0x65: ADC3(); break;
+    case 0x68: PLA4(); break;
     case 0x69: ADC1(); break;
     case 0x6C: JMP8(); break;
     case 0x6D: ADC2(); break;

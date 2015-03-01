@@ -74,6 +74,7 @@ namespace MOS_6502
 
         bool testPHA();
         bool testPHP();
+        bool testPLA();
 
         void runTests(); //runs all tests
     };

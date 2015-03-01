@@ -5918,6 +5918,138 @@ bool CpuTest::testPHP()
     return true;
 }
 
+bool CpuTest::testPLA()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test pulling stack
+     *2 - Test pulling stack as 0
+     *3 - Test pulling stack as negative
+     */
+
+    //Test 1
+    /*Operation: pull stack
+     *Expected result: stack size = 0, acc = 0xA, all status = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_stack->push(0xA);
+
+    //setup memory
+    memory->write(0x68, counter++); //PLA
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_stack->size() == 0 &&
+         cpu->_accumulator == 0xA &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testPLA(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: pull 0x00 stack
+     *Expected result: 0x00, Z = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_stack->push(0x0);
+
+    //setup memory
+    memory->write(0x68, counter++); //PLA
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_stack->size() == 0 &&
+         cpu->_accumulator == 0x0 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testPLA(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: pull 0xFF stack
+     *Expected result: 0xFF, S = 1, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_stack->push(0xFF);
+
+    //setup memory
+    memory->write(0x68, counter++); //PLA
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_stack->size() == 0 &&
+         cpu->_accumulator == 0xFF &&
+         cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testPLA(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testPLA(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -5995,6 +6127,7 @@ void CpuTest::runTests()
 
     if(!testPHA()) testsFailed++;
     if(!testPHP()) testsFailed++;
+    if(!testPLA()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }
