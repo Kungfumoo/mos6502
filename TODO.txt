@@ -23,6 +23,3 @@
 -Read up on interupts to implement the BRK command.
 -Section 1.3 of http://6502.org/tutorials/interrupts.html is
  a good start!
-
-
-git test
