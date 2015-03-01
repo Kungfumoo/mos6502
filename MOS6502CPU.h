@@ -848,7 +848,7 @@ namespace MOS_6502
 
              addressing    assembler    opc  bytes  cyles
              --------------------------------------------
-             implied       PHP           28    1     4
+             implied       PLP           28    1     4
 
              4
          */

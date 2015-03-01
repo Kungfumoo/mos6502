@@ -6050,6 +6050,61 @@ bool CpuTest::testPLA()
     return true;
 }
 
+bool CpuTest::testPLP()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test pulling status from stack
+     */
+
+    //Test 1
+    /*Operation: pull 0x22 from stack
+     *Expected result: stack size = 0, Z = true, rest = false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_stack->push(0x22);
+
+    //setup memory
+    memory->write(0x28, counter++); //PLP
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_stack->size() == 0 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testPLP(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testPLP(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -6128,6 +6183,7 @@ void CpuTest::runTests()
     if(!testPHA()) testsFailed++;
     if(!testPHP()) testsFailed++;
     if(!testPLA()) testsFailed++;
+    if(!testPLP()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

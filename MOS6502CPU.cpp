@@ -1052,6 +1052,11 @@ void MOS6502CPU::PLA4()
     _status->setS(_accumulator > NEGATIVE);
 }
 
+void MOS6502CPU::PLP4()
+{
+    _status->fromByte(_stack->pop());
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {
@@ -1273,6 +1278,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x21: AND9(); break;
     case 0x24: BIT3(); break;
     case 0x25: AND3(); break;
+    case 0x28: PLP4(); break;
     case 0x29: AND1(); break;
     case 0x2C: BIT2(); break;
     case 0x2D: AND2(); break;
