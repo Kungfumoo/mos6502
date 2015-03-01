@@ -869,7 +869,7 @@ namespace MOS_6502
              absolute      ROL oper      2E    3     6
              absolute,X    ROL oper,X    3E    3     7
 
-             5 3 8 2 6
+             5 3 7 2 6
          */
 
          byte ROL(byte operand);
@@ -893,12 +893,13 @@ namespace MOS_6502
              absolute      ROR oper      6E    3     6
              absolute,X    ROR oper,X    7E    3     7
 
-             5 3 8 2 6
+             5 3 7 2 6
          */
 
+         byte ROR(byte operand);
          void ROR5();
          void ROR3();
-         void ROR8();
+         void ROR7();
          void ROR2();
          void ROR6();
 

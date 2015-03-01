@@ -78,6 +78,7 @@ namespace MOS_6502
         bool testPLP();
 
         bool testROL();
+        bool testROR();
 
         void runTests(); //runs all tests
     };

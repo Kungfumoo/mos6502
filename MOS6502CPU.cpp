@@ -1102,6 +1102,57 @@ void MOS6502CPU::ROL6()
     _memory->write(ROL(_memory->read(address)), address);
 }
 
+byte MOS6502CPU::ROR(byte operand)
+{
+    //locals
+    byte value = operand >> 1;
+
+    //if carry is present, then add 128, if this happens too, then S will always be true
+    if(_status->getC())
+    {
+        value += 128;
+        _status->setS(true);
+    }
+    else
+        _status->setS(false);
+
+    _status->setZ(value == 0);
+
+    //bit that represents '1' is used to determine carry, if the original value(operand) is odd then carry will be set.
+    _status->setC((operand % 2) > 0);
+
+    return value;
+}
+
+void MOS6502CPU::ROR5()
+{
+    _accumulator = ROR(_accumulator);
+}
+
+void MOS6502CPU::ROR3()
+{
+    unsigned short address = _memory->read(_programCounter++);
+    _memory->write(ROR(_memory->read(address)), address);
+}
+
+void MOS6502CPU::ROR7()
+{
+    unsigned short address = getZeroPageIndexed(_x);
+    _memory->write(ROR(_memory->read(address)), address);
+}
+
+void MOS6502CPU::ROR2()
+{
+    unsigned short address = getAbsolute();
+    _memory->write(ROR(_memory->read(address)), address);
+}
+
+void MOS6502CPU::ROR6()
+{
+    unsigned short address = getAbsolute() + _x;
+    _memory->write(ROR(_memory->read(address)), address);
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {
@@ -1357,15 +1408,20 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x60: RTS4(); break;
     case 0x61: ADC9(); break;
     case 0x65: ADC3(); break;
+    case 0x66: ROR3(); break;
     case 0x68: PLA4(); break;
     case 0x69: ADC1(); break;
+    case 0x6A: ROR5(); break;
     case 0x6C: JMP8(); break;
     case 0x6D: ADC2(); break;
+    case 0x6E: ROR2(); break;
     case 0x70: BVS11(); break;
     case 0x71: ADC10(); break;
     case 0x75: ADC7(); break;
+    case 0x76: ROR7(); break;
     case 0x79: ADC6_Y(); break;
     case 0x7D: ADC6_X(); break;
+    case 0x7E: ROR6(); break;
     case 0x88: DEY4(); break;
     case 0x90: BCC11(); break;
     case 0xA0: LDY1(); break;
