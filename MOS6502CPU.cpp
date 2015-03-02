@@ -1153,6 +1153,11 @@ void MOS6502CPU::ROR6()
     _memory->write(ROR(_memory->read(address)), address);
 }
 
+void MOS6502CPU::RTI4()
+{
+    getLastState();
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {
@@ -1388,6 +1393,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x39: AND6_Y(); break;
     case 0x3D: AND6_X(); break;
     case 0x3E: ROL6(); break;
+    case 0x40: RTI4(); break;
     case 0x41: EOR9(); break;
     case 0x45: EOR3(); break;
     case 0x46: LSR3(); break;

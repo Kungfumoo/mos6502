@@ -6367,6 +6367,62 @@ bool CpuTest::testROR()
     return true;
 }
 
+bool CpuTest::testRTI()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Restore cpu state
+     */
+
+    //Test 1
+    /*Operation: RTI
+     *Expected result: PC = 0x0A, Z = true, others false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_stack->push(0x0A);
+    cpu->_stack->push(0x22);
+
+    //setup memory
+    memory->write(0x40, counter++); //RTI operation
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_programCounter == 0x0A &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testRTI(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testRTI(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -6450,6 +6506,9 @@ void CpuTest::runTests()
 
     if(!testROL()) testsFailed++;
     if(!testROR()) testsFailed++;
+    cout << endl;
+
+    if(!testRTI()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

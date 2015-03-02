@@ -80,6 +80,8 @@ namespace MOS_6502
         bool testROL();
         bool testROR();
 
+        bool testRTI();
+
         void runTests(); //runs all tests
     };
 }
