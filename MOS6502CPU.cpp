@@ -1158,6 +1158,43 @@ void MOS6502CPU::RTI4()
     getLastState();
 }
 
+void MOS6502CPU::SBC(byte operand)
+{
+    //Locals
+    bool carry = _status->getC();
+    bool BCD = _status->getD();
+
+    if(BCD)
+    {
+        //TODO
+    }
+    else //normal binary numbers
+    {
+        signed short result = operand - _accumulator - ((!carry) ? 1 : 0);
+
+        if(result < 0)
+        {
+            //0 = 0, -1 = 255, -2 = 254
+            //Work out true value:
+            byte resolved = 255 - (result+1);
+
+            _status->setV(true);
+            _status->setC(false);
+            _status->setS(true);
+
+            //TODO: calculate result into unsigned value suited for mos6502
+        }
+        else //treat it as a normal result
+        {
+            _status->setV(false);
+            _status->setC(true);
+            _status->setS(result > NEGATIVE);
+        }
+
+        _accumulator = (byte)result; //load result into accumulator
+    }
+}
+
 //Return from JSR2
 void MOS6502CPU::RTS4()
 {

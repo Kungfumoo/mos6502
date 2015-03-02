@@ -953,6 +953,7 @@ namespace MOS_6502
              1 4 7 2 6 6 9 10
          */
 
+         void SBC(byte operand);
          void SBC1();
          void SBC4();
          void SBC7();
