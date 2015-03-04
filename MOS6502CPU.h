@@ -950,12 +950,12 @@ namespace MOS_6502
              (indirect,X)  SBC (oper,X)  E1    2     6
              (indirect),Y  SBC (oper),Y  F1    2     5*
 
-             1 4 7 2 6 6 9 10
+             1 3 7 2 6 6 9 10
          */
 
          void SBC(byte operand);
          void SBC1();
-         void SBC4();
+         void SBC3();
          void SBC7();
          void SBC2();
          void SBC6_X();

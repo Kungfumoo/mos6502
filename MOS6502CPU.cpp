@@ -1170,29 +1170,85 @@ void MOS6502CPU::SBC(byte operand)
     }
     else //normal binary numbers
     {
-        signed short result = operand - _accumulator - ((!carry) ? 1 : 0);
+        byte result = 0;
 
-        if(result < 0)
+        /*  A     O
+         * 255 - 255 = 0 & CZ
+         * 127 - 135 = -8 & VS  (F7)
+         */
+
+        //Apply carry to operand
+        operand -= ((!carry) ? 1 : 0);
+
+        if(operand > _accumulator) //then it will ALWAYS overflow and clear carry
         {
-            //0 = 0, -1 = 255, -2 = 254
-            //Work out true value:
-            byte resolved = 255 - (result+1);
+            byte diff = operand - _accumulator; //cache difference(positive number)
+
+            //work out signed magnitude result:
+            result = 0xFF - diff;
 
             _status->setV(true);
             _status->setC(false);
-            _status->setS(true);
-
-            //TODO: calculate result into unsigned value suited for mos6502
         }
-        else //treat it as a normal result
+        else //will always carry
         {
+            result = operand - _accumulator;
+
             _status->setV(false);
             _status->setC(true);
-            _status->setS(result > NEGATIVE);
         }
 
-        _accumulator = (byte)result; //load result into accumulator
+        _status->setS(result > NEGATIVE);
+        _status->setZ(result == 0);
+
+        _accumulator = result; //load result into accumulator
     }
+}
+
+void MOS6502CPU::SBC1()
+{
+    SBC(_memory->read(_programCounter++));
+}
+
+void MOS6502CPU::SBC3()
+{
+    SBC(_memory->read(_memory->read(_programCounter++)));
+}
+
+void MOS6502CPU::SBC7()
+{
+    unsigned short address = getZeroPageIndexed(_x);
+    SBC(_memory->read(address));
+}
+
+void MOS6502CPU::SBC2()
+{
+    unsigned short address = getAbsolute();
+    SBC(_memory->read(address));
+}
+
+void MOS6502CPU::SBC6_X()
+{
+    unsigned short address = getAbsolute();
+    SBC(_memory->read(address + _x));
+}
+
+void MOS6502CPU::SBC6_Y()
+{
+    unsigned short address = getAbsolute();
+    SBC(_memory->read(address + _y));
+}
+
+void MOS6502CPU::SBC9()
+{
+    unsigned short address = getPreIndirect();
+    SBC(_memory->read(address));
+}
+
+void MOS6502CPU::SBC10()
+{
+    unsigned short address = getPostIndirect();
+    SBC(_memory->read(address));
 }
 
 //Return from JSR2
@@ -1507,14 +1563,22 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xDD: CMP6_X(); break;
     case 0xDE: DEC6(); break;
     case 0xE0: CPX1(); break;
+    case 0xE1: SBC9(); break;
     case 0xE4: CPX3(); break;
+    case 0xE5: SBC3(); break;
     case 0xE6: INC3(); break;
     case 0xE8: INX4(); break;
+    case 0xE9: SBC1(); break;
     case 0xEA: return; //NOP command, do nothing
     case 0xEC: CPX2(); break;
+    case 0xED: SBC2(); break;
     case 0xEE: INC2(); break;
     case 0xF0: BEQ11(); break;
+    case 0xF1: SBC10(); break;
+    case 0xF5: SBC7(); break;
     case 0xF6: INC7(); break;
+    case 0xF9: SBC6_Y(); break;
+    case 0xFD: SBC6_X(); break;
     case 0xFE: INC6(); break;
 
     default:
