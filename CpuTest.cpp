@@ -6437,7 +6437,6 @@ bool CpuTest::testSBC()
      *2 - Test subtracting a number to 127 that yields a negative result(S flag)
      *3 - Test subtracting a 0 + 0 to yield a 0 result(Z flag)
      *4 - Test subtracting two numbers that overflow(go below 0)
-     *5 - An overflow that results in zero
      */
 
     //Test 1
