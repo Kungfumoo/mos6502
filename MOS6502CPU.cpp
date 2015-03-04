@@ -1158,6 +1158,13 @@ void MOS6502CPU::RTI4()
     getLastState();
 }
 
+//Return from JSR2
+void MOS6502CPU::RTS4()
+{
+    getProgramCounter();
+    _programCounter++;
+}
+
 void MOS6502CPU::SBC(byte operand)
 {
     //Locals
@@ -1249,11 +1256,9 @@ void MOS6502CPU::SBC10()
     SBC(_memory->read(address));
 }
 
-//Return from JSR2
-void MOS6502CPU::RTS4()
+void MOS6502CPU::SEC4()
 {
-    getProgramCounter();
-    _programCounter++;
+    _status->setC(true);
 }
 
 //--General(private)
@@ -1481,6 +1486,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x31: AND10(); break;
     case 0x35: AND7(); break;
     case 0x36: ROL7(); break;
+    case 0x38: SEC4(); break;
     case 0x39: AND6_Y(); break;
     case 0x3D: AND6_X(); break;
     case 0x3E: ROL6(); break;
