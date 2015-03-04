@@ -6423,6 +6423,178 @@ bool CpuTest::testRTI()
     return true;
 }
 
+bool CpuTest::testSBC()
+{
+    //Locals
+    Memory* memory = new Memory(MEMORY_SIZE);
+    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    unsigned short start = 0x600;
+    unsigned short counter = start;
+    int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+    /*Test Cases:
+     *1 - Test subtracting two positive numbers together to yield a positive result
+     *2 - Test subtracting a number to 127 that yields a negative result(S flag)
+     *3 - Test subtracting a 0 + 0 to yield a 0 result(Z flag)
+     *4 - Test subtracting two numbers that overflow(go below 0)
+     *5 - An overflow that results in zero
+     */
+
+    //Test 1
+    /*Operation: 0xED - 0x7F
+     *Expected result: ACC = 0x6D, C = true, others false
+     */
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0xED;
+
+    //setup memory
+    memory->write(0xE9, counter++); //SBC operation
+    memory->write(0x7F, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x6D &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == true &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testSBC(): test case 1 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 2
+    /*Operation: 0xA7 - 0x1E
+     *Expected result: 0x88, Status: C = True, S = true, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0xA7;
+
+    //setup memory
+    memory->write(0xE9, counter++); //SBC operation
+    memory->write(0x1E, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x88 &&
+         cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == true &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testSBC(): test case 2 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 3
+    /*Operation: 0x00 - 0x00
+     *Expected result: 0x00, Status: C = True, Z = true, others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setC(true);
+    cpu->_accumulator = 0x00;
+
+    //setup memory
+    memory->write(0xE9, counter++); //SBC operation
+    memory->write(0x00, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x00 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == true &&
+         cpu->_status->getC() == true &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testSBC(): test case 3 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 4
+    /*Operation: 0x50 - 0x64
+     *Expected result: 0xEB, Status:V = true, S = true others = false
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_accumulator = 0x50;
+
+    //setup memory
+    memory->write(0xE9, counter++); //SBC operation
+    memory->write(0x64, counter++);
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0xEB &&
+         cpu->_status->getS() == true &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == true))
+    {
+        cout << "testSBC(): test case 4 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //all tests passed
+    cout << "testSBC(): all passed!" << endl;
+
+    //free resources
+    delete cpu;
+
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -6509,6 +6681,9 @@ void CpuTest::runTests()
     cout << endl;
 
     if(!testRTI()) testsFailed++;
+    cout << endl;
+
+    if(!testSBC()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

@@ -82,6 +82,8 @@ namespace MOS_6502
 
         bool testRTI();
 
+        bool testSBC();
+
         void runTests(); //runs all tests
     };
 }

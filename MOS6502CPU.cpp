@@ -1171,28 +1171,26 @@ void MOS6502CPU::SBC(byte operand)
     else //normal binary numbers
     {
         byte result = 0;
+        byte carryValue = ((!carry) ? 1 : 0);
 
         /*  A     O
          * 255 - 255 = 0 & CZ
          * 127 - 135 = -8 & VS  (F7)
          */
 
-        //Apply carry to operand
-        operand -= ((!carry) ? 1 : 0);
-
-        if(operand > _accumulator) //then it will ALWAYS overflow and clear carry
+        if((operand + carryValue) > _accumulator) //then it will ALWAYS overflow and clear carry
         {
-            byte diff = operand - _accumulator; //cache difference(positive number)
+            byte diff = operand - _accumulator;//cache difference(positive number)
 
             //work out signed magnitude result:
-            result = 0xFF - diff;
+            result = 0xFF - diff + ((carry) ? 1 : 0);
 
             _status->setV(true);
             _status->setC(false);
         }
         else //will always carry
         {
-            result = operand - _accumulator;
+            result = _accumulator - operand - carryValue;
 
             _status->setV(false);
             _status->setC(true);
