@@ -84,6 +84,10 @@ namespace MOS_6502
 
         bool testSBC();
 
+        bool testSEC();
+        bool testSED();
+        bool testSEI();
+
         void runTests(); //runs all tests
     };
 }

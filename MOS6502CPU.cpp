@@ -1261,6 +1261,16 @@ void MOS6502CPU::SEC4()
     _status->setC(true);
 }
 
+void MOS6502CPU::SED4()
+{
+    _status->setD(true);
+}
+
+void MOS6502CPU::SEI4()
+{
+    _status->setI(true);
+}
+
 //--General(private)
 void MOS6502CPU::setupCycleLookup()
 {
@@ -1522,6 +1532,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x71: ADC10(); break;
     case 0x75: ADC7(); break;
     case 0x76: ROR7(); break;
+    case 0x78: SEI4(); break;
     case 0x79: ADC6_Y(); break;
     case 0x7D: ADC6_X(); break;
     case 0x7E: ROR6(); break;
@@ -1581,6 +1592,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xF1: SBC10(); break;
     case 0xF5: SBC7(); break;
     case 0xF6: INC7(); break;
+    case 0xF8: SED4(); break;
     case 0xF9: SBC6_Y(); break;
     case 0xFD: SBC6_X(); break;
     case 0xFE: INC6(); break;
