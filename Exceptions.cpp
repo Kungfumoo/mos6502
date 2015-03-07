@@ -6,7 +6,7 @@ using namespace MOS_6502;
 using namespace std;
 
 //--UnknownOpCodeException
-const char* UnknownOpCodeException::what() const noexcept
+const char* UnknownOpCodeException::what() const
 {
     string error = "Unknown OpCode Given(base 10): " + to_string(_opcode);
 

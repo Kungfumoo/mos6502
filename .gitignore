@@ -4,3 +4,6 @@ obj/
 6502cpu.depend
 6502cpu.layout
 compile.sh
+Debug/
+*.vcxproj
+*.vcxproj.filters

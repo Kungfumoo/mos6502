@@ -17,7 +17,7 @@ namespace MOS_6502
 
     public:
         //--Overriden Methods:
-        const char* what() const noexcept override;
+        const char* what() const override;
 
         //--Constructor
         UnknownOpCodeException(unsigned int opcode);
