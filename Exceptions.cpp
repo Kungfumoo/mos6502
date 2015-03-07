@@ -5,6 +5,7 @@
 using namespace MOS_6502;
 using namespace std;
 
+#ifdef _WIN32
 //--UnknownOpCodeException
 const char* UnknownOpCodeException::what() const
 {
@@ -17,3 +18,17 @@ UnknownOpCodeException::UnknownOpCodeException(unsigned int opcode)
 {
     _opcode = opcode;
 }
+#else
+//--UnknownOpCodeException
+const char* UnknownOpCodeException::what() const noexcept
+{
+    string error = "Unknown OpCode Given(base 10): " + to_string(_opcode);
+
+    return error.c_str();
+}
+
+UnknownOpCodeException::UnknownOpCodeException(unsigned int opcode)
+{
+    _opcode = opcode;
+}
+#endif
