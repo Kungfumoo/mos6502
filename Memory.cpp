@@ -4,7 +4,7 @@
 using namespace MOS_6502;
 
 //--Constant definition
-const unsigned int Memory::MAX_SIZE_BYTES = 64000;
+const unsigned int Memory::MAX_SIZE_BYTES = 65536;
 
 //--Accessors
 unsigned int Memory::getSize()

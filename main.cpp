@@ -42,5 +42,10 @@ int main()
 
     delete cpu;
     delete testSuite;
+
+#ifdef _WIN32
+	system("pause");
+#endif
+
     return 0;
 }

@@ -10,7 +10,7 @@ using namespace MOS_6502;
 using namespace std;
 
 //const definitions
-const unsigned int CpuTest::MEMORY_SIZE = 64000;
+const unsigned int CpuTest::MEMORY_SIZE = 65536;
 
 //--Test Cases
 bool CpuTest::testADC1()
