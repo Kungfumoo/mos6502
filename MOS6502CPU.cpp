@@ -1271,6 +1271,47 @@ void MOS6502CPU::SEI4()
     _status->setI(true);
 }
 
+void MOS6502CPU::STA3()
+{
+	_memory->write(_accumulator, _memory->read(_programCounter++));
+}
+
+void MOS6502CPU::STA7()
+{
+	unsigned short address = getZeroPageIndexed(_x);
+	_memory->write(_accumulator, address);
+}
+
+void MOS6502CPU::STA2()
+{
+	unsigned short address = getAbsolute();
+	_memory->write(_accumulator, address);
+}
+
+void MOS6502CPU::STA6_X()
+{
+	unsigned short address = getAbsolute();
+	_memory->write(_accumulator, address + _x);
+}
+
+void MOS6502CPU::STA6_Y()
+{
+	unsigned short address = getAbsolute();
+	_memory->write(_accumulator, address + _y);
+}
+
+void MOS6502CPU::STA9()
+{
+	unsigned short address = getPreIndirect();
+	_memory->write(_accumulator, address);
+}
+
+void MOS6502CPU::STA10()
+{
+	unsigned short address = getPostIndirect();
+	_memory->write(_accumulator, address);
+}
+
 //--General(private)
 void MOS6502CPU::setupCycleLookup()
 {
@@ -1536,8 +1577,15 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0x79: ADC6_Y(); break;
     case 0x7D: ADC6_X(); break;
     case 0x7E: ROR6(); break;
+	case 0x81: STA9(); break;
+	case 0x85: STA3(); break;
     case 0x88: DEY4(); break;
+	case 0x8D: STA2(); break;
     case 0x90: BCC11(); break;
+	case 0x91: STA10(); break;
+	case 0x95: STA7(); break;
+	case 0x99: STA6_Y(); break;
+	case 0x9D: STA6_X(); break;
     case 0xA0: LDY1(); break;
     case 0xA1: LDA9(); break;
     case 0xA2: LDX1(); break;

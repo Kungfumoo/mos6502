@@ -88,6 +88,8 @@ namespace MOS_6502
         bool testSED();
         bool testSEI();
 
+		bool testSTA();
+
         void runTests(); //runs all tests
     };
 }

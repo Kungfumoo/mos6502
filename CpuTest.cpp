@@ -6753,6 +6753,62 @@ bool CpuTest::testSEI()
     return true;
 }
 
+bool CpuTest::testSTA()
+{
+	//Locals
+	Memory* memory = new Memory(MEMORY_SIZE);
+	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+	unsigned short start = 0x600;
+	unsigned short counter = start;
+	int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+	/*Test Cases:
+	*1 - load acc to memory
+	*/
+
+	//Test 1
+	/*Operation: STA 0xFA
+	*Expected result: mem @ 0xFA = 0x0A, others false
+	*/
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_accumulator = 0x0A;
+
+	//setup memory
+	memory->write(0x85, counter++); //STA operation
+	memory->write(0xFA, counter++);
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(memory->read(0xFA) == 0x0A &&
+		cpu->_status->getI() == false &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testSTA(): test case 1 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//all tests passed
+	cout << "testSTA(): all passed!" << endl;
+
+	//free resources
+	delete cpu;
+
+	return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -6847,6 +6903,9 @@ void CpuTest::runTests()
     if(!testSEC()) testsFailed++;
     if(!testSED()) testsFailed++;
     if(!testSEI()) testsFailed++;
+	cout << endl;
+
+	if(!testSTA()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }
