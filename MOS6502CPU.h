@@ -1137,7 +1137,7 @@ namespace MOS_6502
              TXS  Transfer Index X to Stack Register
 
              X -> SP                          N Z C I D V
-                                              + + - - - -
+                                              - - - - - -
 
              addressing    assembler    opc  bytes  cyles
              --------------------------------------------

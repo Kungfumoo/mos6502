@@ -1346,6 +1346,51 @@ void MOS6502CPU::STY2()
 	_memory->write(_y, address);
 }
 
+void MOS6502CPU::TAX4()
+{
+	_x = _accumulator;
+
+	_status->setS(_x > NEGATIVE);
+	_status->setZ(_x == 0);
+}
+
+void MOS6502CPU::TAY4()
+{
+	_y = _accumulator;
+
+	_status->setS(_y > NEGATIVE);
+	_status->setZ(_y == 0);
+}
+
+void MOS6502CPU::TSX4()
+{
+	_x = _stackPointer;
+
+	_status->setS(_x > NEGATIVE);
+	_status->setZ(_x == 0);
+}
+
+void MOS6502CPU::TXA4()
+{
+	_accumulator = _x;
+	
+	_status->setS(_accumulator > NEGATIVE);
+	_status->setZ(_accumulator == 0);
+}
+
+void MOS6502CPU::TXS4()
+{
+	_stackPointer = _x;
+}
+
+void MOS6502CPU::TYA4()
+{
+	_accumulator = _y;
+
+	_status->setS(_accumulator > NEGATIVE);
+	_status->setZ(_accumulator == 0);
+}
+
 //--General(private)
 void MOS6502CPU::setupCycleLookup()
 {
@@ -1616,6 +1661,7 @@ void MOS6502CPU::runCommand(byte opcode)
 	case 0x85: STA3(); break;
 	case 0x86: STX3(); break;
     case 0x88: DEY4(); break;
+	case 0x8A: TXA4(); break;
 	case 0x8C: STY2(); break;
 	case 0x8D: STA2(); break;
 	case 0x8E: STX2(); break;
@@ -1624,7 +1670,9 @@ void MOS6502CPU::runCommand(byte opcode)
 	case 0x94: STY7(); break;
 	case 0x95: STA7(); break;
 	case 0x96: STX7(); break;
+	case 0x98: TYA4(); break;
 	case 0x99: STA6_Y(); break;
+	case 0x9A: TXS4(); break;
 	case 0x9D: STA6_X(); break;
     case 0xA0: LDY1(); break;
     case 0xA1: LDA9(); break;
@@ -1632,7 +1680,9 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xA4: LDY3(); break;
     case 0xA5: LDA3(); break;
     case 0xA6: LDX3(); break;
+	case 0xA8: TAY4(); break;
     case 0xA9: LDA1(); break;
+	case 0xAA: TAX4(); break;
     case 0xAC: LDY2(); break;
     case 0xAD: LDA2(); break;
     case 0xAE: LDX2(); break;
@@ -1643,6 +1693,7 @@ void MOS6502CPU::runCommand(byte opcode)
     case 0xB6: LDX7(); break;
     case 0xB8: CLV4(); break;
     case 0xB9: LDA6_Y(); break;
+	case 0xBA: TSX4(); break;
     case 0xBC: LDY6(); break;
     case 0xBD: LDA6_X(); break;
     case 0xBE: LDX6(); break;

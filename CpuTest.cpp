@@ -6921,6 +6921,706 @@ bool CpuTest::testSTY()
 	return true;
 }
 
+bool CpuTest::testTAX()
+{
+	//Locals
+	BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
+	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+	unsigned short start = 0x600;
+	unsigned short counter = start;
+	int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+	/*Test Cases:
+	*1 - Transfer A -> X with positive number
+	*2 - Transfer A -> X with negative number
+	*3 - Transfer A -> X with 0
+	*/
+
+	//Test 1
+	/*Operation: TAX
+	*Expected result: x = 0x0A, others false
+	*/
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_accumulator = 0x0A;
+
+	//setup memory
+	memory->write(0xAA, counter++); //TAX operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_x == 0x0A &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTAX(): test case 1 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 2
+	/*Operation: TAX
+	*Expected result: x =  0xFA, S = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_accumulator = 0xFA;
+
+	//setup memory
+	memory->write(0xAA, counter++); //TAX operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_x == 0xFA &&
+		cpu->_status->getS() == true &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTAX(): test case 2 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 3
+	/*Operation: TAX
+	*Expected result: x =  0x00, Z = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_accumulator = 0x00;
+
+	//setup memory
+	memory->write(0xAA, counter++); //TAX operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_x == 0x00 &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == true &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTAX(): test case 3 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//all tests passed
+	cout << "testTAX(): all passed!" << endl;
+
+	//free resources
+	delete cpu;
+
+	return true;
+}
+
+bool CpuTest::testTAY()
+{
+	//Locals
+	BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
+	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+	unsigned short start = 0x600;
+	unsigned short counter = start;
+	int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+	/*Test Cases:
+	*1 - Transfer A -> Y with positive number
+	*2 - Transfer A -> Y with negative number
+	*3 - Transfer A -> Y with 0
+	*/
+
+	//Test 1
+	/*Operation: TAY
+	*Expected result: x = 0x0A, others false
+	*/
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_accumulator = 0x0A;
+
+	//setup memory
+	memory->write(0xA8, counter++); //TAY operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_y == 0x0A &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTAY(): test case 1 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 2
+	/*Operation: TAY
+	*Expected result: x =  0xFA, S = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_accumulator = 0xFA;
+
+	//setup memory
+	memory->write(0xA8, counter++); //TAY operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_y == 0xFA &&
+		cpu->_status->getS() == true &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTAY(): test case 2 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 3
+	/*Operation: TAY
+	*Expected result: x =  0x00, Z = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_accumulator = 0x00;
+
+	//setup memory
+	memory->write(0xA8, counter++); //TAY operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_y == 0x00 &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == true &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTAY(): test case 3 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//all tests passed
+	cout << "testTAY(): all passed!" << endl;
+
+	//free resources
+	delete cpu;
+
+	return true;
+}
+
+bool CpuTest::testTSX()
+{
+	//Locals
+	BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
+	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+	unsigned short start = 0x600;
+	unsigned short counter = start;
+	int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+	/*Test Cases:
+	*1 - Transfer SR -> X with positive number
+	*2 - Transfer SR -> X with negative number
+	*3 - Transfer SR -> X with 0
+	*/
+
+	//Test 1
+	/*Operation: TSX
+	*Expected result: x = 0x0A, others false
+	*/
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_stackPointer = 0x0A;
+
+	//setup memory
+	memory->write(0xBA, counter++); //TSX operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_x == 0x0A &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTSX(): test case 1 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 2
+	/*Operation: TSX
+	*Expected result: x =  0xFA, S = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_stackPointer = 0xFA;
+
+	//setup memory
+	memory->write(0xBA, counter++); //TSX operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_x == 0xFA &&
+		cpu->_status->getS() == true &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTSX(): test case 2 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 3
+	/*Operation: TSX
+	*Expected result: x =  0x00, Z = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_stackPointer = 0x00;
+
+	//setup memory
+	memory->write(0xBA, counter++); //TSX operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_x == 0x00 &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == true &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTSX(): test case 3 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//all tests passed
+	cout << "testTSX(): all passed!" << endl;
+
+	//free resources
+	delete cpu;
+
+	return true;
+}
+
+bool CpuTest::testTXA()
+{
+	//Locals
+	BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
+	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+	unsigned short start = 0x600;
+	unsigned short counter = start;
+	int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+	/*Test Cases:
+	*1 - Transfer X -> A with positive number
+	*2 - Transfer X -> A with negative number
+	*3 - Transfer X -> A with 0
+	*/
+
+	//Test 1
+	/*Operation: TXA
+	*Expected result: acc = 0x0A, others false
+	*/
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_x = 0x0A;
+
+	//setup memory
+	memory->write(0x8A, counter++); //TXA operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_accumulator == 0x0A &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTXA(): test case 1 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 2
+	/*Operation: TXA
+	*Expected result: acc =  0xFA, S = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_x = 0xFA;
+
+	//setup memory
+	memory->write(0x8A, counter++); //TXA operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_accumulator == 0xFA &&
+		cpu->_status->getS() == true &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTXA(): test case 2 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 3
+	/*Operation: TXA
+	*Expected result: acc =  0x00, Z = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_x = 0x00;
+
+	//setup memory
+	memory->write(0x8A, counter++); //TXA operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_accumulator == 0x00 &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == true &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTXA(): test case 3 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//all tests passed
+	cout << "testTXA(): all passed!" << endl;
+
+	//free resources
+	delete cpu;
+
+	return true;
+}
+
+bool CpuTest::testTXS()
+{
+	//Locals
+	BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
+	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+	unsigned short start = 0x600;
+	unsigned short counter = start;
+	int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+	/*Test Cases:
+	*1 - Transfer X -> SR
+	*/
+
+	//Test 1
+	/*Operation: TXS
+	*Expected result: SR = 0x0A, others false
+	*/
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_x = 0x0A;
+
+	//setup memory
+	memory->write(0x9A, counter++); //TXS operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_stackPointer == 0x0A &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTXS(): test case 1 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//all tests passed
+	cout << "testTXS(): all passed!" << endl;
+
+	//free resources
+	delete cpu;
+
+	return true;
+}
+
+bool CpuTest::testTYA()
+{
+	//Locals
+	BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
+	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+	unsigned short start = 0x600;
+	unsigned short counter = start;
+	int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+	/*Test Cases:
+	*1 - Transfer Y -> A with positive number
+	*2 - Transfer Y -> A with negative number
+	*3 - Transfer Y -> A with 0
+	*/
+
+	//Test 1
+	/*Operation: TYA
+	*Expected result: acc = 0x0A, others false
+	*/
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_y = 0x0A;
+
+	//setup memory
+	memory->write(0x98, counter++); //TYA operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_accumulator == 0x0A &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTYA(): test case 1 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 2
+	/*Operation: TYA
+	*Expected result: acc =  0xFA, S = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_y = 0xFA;
+
+	//setup memory
+	memory->write(0x98, counter++); //TYA operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_accumulator == 0xFA &&
+		cpu->_status->getS() == true &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTYA(): test case 2 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//Test 3
+	/*Operation: TYA
+	*Expected result: acc =  0x00, Z = true, others = false
+	*/
+	//reset variables
+	cpu->reset();
+	counter = start;
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_y = 0x00;
+
+	//setup memory
+	memory->write(0x98, counter++); //TYA operation
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(cpu->_accumulator == 0x00 &&
+		cpu->_status->getS() == false &&
+		cpu->_status->getZ() == true &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testTYA(): test case 3 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//all tests passed
+	cout << "testTYA(): all passed!" << endl;
+
+	//free resources
+	delete cpu;
+
+	return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -7020,6 +7720,14 @@ void CpuTest::runTests()
 	if(!testSTA()) testsFailed++;
 	if(!testSTX()) testsFailed++;
 	if(!testSTY()) testsFailed++;
+	cout << endl;
+
+	if(!testTAX()) testsFailed++;
+	if(!testTAY()) testsFailed++;
+	if(!testTSX()) testsFailed++;
+	if(!testTXA()) testsFailed++;
+	if(!testTXS()) testsFailed++;
+	if(!testTYA()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

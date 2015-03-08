@@ -92,6 +92,13 @@ namespace MOS_6502
 		bool testSTX();
 		bool testSTY();
 
+		bool testTAX();
+		bool testTAY();
+		bool testTSX();
+		bool testTXA();
+		bool testTXS();
+		bool testTYA();
+
         void runTests(); //runs all tests
     };
 }
