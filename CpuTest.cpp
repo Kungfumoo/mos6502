@@ -1,7 +1,7 @@
 //CpuTest class implementation
 #include "CpuTest.h"
 #include "MOS6502CPU.h"
-#include "Memory.h"
+#include "BasicMemory.h"
 #include "Stack.h"
 #include "StatusRegister.h"
 #include <iostream>
@@ -16,7 +16,7 @@ const unsigned int CpuTest::MEMORY_SIZE = 65536;
 bool CpuTest::testADC1()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -224,7 +224,7 @@ bool CpuTest::testADC1()
 bool CpuTest::testADC3()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -437,7 +437,7 @@ bool CpuTest::testADC3()
 bool CpuTest::testADC7()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -655,7 +655,7 @@ bool CpuTest::testADC7()
 bool CpuTest::testADC2()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -873,7 +873,7 @@ bool CpuTest::testADC2()
 bool CpuTest::testADC6_X()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -1096,7 +1096,7 @@ bool CpuTest::testADC6_X()
 bool CpuTest::testADC6_Y()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -1319,7 +1319,7 @@ bool CpuTest::testADC6_Y()
 bool CpuTest::testADC9()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -1547,7 +1547,7 @@ bool CpuTest::testADC9()
 bool CpuTest::testADC10()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -1775,7 +1775,7 @@ bool CpuTest::testADC10()
 bool CpuTest::testAND()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -1907,7 +1907,7 @@ bool CpuTest::testAND()
 bool CpuTest::testASL5()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -2073,7 +2073,7 @@ bool CpuTest::testASL5()
 bool CpuTest::testASL3()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -2259,7 +2259,7 @@ bool CpuTest::testASL3()
 bool CpuTest::testBCC()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -2389,7 +2389,7 @@ bool CpuTest::testBCC()
 bool CpuTest::testBCS()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -2522,7 +2522,7 @@ bool CpuTest::testBCS()
 bool CpuTest::testBEQ()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -2655,7 +2655,7 @@ bool CpuTest::testBEQ()
 bool CpuTest::testBMI()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -2788,7 +2788,7 @@ bool CpuTest::testBMI()
 bool CpuTest::testBNE()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -2920,7 +2920,7 @@ bool CpuTest::testBNE()
 bool CpuTest::testBPL()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -3052,7 +3052,7 @@ bool CpuTest::testBPL()
 bool CpuTest::testBVC()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -3184,7 +3184,7 @@ bool CpuTest::testBVC()
 bool CpuTest::testBVS()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -3317,7 +3317,7 @@ bool CpuTest::testBVS()
 bool CpuTest::testBIT()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -3413,7 +3413,7 @@ bool CpuTest::testBIT()
 bool CpuTest::testClears()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -3580,7 +3580,7 @@ bool CpuTest::testClears()
 bool CpuTest::testBRK()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -3660,7 +3660,7 @@ bool CpuTest::testBRK()
 bool CpuTest::testCMP()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -3786,7 +3786,7 @@ bool CpuTest::testCMP()
 bool CpuTest::testCPX()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -3912,7 +3912,7 @@ bool CpuTest::testCPX()
 bool CpuTest::testCPY()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -4038,7 +4038,7 @@ bool CpuTest::testCPY()
 bool CpuTest::testDEC()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -4169,7 +4169,7 @@ bool CpuTest::testDEC()
 bool CpuTest::testDEX()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -4298,7 +4298,7 @@ bool CpuTest::testDEX()
 bool CpuTest::testDEY()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -4427,7 +4427,7 @@ bool CpuTest::testDEY()
 bool CpuTest::testEOR()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -4559,7 +4559,7 @@ bool CpuTest::testEOR()
 bool CpuTest::testINC()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -4690,7 +4690,7 @@ bool CpuTest::testINC()
 bool CpuTest::testINX()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -4819,7 +4819,7 @@ bool CpuTest::testINX()
 bool CpuTest::testINY()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -4948,7 +4948,7 @@ bool CpuTest::testINY()
 bool CpuTest::testJMP()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -5044,7 +5044,7 @@ bool CpuTest::testJMP()
 bool CpuTest::testJSR_RTS()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -5156,7 +5156,7 @@ bool CpuTest::testJSR_RTS()
 bool CpuTest::testLDA1()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -5285,7 +5285,7 @@ bool CpuTest::testLDA1()
 bool CpuTest::testLDX()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -5414,7 +5414,7 @@ bool CpuTest::testLDX()
 bool CpuTest::testLDY()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -5543,7 +5543,7 @@ bool CpuTest::testLDY()
 bool CpuTest::testLSR()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -5636,7 +5636,7 @@ bool CpuTest::testLSR()
 bool CpuTest::testORA()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -5768,7 +5768,7 @@ bool CpuTest::testORA()
 bool CpuTest::testPHA()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -5845,7 +5845,7 @@ bool CpuTest::testPHA()
 bool CpuTest::testPHP()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -5921,7 +5921,7 @@ bool CpuTest::testPHP()
 bool CpuTest::testPLA()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -6053,7 +6053,7 @@ bool CpuTest::testPLA()
 bool CpuTest::testPLP()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -6108,7 +6108,7 @@ bool CpuTest::testPLP()
 bool CpuTest::testROL()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -6239,7 +6239,7 @@ bool CpuTest::testROL()
 bool CpuTest::testROR()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -6370,7 +6370,7 @@ bool CpuTest::testROR()
 bool CpuTest::testRTI()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -6426,7 +6426,7 @@ bool CpuTest::testRTI()
 bool CpuTest::testSBC()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -6597,7 +6597,7 @@ bool CpuTest::testSBC()
 bool CpuTest::testSEC()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -6650,7 +6650,7 @@ bool CpuTest::testSEC()
 bool CpuTest::testSED()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -6703,7 +6703,7 @@ bool CpuTest::testSED()
 bool CpuTest::testSEI()
 {
     //Locals
-    Memory* memory = new Memory(MEMORY_SIZE);
+    BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
     unsigned short start = 0x600;
     unsigned short counter = start;
@@ -6756,7 +6756,7 @@ bool CpuTest::testSEI()
 bool CpuTest::testSTA()
 {
 	//Locals
-	Memory* memory = new Memory(MEMORY_SIZE);
+	BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
 	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
 	unsigned short start = 0x600;
 	unsigned short counter = start;
@@ -6812,7 +6812,7 @@ bool CpuTest::testSTA()
 bool CpuTest::testSTX()
 {
 	//Locals
-	Memory* memory = new Memory(MEMORY_SIZE);
+	BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
 	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
 	unsigned short start = 0x600;
 	unsigned short counter = start;
@@ -6868,7 +6868,7 @@ bool CpuTest::testSTX()
 bool CpuTest::testSTY()
 {
 	//Locals
-	Memory* memory = new Memory(MEMORY_SIZE);
+	BasicMemory* memory = new BasicMemory(MEMORY_SIZE);
 	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
 	unsigned short start = 0x600;
 	unsigned short counter = start;

@@ -12,25 +12,6 @@ unsigned int Memory::getSize()
     return _size;
 }
 
-//--General Methods
-byte Memory::read(unsigned short address)
-{
-    /*
-     * TODO: May need to add more here to depending on how the atari handles memory access
-     * eg: memory mirroring etc..
-     */
-    return _memory[address];
-}
-
-void Memory::write(byte value, unsigned short address)
-{
-    /*
-     * TODO: May need to add more here to depending on how the atari handles memory access
-     * eg: memory mirroring etc..
-     */
-    _memory[address] = value;
-}
-
 void Memory::clear()
 {
     for(unsigned int i = 0; i < _size; i++)

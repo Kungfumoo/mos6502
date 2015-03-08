@@ -1,7 +1,7 @@
 #include <iostream>
 #include <exception>
 #include "MOS6502CPU.h"
-#include "Memory.h"
+#include "BasicMemory.h"
 #include "CpuTest.h"
 
 using namespace std;
@@ -9,7 +9,7 @@ using namespace MOS_6502;
 
 int main()
 {
-    Memory* memory = new Memory(64000); //64kb
+    Memory* memory = new BasicMemory();
     MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
 
     /*My Playground:
