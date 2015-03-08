@@ -89,6 +89,8 @@ namespace MOS_6502
         bool testSEI();
 
 		bool testSTA();
+		bool testSTX();
+		bool testSTY();
 
         void runTests(); //runs all tests
     };

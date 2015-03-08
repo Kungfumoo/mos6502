@@ -6809,6 +6809,118 @@ bool CpuTest::testSTA()
 	return true;
 }
 
+bool CpuTest::testSTX()
+{
+	//Locals
+	Memory* memory = new Memory(MEMORY_SIZE);
+	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+	unsigned short start = 0x600;
+	unsigned short counter = start;
+	int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+	/*Test Cases:
+	*1 - load x to memory
+	*/
+
+	//Test 1
+	/*Operation: STX 0xFA
+	*Expected result: mem @ 0xFA = 0x0A, others false
+	*/
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_x = 0x0A;
+
+	//setup memory
+	memory->write(0x86, counter++); //STX operation
+	memory->write(0xFA, counter++);
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(memory->read(0xFA) == 0x0A &&
+		cpu->_status->getI() == false &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testSTX(): test case 1 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//all tests passed
+	cout << "testSTX(): all passed!" << endl;
+
+	//free resources
+	delete cpu;
+
+	return true;
+}
+
+bool CpuTest::testSTY()
+{
+	//Locals
+	Memory* memory = new Memory(MEMORY_SIZE);
+	MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+	unsigned short start = 0x600;
+	unsigned short counter = start;
+	int operations = 0; //SET THIS WHEN SETTING UP CASES
+
+	/*Test Cases:
+	*1 - load y to memory
+	*/
+
+	//Test 1
+	/*Operation: STY 0xFA
+	*Expected result: mem @ 0xFA = 0x0A, others false
+	*/
+	operations = 1;
+	cpu->setPC(start);
+
+	//setup registers
+	cpu->_y = 0x0A;
+
+	//setup memory
+	memory->write(0x84, counter++); //STY operation
+	memory->write(0xFA, counter++);
+
+	//run operations
+	for (int i = 0; i < operations; i++)
+		cpu->runNext(false);
+
+	//Check if result differs from expected
+	if (!(memory->read(0xFA) == 0x0A &&
+		cpu->_status->getI() == false &&
+		cpu->_status->getZ() == false &&
+		cpu->_status->getC() == false &&
+		cpu->_status->getV() == false))
+	{
+		cout << "testSTY(): test case 1 failed!" << endl;
+		cpu->status("TEST CPU STATUS");
+
+		//free resources
+		delete cpu;
+
+		return false;
+	}
+
+	//all tests passed
+	cout << "testSTY(): all passed!" << endl;
+
+	//free resources
+	delete cpu;
+
+	return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -6906,6 +7018,8 @@ void CpuTest::runTests()
 	cout << endl;
 
 	if(!testSTA()) testsFailed++;
+	if(!testSTX()) testsFailed++;
+	if(!testSTY()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }
