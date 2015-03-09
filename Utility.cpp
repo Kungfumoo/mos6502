@@ -1,5 +1,6 @@
 //Utility class implementation
 #include "Utility.h"
+#include "Exceptions.h"
 
 using namespace MOS_6502;
 using namespace std;
@@ -43,4 +44,36 @@ byte Utility::toByte(bitset<8>& bits)
     value += (bits[7]) ? 128 : 0;
 
     return value;
+}
+
+byte Utility::toByte(std::bitset<8>& bits, byte start, byte finish)
+{
+    byte values[] = {1, 2, 4, 8, 16, 32, 64, 128};
+    byte value = 0;
+
+    if(start < 8 && finish < 8)
+    {
+        for(int i = start; i <= finish; i++)
+            value += values[i];
+    }
+    else
+        throw new BitLimitExceededException();
+
+    return value;
+}
+
+byte Utility::toBCD(byte number)
+{
+    std::bitset<8> bits = Utility::toBinary(number);
+
+    return Utility::toBCD(bits);
+}
+
+byte Utility::toBCD(bitset<8>& bits)
+{
+    byte rightNibble = Utility::toByte(bits, 0, 3);
+    bits >>= 4;
+    byte leftNibble = Utility::toByte(bits, 0, 3);
+
+    return rightNibble * 10 + leftNibble;
 }

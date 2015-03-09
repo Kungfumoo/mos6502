@@ -123,42 +123,46 @@ void MOS6502CPU::ADC(byte operand)
     bool carry = _status->getC();
     bool BCD = _status->getD();
 
-    if(BCD)
+    if(BCD) //convert to BCD
     {
-        //TODO
+        _accumulator = Utility::toBCD(_accumulator);
+        operand = Utility::toBCD(operand);
     }
-    else //normal binary numbers
-    {
-        unsigned short result = operand + _accumulator + ((carry) ? 1 : 0);
 
-        if(result > NEGATIVE) //negative number or overflow
+    unsigned short result = operand + _accumulator + ((carry) ? 1 : 0);
+
+    if(result > NEGATIVE) //negative number or overflow
+    {
+        if(result > 255) //overflow + carry
         {
-            if(result > 255) //overflow + carry
-            {
-                result = operand - 1; //-1 because of carry
-                _status->setC(true);
-                _status->setV(true);
-                _status->setZ(result == 0);
-                _status->setS(result > NEGATIVE);
-            }
-            else //it's negative
-            {
-                _status->setC(false);
-                _status->setV(false);
-                _status->setZ(false);
-                _status->setS(true);
-            }
+            result = operand - 1; //-1 because of carry
+            _status->setC(true);
+            _status->setV(true);
+            _status->setZ(result == 0);
+            _status->setS(result > NEGATIVE);
         }
-        else //positive number
+        else //it's negative
         {
             _status->setC(false);
             _status->setV(false);
-            _status->setZ(result == 0);
-            _status->setS(false);
+            _status->setZ(false);
+            _status->setS(true);
         }
-
-        _accumulator = (byte)result; //load result into accumulator
     }
+    else //positive number
+    {
+        _status->setC(false);
+        _status->setV(false);
+        _status->setZ(result == 0);
+        _status->setS(false);
+    }
+
+    if(BCD) //Convert from BCD
+    {
+        //TODO
+    }
+
+    _accumulator = (byte)result; //load result into accumulator
 }
 
 void MOS6502CPU::ADC1()
@@ -1373,7 +1377,7 @@ void MOS6502CPU::TSX4()
 void MOS6502CPU::TXA4()
 {
 	_accumulator = _x;
-	
+
 	_status->setS(_accumulator > NEGATIVE);
 	_status->setZ(_accumulator == 0);
 }

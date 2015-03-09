@@ -17,6 +17,9 @@ namespace MOS_6502
         //--Static General Methods:
         static std::bitset<8> toBinary(byte number);
         static byte toByte(std::bitset<8>& bits);
+        static byte toByte(std::bitset<8>& bits, byte start, byte finish); //define bits to look at with start and finish
+        static byte toBCD(byte number);
+        static byte toBCD(std::bitset<8>& bits);
     };
 }
 #endif

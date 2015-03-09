@@ -18,6 +18,12 @@ UnknownOpCodeException::UnknownOpCodeException(unsigned int opcode)
 {
     _opcode = opcode;
 }
+
+//--BitLimitExceededException
+const char* BitLimitExceededException::what() const
+{
+    return "Exceeded number of bits that this system is capable of storing! (8 bits)";
+}
 #else
 //--UnknownOpCodeException
 const char* UnknownOpCodeException::what() const noexcept
@@ -30,5 +36,11 @@ const char* UnknownOpCodeException::what() const noexcept
 UnknownOpCodeException::UnknownOpCodeException(unsigned int opcode)
 {
     _opcode = opcode;
+}
+
+//--BitLimitExceededException
+const char* BitLimitExceededException::what() const noexcept
+{
+    return "Exceeded number of bits that this system is capable of storing! (8 bits)";
 }
 #endif
