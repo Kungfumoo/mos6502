@@ -54,7 +54,8 @@ byte Utility::toByte(std::bitset<8>& bits, byte start, byte finish)
     if(start < 8 && finish < 8)
     {
         for(int i = start; i <= finish; i++)
-            value += values[i];
+            if(bits[i])
+                value += values[i];
     }
     else
         throw new BitLimitExceededException();
@@ -75,7 +76,7 @@ byte Utility::toBCD(bitset<8>& bits)
     bits >>= 4;
     byte leftNibble = Utility::toByte(bits, 0, 3);
 
-    return rightNibble * 10 + leftNibble;
+    return leftNibble * 10 + rightNibble;
 }
 
 byte Utility::addBCD(bitset<8>& num1, bitset<8>& num2)
@@ -102,7 +103,7 @@ byte Utility::addBCD(bitset<8>& num1, bitset<8>& num2)
         if(results[i] > 9)
             results[i] += 6;
 
-    return results[0] * 10 + results[1];
+    return results[1] * 10 + results[0];
 }
 
 byte Utility::addBCD(byte num1, byte num2)

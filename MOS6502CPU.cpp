@@ -125,12 +125,7 @@ void MOS6502CPU::ADC(byte operand)
     unsigned short result;
 
     if(BCD) //convert to BCD
-    {
-        _accumulator = Utility::toBCD(_accumulator);
-        operand = Utility::toBCD(operand);
-
         result = Utility::addBCD(_accumulator, operand);
-    }
     else
         result = operand + _accumulator + ((carry) ? 1 : 0);
 
@@ -158,11 +153,6 @@ void MOS6502CPU::ADC(byte operand)
         _status->setV(false);
         _status->setZ(result == 0);
         _status->setS(false);
-    }
-
-    if(BCD) //Convert from BCD
-    {
-        //TODO
     }
 
     _accumulator = (byte)result; //load result into accumulator
