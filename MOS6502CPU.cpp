@@ -122,14 +122,17 @@ void MOS6502CPU::ADC(byte operand)
     //Locals
     bool carry = _status->getC();
     bool BCD = _status->getD();
+    unsigned short result;
 
     if(BCD) //convert to BCD
     {
         _accumulator = Utility::toBCD(_accumulator);
         operand = Utility::toBCD(operand);
-    }
 
-    unsigned short result = operand + _accumulator + ((carry) ? 1 : 0);
+        result = Utility::addBCD(_accumulator, operand);
+    }
+    else
+        result = operand + _accumulator + ((carry) ? 1 : 0);
 
     if(result > NEGATIVE) //negative number or overflow
     {

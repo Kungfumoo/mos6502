@@ -28,6 +28,7 @@ bool CpuTest::testADC1()
      *3 - Test adding a 0 + 0 to yield a 0 result(Z flag)
      *4 - Test adding numbers together that yield higher then 255.
      *5 - An overflow that results in zero
+     *6 - BCD addition
      */
 
     //Test 1
@@ -204,6 +205,44 @@ bool CpuTest::testADC1()
          cpu->_status->getV() == true))
     {
         cout << "testADC1(): test case 5 failed!" << endl;
+        cpu->status("TEST CPU STATUS");
+
+        //free resources
+        delete cpu;
+
+        return false;
+    }
+
+    //Test 6
+    /*Operation: 15(0001 0101 | 0x15) + 31(0011 0001 | 0x31)
+     *Expected: 0x46, Status: others = false.
+     */
+    //reset variables
+    cpu->reset();
+    counter = start;
+    operations = 1;
+    cpu->setPC(start);
+
+    //setup registers
+    cpu->_status->setD(true);
+    cpu->_accumulator = 0x15;
+
+    //setup memory
+    memory->write(0x69, counter++); //write ADC instruction to next byte
+    memory->write(0x31, counter++); //ADC operand
+
+    //run operations
+    for(int i = 0; i < operations; i++)
+        cpu->runNext(false);
+
+    //Check if result differs from expected
+    if(!(cpu->_accumulator == 0x46 &&
+         cpu->_status->getS() == false &&
+         cpu->_status->getZ() == false &&
+         cpu->_status->getC() == false &&
+         cpu->_status->getV() == false))
+    {
+        cout << "testADC1(): test case 6 failed!" << endl;
         cpu->status("TEST CPU STATUS");
 
         //free resources

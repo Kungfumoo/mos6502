@@ -20,6 +20,8 @@ namespace MOS_6502
         static byte toByte(std::bitset<8>& bits, byte start, byte finish); //define bits to look at with start and finish
         static byte toBCD(byte number);
         static byte toBCD(std::bitset<8>& bits);
+        static byte addBCD(std::bitset<8>& num1, std::bitset<8>& num2);
+        static byte addBCD(byte num1, byte num2);
     };
 }
 #endif
