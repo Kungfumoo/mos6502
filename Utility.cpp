@@ -103,7 +103,7 @@ byte Utility::addBCD(bitset<8>& num1, bitset<8>& num2)
         if(results[i] > 9)
             results[i] += 6;
 
-    return results[1] * 10 + results[0];
+    return (results[1] << 4) | results[0];
 }
 
 byte Utility::addBCD(byte num1, byte num2)
