@@ -94,8 +94,8 @@ byte Utility::addBCD(bitset<8>& num1, bitset<8>& num2)
     opp2[1] = Utility::toByte(num2, 0, 3);
 
     byte results[2] = {
-        opp1[0] + opp2[0],
-        opp1[1] + opp2[1]
+       (byte)(opp1[0] + opp2[0]),
+       (byte)(opp1[1] + opp2[1])
     };
 
     //if over 9, add 6 so it is valid BCD

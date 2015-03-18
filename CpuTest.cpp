@@ -4,6 +4,7 @@
 #include "BasicMemory.h"
 #include "Stack.h"
 #include "StatusRegister.h"
+#include "Utility.h"
 #include <iostream>
 
 using namespace MOS_6502;
@@ -7660,6 +7661,22 @@ bool CpuTest::testTYA()
 	return true;
 }
 
+bool CpuTest::testBCDArithmetic()
+{
+    //adding
+    //15(0x15) + 36(0x36) = 51(0x51)
+    byte result = Utility::addBCD(0x15, 0x36);
+
+    if(result != 0x51)
+    {
+        cout << "testBCDArithmetic(): Test 1 Failed!" << endl;
+        return false;
+    }
+
+    cout << "testBCDArithmetic(): all passed!" << endl;
+    return true;
+}
+
 void CpuTest::runTests()
 {
     int testsFailed = 0;
@@ -7767,6 +7784,9 @@ void CpuTest::runTests()
 	if(!testTXA()) testsFailed++;
 	if(!testTXS()) testsFailed++;
 	if(!testTYA()) testsFailed++;
+	cout << endl;
+
+	if(!testBCDArithmetic()) testsFailed++;
 
     cout << "Tests failed: " << testsFailed << endl;
 }

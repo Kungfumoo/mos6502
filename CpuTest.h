@@ -99,6 +99,8 @@ namespace MOS_6502
 		bool testTXS();
 		bool testTYA();
 
+		bool testBCDArithmetic();
+
         void runTests(); //runs all tests
     };
 }
