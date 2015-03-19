@@ -7669,8 +7669,18 @@ bool CpuTest::testBCDArithmetic()
 
     if(result != 0x51)
     {
+        cout << "Result: " << hex << (int)result << endl;
         cout << "testBCDArithmetic(): Test 1 Failed!" << endl;
         return false;
+    }
+
+    //61 + 40 = 101
+    result = Utility::addBCD(0x61, 0x40);
+
+    if(result != 0x101)
+    {
+        cout << "Result: " << hex << (int)result << endl;
+        cout << "testBCDArithmetic(): Test 2 Failed!" << endl;
     }
 
     cout << "testBCDArithmetic(): all passed!" << endl;
