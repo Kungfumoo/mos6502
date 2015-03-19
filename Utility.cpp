@@ -79,8 +79,10 @@ byte Utility::toBCD(bitset<8>& bits)
     return leftNibble * 10 + rightNibble;
 }
 
-byte Utility::addBCD(bitset<8>& num1, bitset<8>& num2)
+BCDResult Utility::addBCD(bitset<8>& num1, bitset<8>& num2)
 {
+    BCDResult result = {0, false, false};
+
     //split number 1
     byte opp1[2];
     opp1[0] = Utility::toByte(num1, 0, 3);
@@ -101,12 +103,23 @@ byte Utility::addBCD(bitset<8>& num1, bitset<8>& num2)
     //if over 9, add 6 so it is valid BCD
     for(int i = 0; i < 2; i++)
         if(results[i] > 9)
+        {
             results[i] += 6;
 
-    return (results[1] << 4) | results[0];
+            //if the left nibble has gone over 9 then it WILL overflow
+            if(i == 1)
+            {
+                result.overflow = true;
+                result.carry = true;
+            }
+        }
+
+    result.result = (results[1] << 4) | results[0];
+
+    return result;
 }
 
-byte Utility::addBCD(byte num1, byte num2)
+BCDResult Utility::addBCD(byte num1, byte num2)
 {
     bitset<8> number1 = Utility::toBinary(num1);
     bitset<8> number2 = Utility::toBinary(num2);

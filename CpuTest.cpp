@@ -7665,11 +7665,11 @@ bool CpuTest::testBCDArithmetic()
 {
     //adding
     //15(0x15) + 36(0x36) = 51(0x51)
-    byte result = Utility::addBCD(0x15, 0x36);
+    BCDResult result = Utility::addBCD(0x15, 0x36);
 
-    if(result != 0x51)
+    if(result.result != 0x51)
     {
-        cout << "Result: " << hex << (int)result << endl;
+        cout << "Result: " << hex << (int)result.result << endl;
         cout << "testBCDArithmetic(): Test 1 Failed!" << endl;
         return false;
     }
@@ -7677,9 +7677,9 @@ bool CpuTest::testBCDArithmetic()
     //61 + 40 = 101
     result = Utility::addBCD(0x61, 0x40);
 
-    if(result != 0x101)
+    if(result.result != 0x01) //overflow and carry
     {
-        cout << "Result: " << hex << (int)result << endl;
+        cout << "Result: " << hex << (int)result.result << endl;
         cout << "testBCDArithmetic(): Test 2 Failed!" << endl;
     }
 

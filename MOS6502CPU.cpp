@@ -125,34 +125,44 @@ void MOS6502CPU::ADC(byte operand)
     unsigned short result;
 
     if(BCD) //convert to BCD
-        result = Utility::addBCD(_accumulator, operand);
+    {
+        BCDResult r = Utility::addBCD(_accumulator, operand);
+        result = r.result;
+
+        _status->setV(r.overflow);
+        _status->setC(r.carry);
+        _status->setS(false); //TODO: is this right?
+        _status->setZ(result == 0);
+    }
     else
+    {
         result = operand + _accumulator + ((carry) ? 1 : 0);
 
-    if(result > NEGATIVE) //negative number or overflow
-    {
-        if(result > 255) //overflow + carry
+        if(result > NEGATIVE) //negative number or overflow
         {
-            result = operand - 1; //-1 because of carry
-            _status->setC(true);
-            _status->setV(true);
-            _status->setZ(result == 0);
-            _status->setS(result > NEGATIVE);
+            if(result > 255) //overflow + carry
+            {
+                result = operand - 1; //-1 because of carry
+                _status->setC(true);
+                _status->setV(true);
+                _status->setZ(result == 0);
+                _status->setS(result > NEGATIVE);
+            }
+            else //it's negative
+            {
+                _status->setC(false);
+                _status->setV(false);
+                _status->setZ(false);
+                _status->setS(true);
+            }
         }
-        else //it's negative
+        else //positive number
         {
             _status->setC(false);
             _status->setV(false);
-            _status->setZ(false);
-            _status->setS(true);
+            _status->setZ(result == 0);
+            _status->setS(false);
         }
-    }
-    else //positive number
-    {
-        _status->setC(false);
-        _status->setV(false);
-        _status->setZ(result == 0);
-        _status->setS(false);
     }
 
     _accumulator = (byte)result; //load result into accumulator

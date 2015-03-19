@@ -11,6 +11,14 @@ typedef unsigned char byte;
 #define _UTILITY_H_
 namespace MOS_6502
 {
+    //Struct used to store arithmetic results
+    struct BCDResult
+    {
+        byte result;
+        bool carry;
+        bool overflow;
+    };
+
     class Utility
     {
     public:
@@ -22,8 +30,8 @@ namespace MOS_6502
         //toBCD should ONLY be used to create human readable displays, NOT for arithmatic!!!
         static byte toBCD(byte number);
         static byte toBCD(std::bitset<8>& bits);
-        static byte addBCD(std::bitset<8>& num1, std::bitset<8>& num2);
-        static byte addBCD(byte num1, byte num2);
+        static BCDResult addBCD(std::bitset<8>& num1, std::bitset<8>& num2);
+        static BCDResult addBCD(byte num1, byte num2);
     };
 }
 #endif
