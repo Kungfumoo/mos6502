@@ -1180,7 +1180,14 @@ void MOS6502CPU::SBC(byte operand)
 
     if(BCD)
     {
-        //TODO
+        /*
+        BCDResult r = Utility::addBCD(_accumulator, operand);
+        result = r.result;
+
+        _status->setV(r.overflow);
+        _status->setC(r.carry);
+        _status->setS(false); //TODO: is this right?
+        _status->setZ(result == 0);*/
     }
     else //normal binary numbers
     {

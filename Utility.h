@@ -32,6 +32,8 @@ namespace MOS_6502
         static byte toBCD(std::bitset<8>& bits);
         static BCDResult addBCD(std::bitset<8>& num1, std::bitset<8>& num2);
         static BCDResult addBCD(byte num1, byte num2);
+        static BCDResult subtractBCD(std::bitset<8>& num1, std::bitset<8>& num2);
+        static BCDResult subtractBCD(byte num1, byte num2);
     };
 }
 #endif

@@ -126,3 +126,18 @@ BCDResult Utility::addBCD(byte num1, byte num2)
 
     return Utility::addBCD(number1, number2);
 }
+
+BCDResult Utility::subtractBCD(bitset<8>& num1, bitset<8>& num2)
+{
+    BCDResult result = {0, false, false};
+
+    return result;
+}
+
+BCDResult Utility::subtractBCD(byte num1, byte num2)
+{
+    bitset<8> number1 = Utility::toBinary(num1);
+    bitset<8> number2 = Utility::toBinary(num2);
+
+    return Utility::subtractBCD(number1, number2);
+}
