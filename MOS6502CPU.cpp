@@ -12,8 +12,8 @@ using namespace MOS_6502;
 using namespace std;
 
 //Constant Definitions
-byte MOS6502CPU::MAX_CLOCK_SPEED_MHZ = 2;
-byte MOS6502CPU::NEGATIVE = 127;
+const byte MOS6502CPU::MAX_CLOCK_SPEED_MHZ = 2;
+const byte MOS6502CPU::NEGATIVE = 127;
 
 //--STATE METHODS(private)
 void MOS6502CPU::saveProgramCounter()
@@ -1177,21 +1177,20 @@ void MOS6502CPU::SBC(byte operand)
     //Locals
     bool carry = _status->getC();
     bool BCD = _status->getD();
+    byte result = 0;
 
     if(BCD)
     {
-        /*
-        BCDResult r = Utility::addBCD(_accumulator, operand);
+        BCDResult r = Utility::subtractBCD(_accumulator, operand);
         result = r.result;
 
         _status->setV(r.overflow);
         _status->setC(r.carry);
         _status->setS(false); //TODO: is this right?
-        _status->setZ(result == 0);*/
+        _status->setZ(result == 0);
     }
     else //normal binary numbers
     {
-        byte result = 0;
         byte carryValue = ((!carry) ? 1 : 0);
 
         /*  A     O

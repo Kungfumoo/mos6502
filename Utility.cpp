@@ -5,6 +5,8 @@
 using namespace MOS_6502;
 using namespace std;
 
+const byte Utility::NINES_COMPLIMENT = 99;
+
 //--Public static methods
 
 /*Imagine back to front:
@@ -130,6 +132,19 @@ BCDResult Utility::addBCD(byte num1, byte num2)
 BCDResult Utility::subtractBCD(bitset<8>& num1, bitset<8>& num2)
 {
     BCDResult result = {0, false, false};
+
+    byte a = toByte(num1);
+    byte b = toByte(num2); //subtrehend
+
+    int ninesResult = NINES_COMPLIMENT - b;
+
+    ninesResult = a + ninesResult;
+
+    if(ninesResult >= 100)
+    {
+        result.carry = true;
+        result.result = ninesResult - 100;
+    }
 
     return result;
 }

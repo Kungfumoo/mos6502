@@ -22,8 +22,8 @@ namespace MOS_6502
     class MOS6502CPU
     {
         //Constants
-        static byte MAX_CLOCK_SPEED_MHZ;
-        static byte NEGATIVE; //represents the number where the CPU starts interpreting as negative
+        static const byte MAX_CLOCK_SPEED_MHZ;
+        static const byte NEGATIVE; //represents the number where the CPU starts interpreting as negative
 
         //Registers
         unsigned short _programCounter;

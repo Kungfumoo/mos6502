@@ -1,23 +1,19 @@
 --TODO--
+-Memory Leaking:
+    -Before hitting the compiler, sort out the memory leaks in the application.
+    -Use valgrid, I've added a file called 'val' which is a script for this, pop it in debug where the exe is and run it to check for leaks.
+    -http://valgrind.org/docs/manual/quick-start.html#quick-start.mcrun
+
+-NEXT BIG THING: Compiler
+    -Need to plan out and design the compiler for this cpu, to convert the assembly into it's proper bytecode
+    -Compiler should probably have a simple test to input some code and test the output of the bytecode.
+    -Compiler needs to be completely seperate from the CPU, they should have no dependency with eachother.
+        -CPU needs to just accept a load of bytecode information, it will never directly use the compiler.
+        -Reason: Compiler will have a large processing and memory footprint, it should really be used seperatly from the main emulator.
+
 -Some methods such as INX, depending on the state of x, will only set one status bit and not reset the other.
  Need to check whether this needs to be the case(most likely).
     -If it is, need to go through the code and change it to reflect this.
-
--Stack
-	-Currently I fudge the stack by using the standard C++ stack.
-	-Found some information that will help me emulate the proper stack.
-	-So a mos6502 stack is 256 bytes, and it is located @ memory
-         0x0100 ~ 0x01FF
-        -The stack pointer is a 8 bit register which starts at 0xFF by default.
-	-stack pointer will always store the low bit(eg 0x01FF, the 'FF' part)
-	-Pushing elements on the stack decrements the stack pointer.
-	-Popping elements does the opposite, it also clears that part of memory.
-	-If stack overflows(eg it reaches 0x0100) then i should throw some
-         custom exception.
-
-	-Probably better to write a class for this that takes the CPU instance
-	 in the constructor.
-	-Make it so my stack class mimics the std::stack's methods, eg size(), pop() and push(). As tests and stuff has been written to use this.
 
 11.11.2014
 -Read up on interupts to implement the BRK command.

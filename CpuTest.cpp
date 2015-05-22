@@ -7681,7 +7681,11 @@ bool CpuTest::testBCDArithmetic()
     {
         cout << "Result: " << hex << (int)result.result << endl;
         cout << "testBCDArithmetic(): Test 2 Failed!" << endl;
+        return false;
     }
+
+    //subtracting TODO:
+    cout << "(TODO SUBTRACTING): ";
 
     cout << "testBCDArithmetic(): all passed!" << endl;
     return true;

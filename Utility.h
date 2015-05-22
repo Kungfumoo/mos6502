@@ -22,6 +22,8 @@ namespace MOS_6502
     class Utility
     {
     public:
+        static const byte NINES_COMPLIMENT;
+
         //--Static General Methods:
         static std::bitset<8> toBinary(byte number);
         static byte toByte(std::bitset<8>& bits);
