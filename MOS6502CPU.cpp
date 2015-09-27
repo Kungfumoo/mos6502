@@ -1900,4 +1900,6 @@ MOS6502CPU::~MOS6502CPU()
     delete _status;
     delete _memory;
     delete _stack;
+    delete _compiler;
+    delete[] _cycleLookup;
 }
