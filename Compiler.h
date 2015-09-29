@@ -25,6 +25,7 @@ namespace MOS_6502
     public:
         //--General
         void compile(std::string src);
+        void compileFromFile(std::string fileName);
 
         //Constructor
         Compiler(MOS6502CPU* cpuRef);
