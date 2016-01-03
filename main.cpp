@@ -42,10 +42,15 @@ int main()
     testSuite->runTests();
 
     //Compiler:
+	Compiler* compiler = new Compiler();
+	string file = "C:\\Users\\Sudo\\Documents\\Projects\\mos6502\\asmsrc\\test.asm";
 
+	cout << "\nCompiler:" << endl;
+	compiler->compileFromFile(file);
 
     delete cpu;
     delete testSuite;
+	delete compiler;
 
 #ifdef _WIN32
 	system("pause");
