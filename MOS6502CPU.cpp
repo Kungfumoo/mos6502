@@ -2,7 +2,6 @@
 #include "MOS6502CPU.h"
 #include "StatusRegister.h"
 #include "Memory.h"
-#include "Compiler.h"
 #include "Stack.h"
 #include "Exceptions.h"
 #include "Utility.h"
@@ -1567,7 +1566,6 @@ void MOS6502CPU::setupCycleLookup()
 void MOS6502CPU::run()
 {
     int counter = _cycles;
-    unsigned int addressingSpace = _memory->getSize();
 
     while(_running)
     {
@@ -1755,7 +1753,7 @@ void MOS6502CPU::runCommand(byte opcode)
 }
 
 //--General(public)
-void MOS6502CPU::execute(string program)
+void MOS6502CPU::execute(vector<byte>& program)
 {
 
 }
@@ -1880,7 +1878,6 @@ MOS6502CPU::MOS6502CPU(unsigned int clockSpeedMhz, Memory* memory, bool debug)
     _cycles = _clockSpeed * 1000000;
     _cycleLookup = new byte[255]; //0xFF
     _memory = memory;
-    _compiler = new Compiler(this);
     _stack = new Stack(this);
     _running = false;
     _debug = debug;
@@ -1900,6 +1897,5 @@ MOS6502CPU::~MOS6502CPU()
     delete _status;
     delete _memory;
     delete _stack;
-    delete _compiler;
     delete[] _cycleLookup;
 }

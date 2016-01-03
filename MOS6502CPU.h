@@ -6,6 +6,7 @@
  */
 
 #include <string>
+#include <vector>
 
 typedef unsigned char byte;
 
@@ -16,7 +17,6 @@ namespace MOS_6502
     //forward decs
     class StatusRegister;
     class Memory;
-    class Compiler;
     class Stack;
 
     class MOS6502CPU
@@ -40,7 +40,6 @@ namespace MOS_6502
         //Variables
         bool _running;
         unsigned int _clockSpeed;
-        Compiler* _compiler;
         unsigned int _cycles;
         byte* _cycleLookup; //array storing the cycles that each procedure should take
         bool _debug;
@@ -1171,11 +1170,10 @@ namespace MOS_6502
         public:
             //--Friends:
             friend class Stack;
-            friend class Compiler;
             friend class CpuTest;
 
             //--General Methods:
-            void execute(std::string program); //Executes a series of instructions given in the string
+            void execute(std::vector<byte>& program); //Executes a series of instructions given in the string
             void reset(); //resets cpu state and memory
             void start(); //Starts the CPU
             void stop(); //Stops it

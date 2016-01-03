@@ -1,6 +1,5 @@
 //Compile class implementation
 #include "Compiler.h"
-#include "MOS6502CPU.h"
 #include <iostream>
 #include <fstream>
 
@@ -24,7 +23,7 @@ void Compiler::compileFromFile(string filePath)
     string src = "";
     ifstream io;
 
-    io.open(filePath);
+    io.open(filePath, fstream::in);
 
     if(io.fail())
     {
@@ -39,7 +38,5 @@ void Compiler::compileFromFile(string filePath)
 }
 
 //--Constructor
-Compiler::Compiler(MOS6502CPU* cpuRef)
-{
-    _cpu = cpuRef;
-}
+Compiler::Compiler()
+{}
