@@ -43,7 +43,12 @@ int main()
 
     //Compiler:
 	Compiler* compiler = new Compiler();
+
+#ifdef _WIN32
 	string file = "C:\\Users\\Sudo\\Documents\\Projects\\mos6502\\asmsrc\\test.asm";
+#else
+    string file = "/home/aaron/Documents/Projects/mos6502/asmsrc/test.asm";
+#endif
 
 	cout << "\nCompiler:" << endl;
 	compiler->compileFromFile(file);
