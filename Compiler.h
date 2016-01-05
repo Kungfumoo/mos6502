@@ -16,7 +16,8 @@ namespace MOS_6502
     class Compiler
     {
         //--General(private)
-        std::vector<byte> compileLine(std::string line); //Compiles a line of code and adds it to memory and any operands to the stack
+		std::string stripComments(std::string& str); //Strings comments from a line of code
+        std::vector<byte> compileLine(std::string& line); //Compiles a line of code and adds it to memory and any operands to the stack
 
     public:
         //--General

@@ -2,15 +2,50 @@
 #include "Compiler.h"
 #include <iostream>
 #include <fstream>
+#include <regex>
 
 using namespace MOS_6502;
 using namespace std;
 
 //--General(private)
-vector<byte> Compiler::compileLine(string line)
+string Compiler::stripComments(string& str)
+{
+	unsigned int i = 0;
+	bool found = false;
+
+	for(i; i < str.length(); i++)
+	{
+		if(str[i] == ';')
+		{
+			found = true;
+			break;
+		}
+	}
+
+	if(found)
+		return str.substr(0, i);
+
+	return str;
+}
+
+vector<byte> Compiler::compileLine(string& line)
 {
 	cout << line << endl; //TODO: TEMP
-	return vector<byte>();
+
+	vector<byte> oppcodes;
+
+	//strip comments from line
+	line = stripComments(line);
+
+	cout << "stripped: " << line << endl;
+
+	//test regex matches
+	if(regex_search(line, regex("^LDA")))
+	{
+		cout << "match" << endl;
+	}
+
+	return oppcodes;
 }
 
 //--General(public)
