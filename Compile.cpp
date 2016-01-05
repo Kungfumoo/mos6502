@@ -13,6 +13,8 @@ string Compiler::stripComments(string& str)
 	unsigned int i = 0;
 	bool found = false;
 
+	//TODO: remove whitespace?
+
 	for(i; i < str.length(); i++)
 	{
 		if(str[i] == ';')
@@ -39,8 +41,16 @@ vector<byte> Compiler::compileLine(string& line)
 
 	cout << "stripped: " << line << endl;
 
+	/* TODO:
+	 * Have a list of valid commands
+	 * extract command from line
+	 * check command agaisnt list, if none then do a compiler error
+	 * check command agaisnt the addressing mode regexes, if none then compiler error.
+	 * return oppcodes
+	 */
+
 	//test regex matches
-	if(regex_search(line, regex("^LDA")))
+	if(regex_search(line, regex("LDA")))
 	{
 		cout << "match" << endl;
 	}
