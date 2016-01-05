@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 typedef unsigned char byte;
 
@@ -15,9 +16,14 @@ namespace MOS_6502
 {
     class Compiler
     {
+        std::unordered_map<char, std::vector<std::string>> _commands;
+
         //--General(private)
-		std::string stripComments(std::string& str); //Strings comments from a line of code
+        std::string fetchCommand(std::string& line); //fetch the command from the line, chucks an exception if none found
+		std::string stripComments(std::string& line); //strips comments from a line of code
         std::vector<byte> compileLine(std::string& line); //Compiles a line of code and adds it to memory and any operands to the stack
+
+        void setupCommands();
 
     public:
         //--General
