@@ -23,7 +23,7 @@ string Compiler::fetchCommand(string& line)
 
         for(vector<string>::iterator b = bucket.begin(); b < bucket.end(); b++)
         {
-            if(regex_search(line, regex(*b))) //TODO: everything works fine, regex is breaking.
+            if(regex_search(line, regex(*b)))
                 return *b;
         }
     }
