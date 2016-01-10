@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
+#include "Exceptions.h"
 
 using namespace MOS_6502;
 using namespace std;
@@ -27,9 +28,7 @@ string Compiler::fetchCommand(string& line)
         }
     }
 
-    //TODO: throw exception
-    cout << "ERROR: COMMAND DOES NOT EXIST" << endl;
-    return "";
+	throw new CompilerException(_state.lineNo, string("Unknown Command"));
 }
 
 string Compiler::stripComments(string& line)
@@ -93,7 +92,16 @@ vector<byte> Compiler::compileLine(string& line)
 	 * return oppcodes
 	 */
 
-    string command = fetchCommand(line);
+	string command;
+
+	try
+	{
+		command = fetchCommand(line);
+	}
+	catch (CompilerException* e)
+	{
+		throw e;
+	}
 
     cout << "command: " << command << endl;
 
@@ -216,6 +224,11 @@ void Compiler::setupCommands()
 
 }
 
+void Compiler::resetState()
+{
+	_state.lineNo = 0;
+}
+
 //--General(public)
 vector<byte> Compiler::compile(string src)
 {
@@ -231,10 +244,10 @@ vector<byte> Compiler::compileFromFile(string filePath)
 
     if(io.fail())
     {
-        //TODO: throw exception
-		cout << "error" << endl;
-		return vector<byte>();
+		throw new exception(("Could not open file \"" + filePath + "\"").c_str());
     }
+
+	resetState();
 
 	vector<byte> program;
 
@@ -247,12 +260,21 @@ vector<byte> Compiler::compileFromFile(string filePath)
 			//read and compile each line
 			getline(io, line);
 
-			vector<byte> oppcodes = compileLine(line);
-
-			for(vector<byte>::iterator i = oppcodes.begin(); i < oppcodes.end(); i++)
+			try 
 			{
-				program.insert(program.end(), *i);
+				vector<byte> oppcodes = compileLine(line);
+
+				for (vector<byte>::iterator i = oppcodes.begin(); i < oppcodes.end(); i++)
+				{
+					program.insert(program.end(), *i);
+				}
 			}
+			catch(CompilerException* e)
+			{
+				throw e;
+			}
+
+			_state.lineNo++;
 		}
 	}
 

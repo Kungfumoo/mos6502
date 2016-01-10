@@ -45,13 +45,26 @@ int main()
 	Compiler* compiler = new Compiler();
 
 #ifdef _WIN32
-	string file = "C:\\Users\\Aaron\\Documents\\Projects\\mos6502\\asmsrc\\test.asm";
+	string file = "C:\\Users\\Sudo\\Documents\\Projects\\mos6502\\asmsrc\\test.asm";
 #else
     string file = "/home/aaron/Documents/Projects/mos6502/asmsrc/test.asm";
 #endif
 
-	cout << "\nCompiler:" << endl;
-	compiler->compileFromFile(file);
+	try
+	{
+		cout << "\nCompiler:" << endl;
+		compiler->compileFromFile(file);
+	}
+	catch (exception* e)
+	{
+		cout << "\nEXCEPTION: " << e->what() << endl;
+
+#ifdef _WIN32
+		system("pause");
+#endif
+
+		return 1;
+	}
 
     delete cpu;
     delete testSuite;

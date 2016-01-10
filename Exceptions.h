@@ -5,6 +5,7 @@
  */
 
 #include <exception>
+#include <string>
 
 #ifndef _EXCEPTIONS_H_
 #define _EXCEPTIONS_H_
@@ -13,7 +14,7 @@ namespace MOS_6502
     class UnknownOpCodeException : public std::exception
     {
         //Variables
-        unsigned int _opcode;
+		std::string _error;
 
     public:
         //--Overriden Methods:
@@ -29,5 +30,18 @@ namespace MOS_6502
         //--Overriden Methods:
         const char* what() const noexcept override;
     };
+
+	class CompilerException : public std::exception
+	{
+		//Variables
+		std::string _error;
+
+	public:
+		//--Overriden Methods:
+		const char* what() const noexcept override;
+
+		//--Constructor
+		CompilerException(unsigned int line, std::string& message);
+	};
 }
 #endif

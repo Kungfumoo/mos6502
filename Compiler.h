@@ -16,13 +16,21 @@ namespace MOS_6502
 {
     class Compiler
     {
+		struct CompilerState
+		{
+			unsigned int lineNo;
+		};
+
+		//Variables
         std::unordered_map<char, std::vector<std::string>> _commands;
+		CompilerState _state;
 
         //--General(private)
         std::string fetchCommand(std::string& line); //fetch the command from the line, chucks an exception if none found
 		std::string stripComments(std::string& line); //strips comments from a line of code
         std::vector<byte> compileLine(std::string& line); //Compiles a line of code and adds it to memory and any operands to the stack
-
+		
+		void resetState();
         void setupCommands();
 
     public:
