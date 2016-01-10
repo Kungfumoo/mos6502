@@ -8,6 +8,10 @@
 using namespace MOS_6502;
 using namespace std;
 
+//--Constants
+const byte Compiler::ADDRESSING_MODES = 12;
+const byte Compiler::INVALID_MODE = 0;
+
 //--General(private)
 string Compiler::fetchCommand(string& line)
 {
@@ -29,6 +33,11 @@ string Compiler::fetchCommand(string& line)
     }
 
 	throw new CompilerException(_state.lineNo, string("Unknown Command"));
+}
+
+vector<byte> Compiler::fetchOppcodes(string& command, string& line)
+{
+	return vector<byte>();
 }
 
 string Compiler::stripComments(string& line)
@@ -72,40 +81,23 @@ string Compiler::stripComments(string& line)
 
 vector<byte> Compiler::compileLine(string& line)
 {
-	cout << line << endl; //TODO: TEMP
-
-	vector<byte> oppcodes;
-
 	if(line.empty())
-        return oppcodes;
+        return vector<byte>();
 
 	//strip comments from line
 	line = stripComments(line);
 
-	cout << "stripped: " << line << endl;
-
-	/* TODO:
-	 * Have a list of valid commands
-	 * extract command from line
-	 * check command agaisnt list, if none then do a compiler error
-	 * check command agaisnt the addressing mode regexes, if none then compiler error.
-	 * return oppcodes
-	 */
-
-	string command;
-
 	try
 	{
-		command = fetchCommand(line);
+		string command = fetchCommand(line);
+		vector<byte> oppcodes = fetchOppcodes(command, line);
+
+		return oppcodes;
 	}
 	catch (CompilerException* e)
 	{
 		throw e;
 	}
-
-    cout << "command: " << command << endl;
-
-	return oppcodes;
 }
 
 void Compiler::setupCommands()
@@ -224,6 +216,29 @@ void Compiler::setupCommands()
 
 }
 
+void Compiler::setupOppcodes()
+{
+	_oppcodes["ADC"] = vector<byte>(ADDRESSING_MODES, INVALID_MODE);
+	_oppcodes["ADC"][AddressingModes::IMMEDIATE] = 0x69;
+	_oppcodes["ADC"][AddressingModes::ZEROPAGE] = 0x65;
+	_oppcodes["ADC"][AddressingModes::ZEROPAGE_INDEXED] = 0x75;
+	_oppcodes["ADC"][AddressingModes::ABSOLUTE] = 0x6D;
+	_oppcodes["ADC"][AddressingModes::INDEXED_X] = 0x7D;
+	_oppcodes["ADC"][AddressingModes::INDEXED_Y] = 0x79;
+	_oppcodes["ADC"][AddressingModes::PRE_INDEXED_INDIRECT] = 0x61;
+	_oppcodes["ADC"][AddressingModes::POST_INDEXED_INDIRECT] = 0x71;
+
+	_oppcodes["AND"] = vector<byte>(ADDRESSING_MODES, INVALID_MODE);
+	_oppcodes["AND"][AddressingModes::IMMEDIATE] = 0x29;
+	_oppcodes["AND"][AddressingModes::ZEROPAGE] = 0x25;
+	_oppcodes["AND"][AddressingModes::ZEROPAGE] = 0x35;
+	_oppcodes["AND"][AddressingModes::ABSOLUTE] = 0x2D;
+	_oppcodes["AND"][AddressingModes::INDEXED_X] = 0x3D;
+	_oppcodes["AND"][AddressingModes::INDEXED_Y] = 0x39;
+	_oppcodes["AND"][AddressingModes::PRE_INDEXED_INDIRECT] = 0x21;
+	_oppcodes["AND"][AddressingModes::POST_INDEXED_INDIRECT] = 0x31;
+}
+
 void Compiler::resetState()
 {
 	_state.lineNo = 0;
@@ -286,4 +301,5 @@ vector<byte> Compiler::compileFromFile(string filePath)
 Compiler::Compiler()
 {
     setupCommands();
+	setupCommands();
 }
