@@ -41,7 +41,8 @@ namespace MOS_6502
 		const char* what() const noexcept override;
 
 		//--Constructor
-		CompilerException(unsigned int line, std::string& message);
+		CompilerException(unsigned int line, std::string message);
+		CompilerException(std::string error);
 	};
 }
 #endif

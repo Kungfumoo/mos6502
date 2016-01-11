@@ -259,7 +259,7 @@ vector<byte> Compiler::compileFromFile(string filePath)
 
     if(io.fail())
     {
-		throw new exception(("Could not open file \"" + filePath + "\"").c_str());
+		throw new CompilerException(string("Could not open file \"" + filePath + "\""));
     }
 
 	resetState();
@@ -275,7 +275,7 @@ vector<byte> Compiler::compileFromFile(string filePath)
 			//read and compile each line
 			getline(io, line);
 
-			try 
+			try
 			{
 				vector<byte> oppcodes = compileLine(line);
 

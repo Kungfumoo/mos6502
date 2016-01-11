@@ -28,7 +28,12 @@ const char* CompilerException::what() const noexcept
 	return _error.c_str();
 }
 
-CompilerException::CompilerException(unsigned int lineNo, string& message)
+CompilerException::CompilerException(unsigned int lineNo, string message)
 {
 	_error = "COMPILER ERROR (ln: " + to_string(lineNo) + "): " + message;
+}
+
+CompilerException::CompilerException(string error)
+{
+    _error = error;
 }
