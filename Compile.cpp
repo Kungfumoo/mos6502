@@ -286,6 +286,7 @@ vector<byte> Compiler::compileFromFile(string filePath)
 			}
 			catch(CompilerException* e)
 			{
+			    io.close();
 				throw e;
 			}
 
