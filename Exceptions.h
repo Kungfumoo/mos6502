@@ -4,11 +4,12 @@
  *Header containing exception declarations for use in this emulator.
  */
 
+#ifndef _EXCEPTIONS_H_
+#define _EXCEPTIONS_H_
+
 #include <exception>
 #include <string>
 
-#ifndef _EXCEPTIONS_H_
-#define _EXCEPTIONS_H_
 namespace MOS_6502
 {
     class UnknownOpCodeException : public std::exception

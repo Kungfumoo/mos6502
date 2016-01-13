@@ -5,10 +5,11 @@
  * Use this to provide unique implementation for the platform you're emulating
  */
 
-typedef unsigned char byte;
-
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
+
+typedef unsigned char byte;
+
 namespace MOS_6502
 {
     class Memory

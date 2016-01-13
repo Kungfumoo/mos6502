@@ -3,12 +3,13 @@
 /*Description: Class that contains static methods to perform general tasks
  */
 
+#ifndef _UTILITY_H_
+#define _UTILITY_H_
+
 #include <bitset>
 
 typedef unsigned char byte;
 
-#ifndef _UTILITY_H_
-#define _UTILITY_H_
 namespace MOS_6502
 {
     //Struct used to store arithmetic results

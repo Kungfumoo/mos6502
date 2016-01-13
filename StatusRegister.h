@@ -15,13 +15,14 @@
  * -S = Sign flag
  */
 
+#ifndef _STATUS_REGISTER_H_
+#define _STATUS_REGISTER_H_
+
 #include <bitset>
 #include <string>
 
 typedef unsigned char byte;
 
-#ifndef _STATUS_REGISTER_H_
-#define _STATUS_REGISTER_H_
 namespace MOS_6502
 {
     class StatusRegister

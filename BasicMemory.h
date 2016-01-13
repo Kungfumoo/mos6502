@@ -4,10 +4,11 @@
 * Class representing Basic RAM for the CPU.
 */
 
-#include "Memory.h"
-
 #ifndef _BASIC_MEMORY_H_
 #define _BASIC_MEMORY_H_
+
+#include "Memory.h"
+
 namespace MOS_6502
 {
 	class BasicMemory : public Memory

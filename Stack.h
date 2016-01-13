@@ -5,10 +5,11 @@
  *256 bytes between 0x0100 ~ 0x01FF
  */
 
-typedef unsigned char byte;
-
 #ifndef _STACK_H_
 #define _STACK_H_
+
+typedef unsigned char byte;
+
 namespace MOS_6502
 {
     //forward decs
