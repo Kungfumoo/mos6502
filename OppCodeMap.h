@@ -18,7 +18,7 @@ namespace MOS_6502
 namespace CompilerAssets
 {
     class OppCodeMap : public std::unordered_map<std::string, std::vector<byte>>
-    {
+	{
     public:
 		//Constants
 		static const byte ADDRESSING_MODES;
