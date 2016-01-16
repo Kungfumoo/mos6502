@@ -20,6 +20,26 @@ namespace CompilerAssets
     class OppCodeMap : public std::unordered_map<std::string, std::vector<byte>>
     {
     public:
+		//Constants
+		static const byte ADDRESSING_MODES;
+		static const byte INVALID_MODE;
+
+		enum AddressingModes
+		{
+			IMMEDIATE,
+			ABSOLUTE,
+			ZEROPAGE,
+			IMPLIED,
+			ACCUMULATOR,
+			INDEXED_X,
+			INDEXED_Y,
+			ZEROPAGE_INDEXED,
+			INDIRECT,
+			PRE_INDEXED_INDIRECT,
+			POST_INDEXED_INDIRECT,
+			RELATIVE
+		};
+
         //--Constructors
         OppCodeMap();
     };

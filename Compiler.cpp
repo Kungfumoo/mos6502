@@ -5,14 +5,11 @@
 #include <regex>
 #include "Exceptions.h"
 #include "CommandMap.h"
+#include "OppCodeMap.h"
 
 using namespace MOS_6502;
 using namespace MOS_6502::CompilerAssets;
 using namespace std;
-
-//--Constants
-const byte Compiler::ADDRESSING_MODES = 12;
-const byte Compiler::INVALID_MODE = 0;
 
 //--General(private)
 string Compiler::fetchCommand(string& line)
@@ -102,29 +99,6 @@ vector<byte> Compiler::compileLine(string& line)
 	}
 }
 
-void Compiler::setupOppcodes()
-{
-	_oppcodes["ADC"] = vector<byte>(ADDRESSING_MODES, INVALID_MODE);
-	_oppcodes["ADC"][AddressingModes::IMMEDIATE] = 0x69;
-	_oppcodes["ADC"][AddressingModes::ZEROPAGE] = 0x65;
-	_oppcodes["ADC"][AddressingModes::ZEROPAGE_INDEXED] = 0x75;
-	_oppcodes["ADC"][AddressingModes::ABSOLUTE] = 0x6D;
-	_oppcodes["ADC"][AddressingModes::INDEXED_X] = 0x7D;
-	_oppcodes["ADC"][AddressingModes::INDEXED_Y] = 0x79;
-	_oppcodes["ADC"][AddressingModes::PRE_INDEXED_INDIRECT] = 0x61;
-	_oppcodes["ADC"][AddressingModes::POST_INDEXED_INDIRECT] = 0x71;
-
-	_oppcodes["AND"] = vector<byte>(ADDRESSING_MODES, INVALID_MODE);
-	_oppcodes["AND"][AddressingModes::IMMEDIATE] = 0x29;
-	_oppcodes["AND"][AddressingModes::ZEROPAGE] = 0x25;
-	_oppcodes["AND"][AddressingModes::ZEROPAGE] = 0x35;
-	_oppcodes["AND"][AddressingModes::ABSOLUTE] = 0x2D;
-	_oppcodes["AND"][AddressingModes::INDEXED_X] = 0x3D;
-	_oppcodes["AND"][AddressingModes::INDEXED_Y] = 0x39;
-	_oppcodes["AND"][AddressingModes::PRE_INDEXED_INDIRECT] = 0x21;
-	_oppcodes["AND"][AddressingModes::POST_INDEXED_INDIRECT] = 0x31;
-}
-
 void Compiler::resetState()
 {
 	_state.lineNo = 0;
@@ -188,11 +162,12 @@ vector<byte> Compiler::compileFromFile(string filePath)
 Compiler::Compiler()
 {
     _commands = new CommandMap();
-	setupOppcodes();
+	_oppcodes = new OppCodeMap();
 }
 
 //--Destructor
 Compiler::~Compiler()
 {
     delete _commands;
+	delete _oppcodes;
 }

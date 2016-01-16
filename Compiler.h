@@ -19,38 +19,19 @@ namespace MOS_6502
     {
         //forward dec
         class CommandMap;
+		class OppCodeMap;
     }
 
     class Compiler
     {
-		enum AddressingModes
-		{
-			IMMEDIATE,
-			ABSOLUTE,
-			ZEROPAGE,
-			IMPLIED,
-			ACCUMULATOR,
-			INDEXED_X,
-			INDEXED_Y,
-			ZEROPAGE_INDEXED,
-			INDIRECT,
-			PRE_INDEXED_INDIRECT,
-			POST_INDEXED_INDIRECT,
-			RELATIVE
-		};
-
 		struct CompilerState
 		{
 			unsigned int lineNo;
 		};
 
-		//Constants
-		static const byte ADDRESSING_MODES;
-		static const byte INVALID_MODE;
-
 		//Variables
 		CompilerAssets::CommandMap* _commands;
-		std::unordered_map<std::string, std::vector<byte>> _oppcodes;
+		CompilerAssets::OppCodeMap* _oppcodes;
 		CompilerState _state;
 
         //--General(private)
@@ -60,7 +41,6 @@ namespace MOS_6502
         std::vector<byte> compileLine(std::string& line); //Compiles a line of code and adds it to memory and any operands to the stack
 
 		void resetState();
-		void setupOppcodes();
 
     public:
         //--General
