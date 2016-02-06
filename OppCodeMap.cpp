@@ -23,16 +23,16 @@ OppCodeMap::OppCodeMap()
 	(*adc)[AddressingModes::POST_INDEXED_INDIRECT] = 0x71;
 
 	this->insert(pair<string, vector<byte>>("AND", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
-	vector<byte>* and = &this->at("AND");
+	vector<byte>* and_c = &this->at("AND");
 
-	(*and)[AddressingModes::IMMEDIATE] = 0x29;
-	(*and)[AddressingModes::ZEROPAGE] = 0x25;
-	(*and)[AddressingModes::ZEROPAGE] = 0x35;
-	(*and)[AddressingModes::ABSOLUTE] = 0x2D;
-	(*and)[AddressingModes::INDEXED_X] = 0x3D;
-	(*and)[AddressingModes::INDEXED_Y] = 0x39;
-	(*and)[AddressingModes::PRE_INDEXED_INDIRECT] = 0x21;
-	(*and)[AddressingModes::POST_INDEXED_INDIRECT] = 0x31;
+	(*and_c)[AddressingModes::IMMEDIATE] = 0x29;
+	(*and_c)[AddressingModes::ZEROPAGE] = 0x25;
+	(*and_c)[AddressingModes::ZEROPAGE] = 0x35;
+	(*and_c)[AddressingModes::ABSOLUTE] = 0x2D;
+	(*and_c)[AddressingModes::INDEXED_X] = 0x3D;
+	(*and_c)[AddressingModes::INDEXED_Y] = 0x39;
+	(*and_c)[AddressingModes::PRE_INDEXED_INDIRECT] = 0x21;
+	(*and_c)[AddressingModes::POST_INDEXED_INDIRECT] = 0x31;
 
 	this->insert(pair<string, vector<byte>>("ASL", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
 	vector<byte>* asl = &this->at("ASL");
