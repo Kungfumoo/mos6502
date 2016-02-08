@@ -344,7 +344,7 @@ namespace MOS_6502
 
              addressing    assembler    opc  bytes  cyles
              --------------------------------------------
-             relative      BVC oper      70    2     2**
+             relative      BVS oper      70    2     2**
 
              11
          */
