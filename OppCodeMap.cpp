@@ -178,4 +178,36 @@ OppCodeMap::OppCodeMap()
 	(*inc)[AddressingModes::ABSOLUTE] = 0xEE;
 	(*inc)[AddressingModes::INDEXED_X] = 0xFE;
 
+	this->insert(pair<string, vector<byte>>("INX", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* inx = &this->at("INX");
+
+	(*inx)[AddressingModes::IMPLIED] = 0xE8;
+
+	this->insert(pair<string, vector<byte>>("INY", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* iny = &this->at("INY");
+
+	(*iny)[AddressingModes::IMPLIED] = 0xC8;
+
+	this->insert(pair<string, vector<byte>>("JMP", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* jmp = &this->at("JMP");
+
+	(*jmp)[AddressingModes::ABSOLUTE] = 0x4C;
+	(*jmp)[AddressingModes::INDIRECT] = 0x6C;
+
+	this->insert(pair<string, vector<byte>>("JSR", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* jsr = &this->at("JSR");
+
+	(*jsr)[AddressingModes::ABSOLUTE] = 0x20;
+
+	this->insert(pair<string, vector<byte>>("LDA", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* lda = &this->at("LDA");
+
+	(*lda)[AddressingModes::IMMEDIATE] = 0xA9;
+	(*lda)[AddressingModes::ZEROPAGE] = 0xA5;
+	(*lda)[AddressingModes::ZEROPAGE_INDEXED] = 0xB5;
+	(*lda)[AddressingModes::ABSOLUTE] = 0xAD;
+	(*lda)[AddressingModes::INDEXED_X] = 0xBD;
+	(*lda)[AddressingModes::INDEXED_Y] = 0xB9;
+	(*lda)[AddressingModes::PRE_INDEXED_INDIRECT] = 0xA1;
+	(*lda)[AddressingModes::POST_INDEXED_INDIRECT] = 0xB1;
 }
