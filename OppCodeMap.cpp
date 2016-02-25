@@ -210,4 +210,22 @@ OppCodeMap::OppCodeMap()
 	(*lda)[AddressingModes::INDEXED_Y] = 0xB9;
 	(*lda)[AddressingModes::PRE_INDEXED_INDIRECT] = 0xA1;
 	(*lda)[AddressingModes::POST_INDEXED_INDIRECT] = 0xB1;
+
+	this->insert(pair<string, vector<byte>>("LDX", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* ldx = &this->at("LDX");
+
+	(*ldx)[AddressingModes::IMMEDIATE] = 0xA2;
+	(*ldx)[AddressingModes::ZEROPAGE] = 0xA6;
+	(*ldx)[AddressingModes::ZEROPAGE_INDEXED] = 0xB6; //to Y
+	(*ldx)[AddressingModes::ABSOLUTE] = 0xAE;
+	(*ldx)[AddressingModes::INDEXED_Y] = 0xBE;
+
+	this->insert(pair<string, vector<byte>>("LDY", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* ldy = &this->at("LDY");
+
+	(*ldy)[AddressingModes::IMMEDIATE] = 0xA0;
+	(*ldy)[AddressingModes::ZEROPAGE] = 0xA4;
+	(*ldy)[AddressingModes::ZEROPAGE_INDEXED] = 0xB4;
+	(*ldy)[AddressingModes::ABSOLUTE] = 0xAC;
+	(*ldy)[AddressingModes::INDEXED_X] = 0xBC;
 }
