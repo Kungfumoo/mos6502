@@ -43,7 +43,28 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
     if(regex_search(line, regex("^[A-Z]{3}\ \#[0-9A-Za-z]{2}$"))) //1 immediate
     {
         oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::IMMEDIATE]);
-        oppCodes.push_back((byte)(stoi(line.substr(5))));
+        oppCodes.push_back((byte)(stoi(line.substr(5), nullptr, 16)));
+    }
+    else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{4}$"))) //2 absolute
+    {
+        unsigned short operand = (unsigned short)stoi(line.substr(4), nullptr, 16);
+
+        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::ABSOLUTE]);
+        oppCodes.push_back((byte)((operand >> 8) & 255));
+        oppCodes.push_back((byte)operand & 255);
+    }
+    else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{2}$"))) //3 zeropage
+    {
+        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::ZEROPAGE]);
+        oppCodes.push_back((byte)(stoi(line.substr(4), nullptr, 16)));
+    }
+    else if(regex_search(line, regex("^[A-Z]{3}$"))) //4 implied
+    {
+        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::IMPLIED]);
+    }
+    else if(regex_search(line, regex("^[A-Z]{3}\ A$"))) //5 accumulator
+    {
+        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::ACCUMULATOR]);
     }
     else
     {
