@@ -36,7 +36,21 @@ string Compiler::fetchCommand(string& line)
 
 vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 {
-	return vector<byte>();
+    vector<byte> oppMap = this->_oppcodes->at(command);
+    vector<byte> oppCodes;
+
+    //work out addressing mode
+    if(regex_search(line, regex("^[A-Z]{3}\ \#[0-9A-Za-z]{2}$"))) //1 immediate
+    {
+        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::IMMEDIATE]);
+        oppCodes.push_back((byte)(stoi(line.substr(5))));
+    }
+    else
+    {
+        //TODO: throw exception, unknown format
+    }
+
+	return oppCodes;
 }
 
 string Compiler::stripComments(string& line)
