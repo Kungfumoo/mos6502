@@ -228,4 +228,163 @@ OppCodeMap::OppCodeMap()
 	(*ldy)[AddressingModes::ZEROPAGE_INDEXED] = 0xB4;
 	(*ldy)[AddressingModes::ABSOLUTE] = 0xAC;
 	(*ldy)[AddressingModes::INDEXED_X] = 0xBC;
+
+	this->insert(pair<string, vector<byte>>("LSR", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* lsr = &this->at("LSR");
+
+	(*lsr)[AddressingModes::ACCUMULATOR] = 0x4A;
+	(*lsr)[AddressingModes::ZEROPAGE] = 0x46;
+	(*lsr)[AddressingModes::ZEROPAGE_INDEXED] = 0x56;
+	(*lsr)[AddressingModes::ABSOLUTE] = 0x4E;
+	(*lsr)[AddressingModes::INDEXED_X] = 0x5E;
+
+	this->insert(pair<string, vector<byte>>("NOP", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* nop = &this->at("NOP");
+
+	(*nop)[AddressingModes::IMPLIED] = 0xEA;
+
+	this->insert(pair<string, vector<byte>>("ORA", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* ora = &this->at("ORA");
+
+	(*ora)[AddressingModes::IMMEDIATE] = 0x09;
+	(*ora)[AddressingModes::ZEROPAGE] = 0x05;
+	(*ora)[AddressingModes::ZEROPAGE_INDEXED] = 0x15;
+	(*ora)[AddressingModes::ABSOLUTE] = 0x0D;
+	(*ora)[AddressingModes::INDEXED_X] = 0x1D;
+	(*ora)[AddressingModes::INDEXED_Y] = 0x19;
+	(*ora)[AddressingModes::PRE_INDEXED_INDIRECT] = 0x01;
+	(*ora)[AddressingModes::POST_INDEXED_INDIRECT] = 0x11;
+
+	this->insert(pair<string, vector<byte>>("PHA", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* pha = &this->at("PHA");
+
+	(*pha)[AddressingModes::IMPLIED] = 0x48;
+
+	this->insert(pair<string, vector<byte>>("PHP", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* php = &this->at("PHP");
+
+	(*php)[AddressingModes::IMPLIED] = 0x08;
+
+	this->insert(pair<string, vector<byte>>("PLA", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* pla = &this->at("PLA");
+
+	(*pla)[AddressingModes::IMPLIED] = 0x68;
+
+	this->insert(pair<string, vector<byte>>("PLP", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* plp = &this->at("PLP");
+
+	(*plp)[AddressingModes::IMPLIED] = 0x28;
+
+	this->insert(pair<string, vector<byte>>("ROL", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* rol = &this->at("ROL");
+
+	(*rol)[AddressingModes::ACCUMULATOR] = 0x2A;
+	(*rol)[AddressingModes::ZEROPAGE] = 0x26;
+	(*rol)[AddressingModes::ZEROPAGE_INDEXED] = 0x36;
+	(*rol)[AddressingModes::ABSOLUTE] = 0x2E;
+	(*rol)[AddressingModes::INDEXED_X] = 0x3E;
+
+	this->insert(pair<string, vector<byte>>("ROR", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* ror = &this->at("ROR");
+
+	(*ror)[AddressingModes::ACCUMULATOR] = 0x6A;
+	(*ror)[AddressingModes::ZEROPAGE] = 0x66;
+	(*ror)[AddressingModes::ZEROPAGE_INDEXED] = 0x76;
+	(*ror)[AddressingModes::ABSOLUTE] = 0x6E;
+	(*ror)[AddressingModes::INDEXED_X] = 0x7E;
+
+	this->insert(pair<string, vector<byte>>("RTI", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* rti = &this->at("RTI");
+
+	(*rti)[AddressingModes::IMPLIED] = 0x40;
+
+	this->insert(pair<string, vector<byte>>("RTS", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* rts = &this->at("RTS");
+
+	(*rts)[AddressingModes::IMPLIED] = 0x60;
+
+	this->insert(pair<string, vector<byte>>("SBC", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* sbc = &this->at("SBC");
+
+	(*sbc)[AddressingModes::IMMEDIATE] = 0xE9;
+	(*sbc)[AddressingModes::ZEROPAGE] = 0xE5;
+	(*sbc)[AddressingModes::ZEROPAGE_INDEXED] = 0xF5;
+	(*sbc)[AddressingModes::ABSOLUTE] = 0xED;
+	(*sbc)[AddressingModes::INDEXED_X] = 0xFD;
+	(*sbc)[AddressingModes::INDEXED_Y] = 0xF9;
+	(*sbc)[AddressingModes::PRE_INDEXED_INDIRECT] = 0xE1;
+	(*sbc)[AddressingModes::POST_INDEXED_INDIRECT] = 0xF1;
+
+	this->insert(pair<string, vector<byte>>("SEC", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* sec = &this->at("SEC");
+
+	(*sec)[AddressingModes::IMPLIED] = 0x38;
+
+
+	this->insert(pair<string, vector<byte>>("SED", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* sed = &this->at("SED");
+
+	(*sed)[AddressingModes::IMPLIED] = 0xF8;
+
+	this->insert(pair<string, vector<byte>>("SEI", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* sei = &this->at("SEI");
+
+	(*sei)[AddressingModes::IMPLIED] = 0x78;
+
+
+    this->insert(pair<string, vector<byte>>("STA", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* sta = &this->at("STA");
+
+	(*sta)[AddressingModes::ZEROPAGE] = 0x85;
+	(*sta)[AddressingModes::ZEROPAGE_INDEXED] = 0x95;
+	(*sta)[AddressingModes::ABSOLUTE] = 0x8D;
+	(*sta)[AddressingModes::INDEXED_X] = 0x9D;
+	(*sta)[AddressingModes::INDEXED_Y] = 0x99;
+	(*sta)[AddressingModes::PRE_INDEXED_INDIRECT] = 0x81;
+	(*sta)[AddressingModes::POST_INDEXED_INDIRECT] = 0x91;
+
+	this->insert(pair<string, vector<byte>>("STX", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* stx = &this->at("STX");
+
+	(*stx)[AddressingModes::ZEROPAGE] = 0x86;
+	(*stx)[AddressingModes::ZEROPAGE_INDEXED] = 0x96; //from Y though
+	(*stx)[AddressingModes::ABSOLUTE] = 0x8E;
+
+	this->insert(pair<string, vector<byte>>("STY", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* sty = &this->at("STY");
+
+	(*sty)[AddressingModes::ZEROPAGE] = 0x84;
+	(*sty)[AddressingModes::ZEROPAGE_INDEXED] = 0x94;
+	(*sty)[AddressingModes::ABSOLUTE] = 0x8C;
+
+	this->insert(pair<string, vector<byte>>("TAX", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* tax = &this->at("TAX");
+
+	(*tax)[AddressingModes::IMPLIED] = 0xAA;
+
+
+    this->insert(pair<string, vector<byte>>("TAY", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* tay = &this->at("TAY");
+
+	(*tay)[AddressingModes::IMPLIED] = 0xA8;
+
+	this->insert(pair<string, vector<byte>>("TSX", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* tsx = &this->at("TSX");
+
+	(*tsx)[AddressingModes::IMPLIED] = 0xBA;
+
+	this->insert(pair<string, vector<byte>>("TXA", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* txa = &this->at("TXA");
+
+	(*txa)[AddressingModes::IMPLIED] = 0x8A;
+
+	this->insert(pair<string, vector<byte>>("TXS", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* txs = &this->at("TXS");
+
+	(*txs)[AddressingModes::IMPLIED] = 0x9A;
+
+	this->insert(pair<string, vector<byte>>("TYA", vector<byte>(ADDRESSING_MODES, INVALID_MODE)));
+	vector<byte>* tya = &this->at("TYA");
+
+	(*tya)[AddressingModes::IMPLIED] = 0x98;
 }
