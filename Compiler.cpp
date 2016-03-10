@@ -92,9 +92,19 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
         oppCodes.push_back((byte)((operand >> 8) & 255));
         oppCodes.push_back((byte)operand & 255);
     }
+    else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{2},X\)$"))) //9 pre-indexed indirect
+    {
+        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::PRE_INDEXED_INDIRECT]);
+        oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
+    }
+    else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{2}\),Y$"))) //10 post-indexed indirect
+    {
+        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::POST_INDEXED_INDIRECT]);
+        oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
+    }
     else
     {
-        //TODO: throw exception, unknown format
+        throw new CompilerException(_state.lineNo, "Syntax Error");
     }
 
 	return oppCodes;
