@@ -37,9 +37,15 @@ namespace MOS_6502
 		//Variables
 		std::string _error;
 
+		//--Private Methods:
+		void composeMessage(unsigned int& line, std::string& message);
+
 	public:
 		//--Overriden Methods:
 		const char* what() const noexcept override;
+
+		//--Public Methods:
+		void appendLine(unsigned int line);
 
 		//--Constructor
 		CompilerException(unsigned int line, std::string message);

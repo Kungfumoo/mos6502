@@ -40,6 +40,9 @@ namespace CompilerAssets
 			RELATIVE
 		};
 
+		//--Public Methods
+		byte fetchCommandCode(std::string cmd, AddressingModes mode);
+
         //--Constructors
         OppCodeMap();
     };

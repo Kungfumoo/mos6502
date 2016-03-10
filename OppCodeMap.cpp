@@ -1,11 +1,25 @@
 #include "OppCodeMap.h"
+#include "Exceptions.h"
 
 using namespace std;
+using namespace MOS_6502;
 using namespace MOS_6502::CompilerAssets;
 
 //--Constants
 const byte OppCodeMap::ADDRESSING_MODES = 12;
 const byte OppCodeMap::INVALID_MODE = 0xFF;
+
+//--Public Methods
+byte OppCodeMap::fetchCommandCode(string cmd, AddressingModes mode)
+{
+    vector<byte> oppMap = at(cmd);
+    byte value = oppMap[mode];
+
+    if(value == INVALID_MODE)
+        throw CompilerException("Invalid Addressing mode for CMD \"" + cmd + "\"");
+
+    return value;
+}
 
 //--Constructor
 OppCodeMap::OppCodeMap()

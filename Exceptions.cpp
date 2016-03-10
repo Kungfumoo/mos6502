@@ -23,14 +23,24 @@ const char* BitLimitExceededException::what() const noexcept
 }
 
 //--CompilerException
+void CompilerException::composeMessage(unsigned int& line, string& message)
+{
+    _error = "COMPILER ERROR (ln: " + to_string(line) + "): " + message;
+}
+
 const char* CompilerException::what() const noexcept
 {
 	return _error.c_str();
 }
 
-CompilerException::CompilerException(unsigned int lineNo, string message)
+void CompilerException::appendLine(unsigned int line)
 {
-	_error = "COMPILER ERROR (ln: " + to_string(lineNo) + "): " + message;
+    composeMessage(line, _error);
+}
+
+CompilerException::CompilerException(unsigned int line, string message)
+{
+	composeMessage(line, message);
 }
 
 CompilerException::CompilerException(string error)

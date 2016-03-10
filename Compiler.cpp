@@ -36,76 +36,79 @@ string Compiler::fetchCommand(string& line)
 
 vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 {
-    vector<byte> oppMap = this->_oppcodes->at(command);
     vector<byte> oppCodes;
 
     //work out addressing mode
-    if(regex_search(line, regex("^[A-Z]{3}\ \#[0-9A-Za-z]{2}$"))) //1 immediate
-    {
-        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::IMMEDIATE]);
-        oppCodes.push_back((byte)(stoi(line.substr(5), nullptr, 16)));
-    }
-    else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{4}$"))) //2 absolute
-    {
-        unsigned short operand = (unsigned short)stoi(line.substr(4), nullptr, 16);
+    try {
+        if(regex_search(line, regex("^[A-Z]{3}\ \#[0-9A-Za-z]{2}$"))) //1 immediate
+        {
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::IMMEDIATE));
+            oppCodes.push_back((byte)(stoi(line.substr(5), nullptr, 16)));
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{4}$"))) //2 absolute
+        {
+            unsigned short operand = (unsigned short)stoi(line.substr(4), nullptr, 16);
 
-        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::ABSOLUTE]);
-        oppCodes.push_back((byte)((operand >> 8) & 255));
-        oppCodes.push_back((byte)operand & 255);
-    }
-    else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{2}$"))) //3 zeropage
-    {
-        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::ZEROPAGE]);
-        oppCodes.push_back((byte)(stoi(line.substr(4), nullptr, 16)));
-    }
-    else if(regex_search(line, regex("^[A-Z]{3}$"))) //4 implied
-    {
-        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::IMPLIED]);
-    }
-    else if(regex_search(line, regex("^[A-Z]{3}\ A$"))) //5 accumulator
-    {
-        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::ACCUMULATOR]);
-    }
-    else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{4},[X|Y]$"))) //6 absolute indexed
-    {
-        char reg = line.back();
-        unsigned short operand = (unsigned short)stoi(line.substr(4, 4), nullptr, 16);
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ABSOLUTE));
+            oppCodes.push_back((byte)((operand >> 8) & 255));
+            oppCodes.push_back((byte)operand & 255);
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{2}$"))) //3 zeropage
+        {
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ZEROPAGE));
+            oppCodes.push_back((byte)(stoi(line.substr(4), nullptr, 16)));
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}$"))) //4 implied
+        {
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::IMPLIED));
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}\ A$"))) //5 accumulator
+        {
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ACCUMULATOR));
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{4},[X|Y]$"))) //6 absolute indexed
+        {
+            OppCodeMap::AddressingModes mode = (line.back() == 'X') ? OppCodeMap::AddressingModes::INDEXED_X : OppCodeMap::AddressingModes::INDEXED_Y;
+            unsigned short operand = (unsigned short)stoi(line.substr(4, 4), nullptr, 16);
 
-        if(reg == 'X')
-            oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::INDEXED_X]);
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, mode));
+            oppCodes.push_back((byte)((operand >> 8) & 255));
+            oppCodes.push_back((byte)operand & 255);
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{2},[X|Y]$"))) //7 zeropage indexed
+        {
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ZEROPAGE_INDEXED));
+            oppCodes.push_back((byte)(stoi(line.substr(4, 2), nullptr, 16)));
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{4}\)$"))) //8 Indirect
+        {
+            unsigned short operand = (unsigned short)stoi(line.substr(5, 4), nullptr, 16);
+
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::INDIRECT));
+            oppCodes.push_back((byte)((operand >> 8) & 255));
+            oppCodes.push_back((byte)operand & 255);
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{2},X\)$"))) //9 pre-indexed indirect
+        {
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::PRE_INDEXED_INDIRECT));
+            oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{2}\),Y$"))) //10 post-indexed indirect
+        {
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::POST_INDEXED_INDIRECT));
+            oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
+        }
         else
-            oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::INDEXED_Y]);
+        {
+            throw new CompilerException("Syntax Error");
+        }
+    }
+    catch(CompilerException* e)
+    {
+        e->appendLine(_state.lineNo);
+        throw e;
+    }
 
-        oppCodes.push_back((byte)((operand >> 8) & 255));
-        oppCodes.push_back((byte)operand & 255);
-    }
-    else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{2},[X|Y]$"))) //7 zeropage indexed
-    {
-        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::ZEROPAGE_INDEXED]);
-        oppCodes.push_back((byte)(stoi(line.substr(4, 2), nullptr, 16)));
-    }
-    else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{4}\)$"))) //8 Indirect
-    {
-        unsigned short operand = (unsigned short)stoi(line.substr(5, 4), nullptr, 16);
-
-        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::INDIRECT]);
-        oppCodes.push_back((byte)((operand >> 8) & 255));
-        oppCodes.push_back((byte)operand & 255);
-    }
-    else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{2},X\)$"))) //9 pre-indexed indirect
-    {
-        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::PRE_INDEXED_INDIRECT]);
-        oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
-    }
-    else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{2}\),Y$"))) //10 post-indexed indirect
-    {
-        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::POST_INDEXED_INDIRECT]);
-        oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
-    }
-    else
-    {
-        throw new CompilerException(_state.lineNo, "Syntax Error");
-    }
 
 	return oppCodes;
 }
