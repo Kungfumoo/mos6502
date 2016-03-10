@@ -79,6 +79,19 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
         oppCodes.push_back((byte)((operand >> 8) & 255));
         oppCodes.push_back((byte)operand & 255);
     }
+    else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{2},[X|Y]$"))) //7 zeropage indexed
+    {
+        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::ZEROPAGE_INDEXED]);
+        oppCodes.push_back((byte)(stoi(line.substr(4, 2), nullptr, 16)));
+    }
+    else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{4}\)$"))) //8 Indirect
+    {
+        unsigned short operand = (unsigned short)stoi(line.substr(5, 4), nullptr, 16);
+
+        oppCodes.push_back(oppMap[OppCodeMap::AddressingModes::INDIRECT]);
+        oppCodes.push_back((byte)((operand >> 8) & 255));
+        oppCodes.push_back((byte)operand & 255);
+    }
     else
     {
         //TODO: throw exception, unknown format
