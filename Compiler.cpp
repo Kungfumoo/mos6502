@@ -157,17 +157,10 @@ vector<byte> Compiler::compileLine(string& line)
 	//strip comments from line
 	line = stripComments(line);
 
-	try
-	{
-		string command = fetchCommand(line);
-		vector<byte> oppcodes = fetchOppcodes(command, line);
+    string command = fetchCommand(line);
+    vector<byte> oppcodes = fetchOppcodes(command, line);
 
-		return oppcodes;
-	}
-	catch (CompilerException* e)
-	{
-		throw e;
-	}
+    return oppcodes;
 }
 
 void Compiler::resetState()
