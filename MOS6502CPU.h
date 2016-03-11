@@ -25,6 +25,7 @@ namespace MOS_6502
         //Constants
         static const byte MAX_CLOCK_SPEED_MHZ;
         static const byte NEGATIVE; //represents the number where the CPU starts interpreting as negative
+        static const unsigned short DEFAULT_PC; //PC starting default
 
         //Registers
         unsigned short _programCounter;
@@ -1188,7 +1189,7 @@ namespace MOS_6502
             //--Constructors:
             /*Constructor 1
              *clockSpeedMhz = the clockspeed that this should operate on in Mhz(max is 2)
-             *memory = A pointer to an instanciated Memory object(represents RAM)
+             *memory = A pointer to an created Memory object(represents RAM)
              */
             MOS6502CPU(unsigned int clockSpeedMhz, Memory* memory, bool debug);
 

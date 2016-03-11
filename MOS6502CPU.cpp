@@ -13,6 +13,7 @@ using namespace std;
 //Constant Definitions
 const byte MOS6502CPU::MAX_CLOCK_SPEED_MHZ = 2;
 const byte MOS6502CPU::NEGATIVE = 127;
+const unsigned short MOS6502CPU::DEFAULT_PC = 0x600;
 
 //--STATE METHODS(private)
 void MOS6502CPU::saveProgramCounter()
@@ -1582,6 +1583,10 @@ void MOS6502CPU::run()
         {
             //Perform interupts
 
+            //TODO: TEMP fudge to test smaller programs
+            if(_status->getB())
+                stop();
+
             //Perform cyclic tasks
 
             counter += _cycles;
@@ -1755,7 +1760,12 @@ void MOS6502CPU::runCommand(byte opcode)
 //--General(public)
 void MOS6502CPU::execute(vector<byte>& program)
 {
+    unsigned short memoryCounter = _programCounter;
 
+    for(auto i = program.begin(); i < program.end(); i++)
+        _memory->write(*i, memoryCounter++);
+
+    start();
 }
 
 void MOS6502CPU::reset()
@@ -1769,7 +1779,7 @@ void MOS6502CPU::reset()
     _accumulator = 0;
     _x = 0;
     _y = 0;
-    _programCounter = 0;
+    _programCounter = DEFAULT_PC;
     _stackPointer = 0xFF;
 }
 
@@ -1784,7 +1794,7 @@ void MOS6502CPU::start()
 
 void MOS6502CPU::stop()
 {
-
+    _running = false;
 }
 
 //--Debugging Methods
@@ -1887,7 +1897,7 @@ MOS6502CPU::MOS6502CPU(unsigned int clockSpeedMhz, Memory* memory, bool debug)
     _accumulator = 0;
     _x = 0;
     _y = 0;
-    _programCounter = 0;
+    _programCounter = DEFAULT_PC;
     _stackPointer = 0xFF;
 }
 

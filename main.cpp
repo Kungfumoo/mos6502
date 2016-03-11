@@ -53,7 +53,10 @@ int main()
 	try
 	{
 		cout << "\nCompiler:" << endl;
-		compiler->compileFromFile(file);
+		vector<byte> program = compiler->compileFromFile(file);
+		cout << "\nCPU:" << endl;
+		cpu->execute(program);
+		cpu->status();
 	}
 	catch (exception* e)
 	{
