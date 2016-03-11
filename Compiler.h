@@ -37,7 +37,7 @@ namespace MOS_6502
         //--General(private)
         std::string fetchCommand(std::string& line); //fetch the command from the line, chucks an exception if none found
 		std::vector<byte> fetchOppcodes(std::string& command, std::string& line); //converts the line into oppcodes
-		std::string stripComments(std::string& line); //strips comments from a line of code
+		std::string stripAndTrim(std::string& line); //strips comments, whitespace from a line of code also uppercases
         std::vector<byte> compileLine(std::string& line); //Compiles a line of code and adds it to memory and any operands to the stack
 
 		void resetState();

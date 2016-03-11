@@ -1,3 +1,3 @@
-LDA #10 ;load 10 into the accumulator
-ADC #10 ;Add 10 to acumulator
-BRK #10 ;wrong for testing
+lda #10 ;load 10 into the accumulator
+adc #$10 ;Add hex 10(16) to acumulator
+brk

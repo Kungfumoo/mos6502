@@ -14,11 +14,9 @@ using namespace std;
 //--General(private)
 string Compiler::fetchCommand(string& line)
 {
-    //TODO: fetch first letter, use letter to access bucket, iterate through bucket and return the command. Exception if none found
+    //fetch first letter, use letter to access bucket, iterate through bucket and return the command. Exception if none found
     //This assumes the line has been trimmed
-    char first = toupper(line[0]);
-
-    auto i = _commands->find(first);
+    auto i = _commands->find(line[0]);
 
     if(i != _commands->end())
     {
@@ -40,23 +38,29 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 
     //work out addressing mode
     try {
-        if(regex_search(line, regex("^[A-Z]{3}\ \#[0-9A-Za-z]{2}$"))) //1 immediate
+        if(regex_search(line, regex("^[A-Z]{3}\ \#[\$]?[0-9A-Za-z]{2}$"))) //1 immediate
         {
+            string operand = line.substr(5);
+
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::IMMEDIATE));
-            oppCodes.push_back((byte)(stoi(line.substr(5), nullptr, 16)));
+
+            if(operand[0] == '$') //literal hex
+                oppCodes.push_back((byte)(stoi(operand.substr(1), nullptr, 16)));
+            else //literal decimal
+                oppCodes.push_back((byte)(stoi(operand, nullptr, 10)));
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{4}$"))) //2 absolute
+        else if(regex_search(line, regex("^[A-Z]{3}\ \$[0-9A-Za-z]{4}$"))) //2 absolute
         {
-            unsigned short operand = (unsigned short)stoi(line.substr(4), nullptr, 16);
+            unsigned short operand = (unsigned short)stoi(line.substr(5), nullptr, 16);
 
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ABSOLUTE));
             oppCodes.push_back((byte)((operand >> 8) & 255));
             oppCodes.push_back((byte)operand & 255);
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{2}$"))) //3 zeropage
+        else if(regex_search(line, regex("^[A-Z]{3}\ \$[0-9A-Za-z]{2}$"))) //3 zeropage
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ZEROPAGE));
-            oppCodes.push_back((byte)(stoi(line.substr(4), nullptr, 16)));
+            oppCodes.push_back((byte)(stoi(line.substr(5), nullptr, 16)));
         }
         else if(regex_search(line, regex("^[A-Z]{3}$"))) //4 implied
         {
@@ -66,37 +70,37 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ACCUMULATOR));
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{4},[X|Y]$"))) //6 absolute indexed
+        else if(regex_search(line, regex("^[A-Z]{3}\ \$[0-9A-Za-z]{4},[X|Y]$"))) //6 absolute indexed
         {
             OppCodeMap::AddressingModes mode = (line.back() == 'X') ? OppCodeMap::AddressingModes::INDEXED_X : OppCodeMap::AddressingModes::INDEXED_Y;
-            unsigned short operand = (unsigned short)stoi(line.substr(4, 4), nullptr, 16);
+            unsigned short operand = (unsigned short)stoi(line.substr(5, 4), nullptr, 16);
 
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, mode));
             oppCodes.push_back((byte)((operand >> 8) & 255));
             oppCodes.push_back((byte)operand & 255);
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ [0-9A-Za-z]{2},[X|Y]$"))) //7 zeropage indexed
+        else if(regex_search(line, regex("^[A-Z]{3}\ \$[0-9A-Za-z]{2},[X|Y]$"))) //7 zeropage indexed
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ZEROPAGE_INDEXED));
-            oppCodes.push_back((byte)(stoi(line.substr(4, 2), nullptr, 16)));
+            oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{4}\)$"))) //8 Indirect
+        else if(regex_search(line, regex("^[A-Z]{3}\ \(\$[0-9A-Za-z]{4}\)$"))) //8 Indirect
         {
-            unsigned short operand = (unsigned short)stoi(line.substr(5, 4), nullptr, 16);
+            unsigned short operand = (unsigned short)stoi(line.substr(6, 4), nullptr, 16);
 
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::INDIRECT));
             oppCodes.push_back((byte)((operand >> 8) & 255));
             oppCodes.push_back((byte)operand & 255);
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{2},X\)$"))) //9 pre-indexed indirect
+        else if(regex_search(line, regex("^[A-Z]{3}\ \(\$[0-9A-Za-z]{2},X\)$"))) //9 pre-indexed indirect
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::PRE_INDEXED_INDIRECT));
-            oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
+            oppCodes.push_back((byte)(stoi(line.substr(6, 2), nullptr, 16)));
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \([0-9A-Za-z]{2}\),Y$"))) //10 post-indexed indirect
+        else if(regex_search(line, regex("^[A-Z]{3}\ \(\$[0-9A-Za-z]{2}\),Y$"))) //10 post-indexed indirect
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::POST_INDEXED_INDIRECT));
-            oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
+            oppCodes.push_back((byte)(stoi(line.substr(6, 2), nullptr, 16)));
         }
         else
         {
@@ -113,7 +117,7 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 	return oppCodes;
 }
 
-string Compiler::stripComments(string& line)
+string Compiler::stripAndTrim(string& line)
 {
 	unsigned int i;
 	bool found = false;
@@ -149,6 +153,10 @@ string Compiler::stripComments(string& line)
     if(r >= l)
         line = line.substr(l, (r-l)+1);
 
+    //uppercase
+    for(auto i = line.begin(); i < line.end(); i++)
+        *i = toupper(*i);
+
 	return line;
 }
 
@@ -158,7 +166,7 @@ vector<byte> Compiler::compileLine(string& line)
         return vector<byte>();
 
 	//strip comments from line
-	line = stripComments(line);
+	line = stripAndTrim(line);
 
     string command = fetchCommand(line);
     vector<byte> oppcodes = fetchOppcodes(command, line);
