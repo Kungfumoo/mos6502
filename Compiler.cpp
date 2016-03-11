@@ -38,7 +38,7 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 
     //work out addressing mode
     try {
-        if(regex_search(line, regex("^[A-Z]{3}\ \#[\$]?[0-9A-Za-z]{2}$"))) //1 immediate
+        if(regex_search(line, regex("^[A-Z]{3}\ #[\$]?[0-9A-Za-z]{2}$"))) //1 immediate
         {
             string operand = line.substr(5);
 
