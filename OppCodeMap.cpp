@@ -16,7 +16,7 @@ byte OppCodeMap::fetchCommandCode(string cmd, AddressingModes mode)
     byte value = oppMap[mode];
 
     if(value == INVALID_MODE)
-        throw CompilerException("Invalid Addressing mode for CMD \"" + cmd + "\"");
+        throw new CompilerException("Invalid Addressing mode for CMD \"" + cmd + "\"");
 
     return value;
 }
