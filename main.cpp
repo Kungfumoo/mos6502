@@ -56,7 +56,7 @@ int main()
 		vector<byte> program = compiler->compileFromFile(file);
 		cout << "\nCPU:" << endl;
 		cpu->execute(program);
-		cpu->status();
+		cpu->status(false);
 	}
 	catch (exception* e)
 	{

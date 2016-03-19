@@ -1184,7 +1184,9 @@ namespace MOS_6502
             void setPC(unsigned short address); //set pc to point to address
             void runNext(bool status); //runs command the PC is pointing to, and moves to the next one, if status is true, show it
             void status(); //prints a report on the status of the CPU
+            void status(bool includeStack);
             void status(std::string header); //like above but replaces STATUS with the chosen header
+            void status(std::string header, bool includeStack);
 
             //--Constructors:
             /*Constructor 1

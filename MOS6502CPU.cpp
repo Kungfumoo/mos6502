@@ -1822,10 +1822,20 @@ void MOS6502CPU::runNext(bool status)
 
 void MOS6502CPU::status()
 {
-    status("STATUS");
+    status("STATUS", true);
+}
+
+void MOS6502CPU::status(bool includeStack)
+{
+    status("STATUS", includeStack);
 }
 
 void MOS6502CPU::status(string header)
+{
+    status(header, true);
+}
+
+void MOS6502CPU::status(string header, bool includeStack)
 {
     //Locals
     byte stackSize = _stack->size();
@@ -1850,9 +1860,9 @@ void MOS6502CPU::status(string header)
     cout << "|" << _status->getC() << endl << endl;
 
     cout << "Stack:" << endl;
-    cout << "Size: " << (int)stackSize << endl;
+    cout << "Size: " << dec << (int)stackSize << endl;
 
-    if(stackSize > 0)
+    if(includeStack && stackSize > 0)
     {
         cout << "Contents:" << endl;
 
