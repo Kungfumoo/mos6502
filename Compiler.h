@@ -27,6 +27,10 @@ namespace MOS_6502
 		struct CompilerState
 		{
 			unsigned int lineNo;
+			unsigned int index;
+			std::unordered_map<std::string, unsigned int> labels;
+			std::unordered_map<std::string, std::vector<unsigned int>> labelsToUpdate; //key=label, value = array of indexes to update with label location
+			std::vector<byte> program;
 		};
 
 		//Variables

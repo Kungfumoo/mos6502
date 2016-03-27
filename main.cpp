@@ -45,7 +45,7 @@ int main()
 	Compiler* compiler = new Compiler();
 
 #ifdef _WIN32
-	string file = "C:\\Users\\Sudo\\Documents\\Projects\\mos6502\\asmsrc\\test.asm";
+	string file = "C:\\Users\\Sudo\\Documents\\Projects\\mos6502\\asmsrc\\test1.asm";
 #else
     string file = "/home/aaron/Documents/Projects/mos6502/asmsrc/test.asm";
 #endif
@@ -54,9 +54,14 @@ int main()
 	{
 		cout << "\nCompiler:" << endl;
 		vector<byte> program = compiler->compileFromFile(file);
-		cout << "\nCPU:" << endl;
+		/*cout << "\nCPU:" << endl;
 		cpu->execute(program);
-		cpu->status(false);
+		cpu->status(false);*/
+
+		cout << "PROGRAM:" << endl;
+		for (auto i = program.begin(); i < program.end(); i++)
+			cout << "0x" << hex << (int)*i << ", ";
+		cout << endl;
 	}
 	catch (exception* e)
 	{

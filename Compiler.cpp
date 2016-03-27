@@ -112,14 +112,29 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 			}
 			else //using labels
 			{
-				/*
-				 * TODO: need to make a table of references to labels.
-				 * as soon as the compiler encounters a label, store it somewhere with it's address
-				 * any branch instructions using a previous label can then just do a lookup to then workout the address.
-				 *
-				 * for any instructions refering to a label that hasn't been encountered yet, we should store the label somewhere with the index of the byte to update when we find it.
-				 * so on processing a label, we will add it to the table of labels, and update any bytes awaiting using their index vs label location
-				 */
+				string label = line.substr(5);
+
+				auto i = _state.labels.find(label);
+
+				if(i != _state.labels.end())
+				{
+					unsigned int value = 128 + (_state.index - i->second); //signed maginitude
+
+					if(value > 255)
+						throw new CompilerException(_state.lineNo, "A negative Branch instruction exceeds a branch greater then 255, consider using a jmp");
+
+					oppCodes.push_back((byte)value);
+				}
+				else //add it to labels to update
+				{
+					auto n = _state.labelsToUpdate.find("label");
+
+					if(n == _state.labelsToUpdate.end())
+						_state.labelsToUpdate[label] = vector<unsigned int>();
+
+					vector<unsigned int>* addresses = &_state.labelsToUpdate[label];
+					addresses->push_back(_state.index +1);
+				}
 			}
 		}
         else
@@ -203,7 +218,39 @@ bool Compiler::checkForLabel(string& line)
 {
 	if(regex_search(line, regex("^[A-Za-z]+:$"))) //TODO: clarify if numbers can be used in labels
 	{
-		//TODO: Update compiler state with label
+		string sub = line.substr(0, line.length() - 1);
+		unsigned int labelPos = _state.index + 1;
+
+		//Update compiler state with label
+		try
+		{
+			_state.labels.insert(pair<string, unsigned int>(sub, labelPos));
+		}
+		catch(exception* e)
+		{
+			throw new CompilerException(_state.lineNo, "label: \"" + sub + "\" already defined!");
+		}
+
+		//Update any commands awaiting the position of this label (will always be positive)
+		auto i = _state.labelsToUpdate.find(sub);
+
+		if(i != _state.labelsToUpdate.end() && !i->second.empty())
+		{
+			vector<unsigned int>* indexes = &i->second;
+
+			for(auto n = indexes->begin(); n < indexes->end(); n++)
+			{
+				unsigned int diff = labelPos - *n;
+
+				if(diff > 127)
+					throw new CompilerException(*n, "A positive Branch instruction exceeds a branch greater then 127, consider using a jmp");
+
+				_state.program[*n] = diff; //branch instructions use signed magnitude
+			}
+
+			indexes->clear();
+		}
+
 
 		return true;
 	}
@@ -214,6 +261,10 @@ bool Compiler::checkForLabel(string& line)
 void Compiler::resetState()
 {
 	_state.lineNo = 0;
+	_state.index = 0;
+	_state.program.clear();
+	_state.labels.clear();
+	_state.labelsToUpdate.clear();
 }
 
 //--General(public)
@@ -236,8 +287,6 @@ vector<byte> Compiler::compileFromFile(string filePath)
 
 	resetState();
 
-	vector<byte> program;
-
 	if(io.is_open())
 	{
 		while(io.good())
@@ -253,7 +302,8 @@ vector<byte> Compiler::compileFromFile(string filePath)
 
 				for (vector<byte>::iterator i = oppcodes.begin(); i < oppcodes.end(); i++)
 				{
-					program.insert(program.end(), *i);
+					_state.program.insert(_state.program.end(), *i);
+					_state.index++;
 				}
 			}
 			catch(CompilerException* e)
@@ -267,7 +317,7 @@ vector<byte> Compiler::compileFromFile(string filePath)
 	}
 
     io.close();
-	return program;
+	return _state.program;
 }
 
 //--Constructor
