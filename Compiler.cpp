@@ -112,7 +112,7 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 			}
 			else //using labels
 			{
-				string label = line.substr(5);
+				string label = line.substr(4);
 
 				auto i = _state.labels.find(label);
 
@@ -260,7 +260,7 @@ bool Compiler::checkForLabel(string& line)
 
 void Compiler::resetState()
 {
-	_state.lineNo = 0;
+	_state.lineNo = 1;
 	_state.index = 0;
 	_state.program.clear();
 	_state.labels.clear();
