@@ -102,6 +102,26 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::POST_INDEXED_INDIRECT));
             oppCodes.push_back((byte)(stoi(line.substr(6, 2), nullptr, 16)));
         }
+		else if(regex_search(line, regex("^[A-Z]{3}\ (\$[0-9A-Za-z]{2}|[A-Za-z]+)$"))) //11 Relative
+		{
+			oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::RELATIVE));
+
+			if(line[4] == '$') //numerical
+			{
+				oppCodes.push_back((byte)(stoi(line.substr(5), nullptr, 16)));
+			}
+			else //using labels
+			{
+				/*
+				 * TODO: need to make a table of references to labels.
+				 * as soon as the compiler encounters a label, store it somewhere with it's address
+				 * any branch instructions using a previous label can then just do a lookup to then workout the address.
+				 *
+				 * for any instructions refering to a label that hasn't been encountered yet, we should store the label somewhere with the index of the byte to update when we find it.
+				 * so on processing a label, we will add it to the table of labels, and update any bytes awaiting using their index vs label location
+				 */
+			}
+		}
         else
         {
             throw new CompilerException("Syntax Error");
@@ -168,10 +188,27 @@ vector<byte> Compiler::compileLine(string& line)
 	//strip comments from line
 	line = stripAndTrim(line);
 
-    string command = fetchCommand(line);
-    vector<byte> oppcodes = fetchOppcodes(command, line);
+	if(!checkForLabel(line))
+	{
+		string command = fetchCommand(line);
+		vector<byte> oppcodes = fetchOppcodes(command, line);
 
-    return oppcodes;
+		return oppcodes;
+	}
+
+	return vector<byte>();
+}
+
+bool Compiler::checkForLabel(string& line)
+{
+	if(regex_search(line, regex("^[A-Za-z]+:$"))) //TODO: clarify if numbers can be used in labels
+	{
+		//TODO: Update compiler state with label
+
+		return true;
+	}
+
+	return false;
 }
 
 void Compiler::resetState()

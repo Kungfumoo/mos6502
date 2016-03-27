@@ -39,6 +39,7 @@ namespace MOS_6502
 		std::vector<byte> fetchOppcodes(std::string& command, std::string& line); //converts the line into oppcodes
 		std::string stripAndTrim(std::string& line); //strips comments, whitespace from a line of code also uppercases
         std::vector<byte> compileLine(std::string& line); //Compiles a line of code and adds it to memory and any operands to the stack
+		bool checkForLabel(std::string& line); //Checks for a label, if one exists it will update the compiler state and return true
 
 		void resetState();
 
