@@ -225,7 +225,7 @@ bool Compiler::checkForLabel(string& line)
 	if(regex_search(line, regex("^[A-Za-z]+:$"))) //TODO: clarify if numbers can be used in labels
 	{
 		string sub = line.substr(0, line.length() - 1);
-		unsigned int labelPos = _state.index + 1;
+		unsigned int labelPos = _state.index - 1; //index starts from 1 so -1 is needed
 
 		//Update compiler state with label
 		try
