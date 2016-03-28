@@ -137,7 +137,9 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 						_state.labelsToUpdate[label] = vector<unsigned int>();
 
 					vector<unsigned int>* addresses = &_state.labelsToUpdate[label];
-					addresses->push_back(_state.index +1);
+					addresses->push_back(_state.index + 1);
+
+					oppCodes.push_back(0); //add placeholder
 				}
 			}
 		}
