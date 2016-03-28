@@ -38,6 +38,10 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 
     //work out addressing mode
     try {
+        /*
+         * TODO: Had to double escape the $, bug in C++ regex engine?
+         * Consider using boost instead?
+         */
         if(regex_search(line, regex("^[A-Z]{3}\ #[\$]?[0-9A-Za-z]{2}$"))) //1 immediate
         {
             string operand = line.substr(5);
@@ -49,7 +53,7 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
             else //literal decimal
                 oppCodes.push_back((byte)(stoi(operand, nullptr, 10)));
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \$[0-9A-Za-z]{4}$"))) //2 absolute
+        else if(regex_search(line, regex("^[A-Z]{3}\ \\$[0-9A-Za-z]{4}$"))) //2 absolute
         {
             unsigned short operand = (unsigned short)stoi(line.substr(5), nullptr, 16);
 
@@ -57,7 +61,7 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
             oppCodes.push_back((byte)((operand >> 8) & 255));
             oppCodes.push_back((byte)operand & 255);
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \$[0-9A-Za-z]{2}$"))) //3 zeropage
+        else if(regex_search(line, regex("^[A-Z]{3}\ \\$[0-9A-Za-z]{2}$"))) //3 zeropage
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ZEROPAGE));
             oppCodes.push_back((byte)(stoi(line.substr(5), nullptr, 16)));
@@ -70,7 +74,7 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ACCUMULATOR));
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \$[0-9A-Za-z]{4},[X|Y]$"))) //6 absolute indexed
+        else if(regex_search(line, regex("^[A-Z]{3}\ \\$[0-9A-Za-z]{4},[X|Y]$"))) //6 absolute indexed
         {
             OppCodeMap::AddressingModes mode = (line.back() == 'X') ? OppCodeMap::AddressingModes::INDEXED_X : OppCodeMap::AddressingModes::INDEXED_Y;
             unsigned short operand = (unsigned short)stoi(line.substr(5, 4), nullptr, 16);
@@ -79,12 +83,12 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
             oppCodes.push_back((byte)((operand >> 8) & 255));
             oppCodes.push_back((byte)operand & 255);
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \$[0-9A-Za-z]{2},[X|Y]$"))) //7 zeropage indexed
+        else if(regex_search(line, regex("^[A-Z]{3}\ \\$[0-9A-Za-z]{2},[X|Y]$"))) //7 zeropage indexed
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ZEROPAGE_INDEXED));
             oppCodes.push_back((byte)(stoi(line.substr(5, 2), nullptr, 16)));
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \(\$[0-9A-Za-z]{4}\)$"))) //8 Indirect
+        else if(regex_search(line, regex("^[A-Z]{3}\ \(\\$[0-9A-Za-z]{4}\)$"))) //8 Indirect
         {
             unsigned short operand = (unsigned short)stoi(line.substr(6, 4), nullptr, 16);
 
@@ -92,17 +96,17 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
             oppCodes.push_back((byte)((operand >> 8) & 255));
             oppCodes.push_back((byte)operand & 255);
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \(\$[0-9A-Za-z]{2},X\)$"))) //9 pre-indexed indirect
+        else if(regex_search(line, regex("^[A-Z]{3}\ \(\\$[0-9A-Za-z]{2},X\)$"))) //9 pre-indexed indirect
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::PRE_INDEXED_INDIRECT));
             oppCodes.push_back((byte)(stoi(line.substr(6, 2), nullptr, 16)));
         }
-        else if(regex_search(line, regex("^[A-Z]{3}\ \(\$[0-9A-Za-z]{2}\),Y$"))) //10 post-indexed indirect
+        else if(regex_search(line, regex("^[A-Z]{3}\ \(\\$[0-9A-Za-z]{2}\),Y$"))) //10 post-indexed indirect
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::POST_INDEXED_INDIRECT));
             oppCodes.push_back((byte)(stoi(line.substr(6, 2), nullptr, 16)));
         }
-		else if(regex_search(line, regex("^[A-Z]{3}\ (\$[0-9A-Za-z]{2}|[A-Za-z]+)$"))) //11 Relative
+		else if(regex_search(line, regex("^[A-Z]{3}\ (\\$[0-9A-Za-z]{2}|[A-Za-z]+)$"))) //11 Relative
 		{
 			oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::RELATIVE));
 
