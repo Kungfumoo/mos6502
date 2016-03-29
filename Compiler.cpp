@@ -58,8 +58,8 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
             unsigned short operand = (unsigned short)stoi(line.substr(5), nullptr, 16);
 
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ABSOLUTE));
-            oppCodes.push_back((byte)((operand >> 8) & 255));
             oppCodes.push_back((byte)operand & 255);
+            oppCodes.push_back((byte)((operand >> 8) & 255));
         }
         else if(regex_search(line, regex("^[A-Z]{3}\ \\$[0-9A-Za-z]{2}$"))) //3 zeropage
         {
@@ -80,8 +80,8 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
             unsigned short operand = (unsigned short)stoi(line.substr(5, 4), nullptr, 16);
 
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, mode));
-            oppCodes.push_back((byte)((operand >> 8) & 255));
             oppCodes.push_back((byte)operand & 255);
+            oppCodes.push_back((byte)((operand >> 8) & 255));
         }
         else if(regex_search(line, regex("^[A-Z]{3}\ \\$[0-9A-Za-z]{2},[X|Y]$"))) //7 zeropage indexed
         {
@@ -93,8 +93,8 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
             unsigned short operand = (unsigned short)stoi(line.substr(6, 4), nullptr, 16);
 
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::INDIRECT));
-            oppCodes.push_back((byte)((operand >> 8) & 255));
             oppCodes.push_back((byte)operand & 255);
+            oppCodes.push_back((byte)((operand >> 8) & 255));
         }
         else if(regex_search(line, regex("^[A-Z]{3}\ \(\\$[0-9A-Za-z]{2},X\)$"))) //9 pre-indexed indirect
         {
