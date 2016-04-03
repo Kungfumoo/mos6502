@@ -109,7 +109,7 @@ unsigned short MOS6502CPU::getRelative(byte value)
     unsigned short newAddress = _programCounter;
 
     if(value > NEGATIVE) //negative number 128 = 0, 129 = -1, 130 = -2 ...
-        newAddress += (128 - value);
+        newAddress += (127 - value);
     else //positive
         newAddress += value;
 

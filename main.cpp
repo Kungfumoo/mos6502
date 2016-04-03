@@ -54,14 +54,15 @@ int main()
 	{
 		cout << "\nCompiler:" << endl;
 		vector<byte> program = compiler->compileFromFile(file);
-		/*cout << "\nCPU:" << endl;
-		cpu->execute(program);
-		cpu->status(false);*/
 
 		cout << "PROGRAM:" << endl;
 		for (auto i = program.begin(); i < program.end(); i++)
 			cout << "0x" << hex << (int)*i << ", ";
 		cout << endl;
+
+		cout << "\nCPU:" << endl;
+		cpu->execute(program);
+		cpu->status(false);
 	}
 	catch (exception* e)
 	{
