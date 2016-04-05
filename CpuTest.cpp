@@ -2329,7 +2329,7 @@ bool CpuTest::testBCC()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x5DB &&
+    if(!(cpu->_programCounter == 0x5DA &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -2460,7 +2460,7 @@ bool CpuTest::testBCS()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x5DB &&
+    if(!(cpu->_programCounter == 0x5DA &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == true &&
@@ -2593,7 +2593,7 @@ bool CpuTest::testBEQ()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x5DB &&
+    if(!(cpu->_programCounter == 0x5DA &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == true &&
          cpu->_status->getC() == false &&
@@ -2726,7 +2726,7 @@ bool CpuTest::testBMI()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x5DB &&
+    if(!(cpu->_programCounter == 0x5DA &&
          cpu->_status->getS() == true &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -2858,7 +2858,7 @@ bool CpuTest::testBNE()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x5DB &&
+    if(!(cpu->_programCounter == 0x5DA &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -2990,7 +2990,7 @@ bool CpuTest::testBPL()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x5DB &&
+    if(!(cpu->_programCounter == 0x5DA &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -3122,7 +3122,7 @@ bool CpuTest::testBVC()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x5DB &&
+    if(!(cpu->_programCounter == 0x5DA &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -3255,7 +3255,7 @@ bool CpuTest::testBVS()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x5DB &&
+    if(!(cpu->_programCounter == 0x5DA &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
