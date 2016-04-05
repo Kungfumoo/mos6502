@@ -1,21 +1,12 @@
 --TODO--
 -Memory Leaking:
     -Before hitting the compiler, sort out the memory leaks in the application.
-    -Use valgrid, I've added a file called 'val' which is a script for this, pop it in debug where the exe is and run it to check for leaks.
+    -Use valgrind, I've added a file called 'val' which is a script for this, pop it in debug where the exe is and run it to check for leaks.
     -http://valgrind.org/docs/manual/quick-start.html#quick-start.mcrun
 
--NEXT BIG THING: Compiler
-    -Need to plan out and design the compiler for this cpu, to convert the assembly into it's proper bytecode
-    -Compiler should probably have a simple test to input some code and test the output of the bytecode.
-    -Compiler needs to be completely seperate from the CPU, they should have no dependency with eachother.
-        -CPU needs to just accept a load of bytecode information, it will never directly use the compiler.
-        -Reason: Compiler will have a large processing and memory footprint, it should really be used seperatly from the main emulator.
+-Compiler
+    -Need to implement constant definitons and support the JMP command
 
 -Some methods such as INX, depending on the state of x, will only set one status bit and not reset the other.
  Need to check whether this needs to be the case(most likely).
     -If it is, need to go through the code and change it to reflect this.
-
-11.11.2014
--Read up on interupts to implement the BRK command.
--Section 1.3 of http://6502.org/tutorials/interrupts.html is
- a good start!
