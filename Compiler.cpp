@@ -42,7 +42,38 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
          * TODO: Had to double escape the $, bug in C++ regex engine?
          * Consider using boost instead?
          */
-        if(regex_search(line, regex("^[A-Z]{3}\ #[\$]?[0-9A-Za-z]{2}$"))) //1 immediate
+
+        if(regex_search(line, regex("^JMP\ [A-Za-z]$"))) //JMP Absolute with label
+        {
+            oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ABSOLUTE));
+
+            string label = line.substr(4);
+
+            auto i = _state.labels.find(label);
+
+            if(i != _state.labels.end())
+            {
+                unsigned short addr = (unsigned short)i->second;
+
+                oppCodes.push_back((byte)addr & 255);
+                oppCodes.push_back((byte)((addr >> 8) & 255));
+            }
+            else //add it to labels to update
+            {
+                auto n = _state.labelsToUpdate.find("label");
+
+                if(n == _state.labelsToUpdate.end())
+                    _state.labelsToUpdate[label] = vector<unsigned int>();
+
+                vector<unsigned int>* addresses = &_state.labelsToUpdate[label];
+                addresses->push_back(_state.index + 1);
+
+                //add placeholder
+                oppCodes.push_back(0);
+                oppCodes.push_back(0);
+            }
+        }
+        else if(regex_search(line, regex("^[A-Z]{3}\ #[\$]?[0-9A-Za-z]{2}$"))) //1 immediate
         {
             string operand = line.substr(5);
 
@@ -246,12 +277,19 @@ bool Compiler::checkForLabel(string& line)
 
 			for(auto n = indexes->begin(); n < indexes->end(); n++)
 			{
-				unsigned int diff = labelPos - *n;
+			    if(_state.program[(*n) - 1] == 0x4C) //then it's a JMP, record location of label, not diff
+                    /*oppCodes.push_back((byte)addr & 255);
+                oppCodes.push_back((byte)((addr >> 8) & 255));*/
+                    _state.program[*n] = labelPos;
+                else
+                {
+                    unsigned int diff = labelPos - *n;
 
-				if(diff > 127)
-					throw new CompilerException(*n, "A positive Branch instruction exceeds a branch greater then 127, consider using a jmp");
+                    if(diff > 127)
+                        throw new CompilerException(*n, "A positive Branch instruction exceeds a branch greater then 127, consider using a jmp");
 
-				_state.program[*n] = diff; //branch instructions use signed magnitude
+                    _state.program[*n] = diff; //branch instructions use signed magnitude
+                }
 			}
 
 			indexes->clear();
