@@ -47,7 +47,7 @@ int main()
 #ifdef _WIN32
 	string file = "C:\\Users\\Sudo\\Documents\\Projects\\mos6502\\asmsrc\\test1.asm";
 #else
-    string file = "/home/aaron/Documents/Projects/mos6502/asmsrc/test3.asm";
+    string file = "/home/aaron/Documents/Projects/mos6502/asmsrc/test4.asm";
 #endif
 
 	try

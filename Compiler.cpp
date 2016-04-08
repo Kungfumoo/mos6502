@@ -43,7 +43,7 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
          * Consider using boost instead?
          */
 
-        if(regex_search(line, regex("^JMP\ [A-Za-z]$"))) //JMP Absolute with label
+        if(regex_search(line, regex("^JMP\ [A-Za-z]+$"))) //JMP Absolute with label
         {
             oppCodes.push_back(_oppcodes->fetchCommandCode(command, OppCodeMap::AddressingModes::ABSOLUTE));
 
@@ -278,9 +278,10 @@ bool Compiler::checkForLabel(string& line)
 			for(auto n = indexes->begin(); n < indexes->end(); n++)
 			{
 			    if(_state.program[(*n) - 1] == 0x4C) //then it's a JMP, record location of label, not diff
-                    /*oppCodes.push_back((byte)addr & 255);
-                oppCodes.push_back((byte)((addr >> 8) & 255));*/
-                    _state.program[*n] = labelPos;
+                {
+                    _state.program[*n] = (byte)labelPos & 255;
+                    _state.program[(*n) + 1] = (byte)((labelPos >> 8) & 255);
+                }
                 else
                 {
                     unsigned int diff = labelPos - *n;
