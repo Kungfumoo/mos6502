@@ -241,7 +241,7 @@ vector<byte> Compiler::compileLine(string& line)
 	//strip comments from line
 	line = stripAndTrim(line);
 
-	if(!checkForLabel(line))
+	if(!(checkForLabel(line) || checkForConstant(line)))
 	{
 		string command = fetchCommand(line);
 		vector<byte> oppcodes = fetchOppcodes(command, line);
@@ -303,6 +303,26 @@ bool Compiler::checkForLabel(string& line)
 	}
 
 	return false;
+}
+
+bool Compiler::checkForConstant(string& line)
+{
+    smatch matches;
+
+    if(regex_search(line, matches, regex("^define ([A-Za-z_]+) ([\$]?[0-9A-Fa-f]{2,4})$")))
+    {
+        //TODO: for testing, remove
+        cout << "CONSTANT" << endl;
+
+        for(auto i = matches.begin(); i < matches.end(); i++)
+        {
+            cout << *i << endl;
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 void Compiler::resetState()
