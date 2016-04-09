@@ -25,7 +25,6 @@ namespace MOS_6502
         //Constants
         static const byte MAX_CLOCK_SPEED_MHZ;
         static const byte NEGATIVE; //represents the number where the CPU starts interpreting as negative
-        static const unsigned short DEFAULT_PC; //PC starting default
 
         //Registers
         unsigned short _programCounter;
@@ -1170,6 +1169,9 @@ namespace MOS_6502
          void runCommand(byte opcode);
 
         public:
+            //--Constants:
+            static const unsigned short DEFAULT_PC; //PC starting default
+
             //--Friends:
             friend class Stack;
             friend class CpuTest;

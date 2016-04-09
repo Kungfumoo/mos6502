@@ -45,7 +45,7 @@ int main()
 	Compiler* compiler = new Compiler();
 
 #ifdef _WIN32
-	string file = "C:\\Users\\Sudo\\Documents\\Projects\\mos6502\\asmsrc\\test1.asm";
+	string file = "C:\\Users\\Aaron Winter\\Documents\\Projects\\mos6502\\asmsrc\\test4.asm";
 #else
     string file = "/home/aaron/Documents/Projects/mos6502/asmsrc/test4.asm";
 #endif

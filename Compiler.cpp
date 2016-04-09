@@ -6,6 +6,7 @@
 #include "Exceptions.h"
 #include "CommandMap.h"
 #include "OppCodeMap.h"
+#include "MOS6502CPU.h"
 
 using namespace MOS_6502;
 using namespace MOS_6502::CompilerAssets;
@@ -53,7 +54,7 @@ vector<byte> Compiler::fetchOppcodes(string& command, string& line)
 
             if(i != _state.labels.end())
             {
-                unsigned short addr = (unsigned short)i->second;
+                unsigned short addr = (unsigned short)(MOS6502CPU::DEFAULT_PC + i->second + 1);
 
                 oppCodes.push_back((byte)addr & 255);
                 oppCodes.push_back((byte)((addr >> 8) & 255));
@@ -279,6 +280,7 @@ bool Compiler::checkForLabel(string& line)
 			{
 			    if(_state.program[(*n) - 1] == 0x4C) //then it's a JMP, record location of label, not diff
                 {
+                    labelPos = MOS6502CPU::DEFAULT_PC + labelPos + 1;
                     _state.program[*n] = (byte)labelPos & 255;
                     _state.program[(*n) + 1] = (byte)((labelPos >> 8) & 255);
                 }
