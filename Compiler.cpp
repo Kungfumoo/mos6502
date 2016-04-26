@@ -309,7 +309,7 @@ bool Compiler::checkForConstant(string& line)
 {
     smatch matches;
 
-    if(regex_search(line, matches, regex("^define ([A-Za-z_]+) ([\$]?[0-9A-Fa-f]{2,4})$")))
+    if(regex_search(line, matches, regex("^DEFINE ([A-Za-z_]+) ([\$]?[0-9A-Fa-f]{2,4})$")))
     {
         //TODO: for testing, remove
         cout << "CONSTANT" << endl;
