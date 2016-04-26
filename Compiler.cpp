@@ -311,13 +311,14 @@ bool Compiler::checkForConstant(string& line)
 
     if(regex_search(line, matches, regex("^DEFINE ([A-Za-z_]+) ([\$]?[0-9A-Fa-f]{2,4})$")))
     {
-        //TODO: for testing, remove
-        cout << "CONSTANT" << endl;
+        auto i = matches.begin() + 1; //+1 to skip the whole string match
+        string identifier = *(i++);
+        string operand = *(i);
 
-        for(auto i = matches.begin(); i < matches.end(); i++)
-        {
-            cout << *i << endl;
-        }
+        if(operand[0] == '$') //literal hex
+            _state.constants.insert(pair<string, unsigned int>(identifier, (unsigned int)stoi(operand.substr(1), nullptr, 16)));
+        else //literal decimal
+            _state.constants.insert(pair<string, unsigned int>(identifier, (unsigned int)stoi(operand, nullptr, 10)));
 
         return true;
     }
@@ -330,6 +331,7 @@ void Compiler::resetState()
 	_state.lineNo = 1;
 	_state.index = 0;
 	_state.program.clear();
+	_state.constants.clear();
 	_state.labels.clear();
 	_state.labelsToUpdate.clear();
 }
