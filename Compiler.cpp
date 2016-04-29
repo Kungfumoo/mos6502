@@ -315,15 +315,25 @@ bool Compiler::checkForConstant(string& line)
         string identifier = *(i++);
         string operand = *(i);
 
-        if(operand[0] == '$') //literal hex
-            _state.constants.insert(pair<string, unsigned int>(identifier, (unsigned int)stoi(operand.substr(1), nullptr, 16)));
-        else //literal decimal
-            _state.constants.insert(pair<string, unsigned int>(identifier, (unsigned int)stoi(operand, nullptr, 10)));
+        _state.constants.insert(pair<string, string>(identifier, operand));
 
         return true;
     }
 
     return false;
+}
+
+string Compiler::applyConstants(string& line)
+{
+    smatch matches;
+
+    //grab label for constant
+    if(regex_search(line, matches, regex("^[A-Za-z]{3} [#]?([A-Za-z_]+)$"))) //TODO: workout ultimate regex for this
+    {
+
+    }
+
+    return "";
 }
 
 void Compiler::resetState()

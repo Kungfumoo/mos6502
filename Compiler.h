@@ -28,7 +28,7 @@ namespace MOS_6502
 		{
 			unsigned int lineNo;
 			unsigned int index;
-			std::unordered_map<std::string, unsigned int> constants;
+			std::unordered_map<std::string, std::string> constants;
 			std::unordered_map<std::string, unsigned int> labels;
 			std::unordered_map<std::string, std::vector<unsigned int>> labelsToUpdate; //key=label, value = array of indexes to update with label location
 			std::vector<byte> program;
@@ -46,6 +46,7 @@ namespace MOS_6502
         std::vector<byte> compileLine(std::string& line); //Compiles a line of code and adds it to memory and any operands to the stack
 		bool checkForLabel(std::string& line); //Checks for a label, if one exists it will update the compiler state and return true
 		bool checkForConstant(std::string& line); //Checks for a constant, if one exists it will update the compiler state and return true
+		std::string applyConstants(std::string& line); //Apply constant to command if found
 
 		void resetState();
 
