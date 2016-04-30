@@ -243,6 +243,7 @@ vector<byte> Compiler::compileLine(string& line)
 
 	if(!(checkForLabel(line) || checkForConstant(line)))
 	{
+	    line = applyConstants(line);
 		string command = fetchCommand(line);
 		vector<byte> oppcodes = fetchOppcodes(command, line);
 
@@ -328,12 +329,22 @@ string Compiler::applyConstants(string& line)
     smatch matches;
 
     //grab label for constant
-    if(regex_search(line, matches, regex("^[A-Za-z]{3} [#]?([A-Za-z_]+)$"))) //TODO: workout ultimate regex for this
+    if(regex_search(line, matches, regex("^[A-Za-z]{3} [\(]?([A-Za-z_]+[\)]?)(,[Y|X]){0,1}[\)]?$")))
     {
+        string constant = *(matches.begin() + 1);
 
+        auto i = _state.constants.find(constant);
+
+        if(i != _state.constants.end())
+        {
+            string value = i->second;
+            size_t pos = line.find(constant);
+
+            return line.replace(pos, constant.length(), value);
+        }
     }
 
-    return "";
+    return line;
 }
 
 void Compiler::resetState()
