@@ -6,9 +6,9 @@ CO=-std=c++11 -c
 
 all: main.o mos6502
 
-tests: test.o mos6502
+tests: CpuTest.o test.o mos6502
 
-mos6502: BasicMemory.o CommandMap.o Compiler.o CpuTest.o Exceptions.o Memory.o MOS6502CPU.o OppCodeMap.o Stack.o StatusRegister.o Utility.o
+mos6502: BasicMemory.o CommandMap.o Compiler.o Exceptions.o Memory.o MOS6502CPU.o OppCodeMap.o Stack.o StatusRegister.o Utility.o
 	$(CC) *.o -o mos6502
 
 BasicMemory.o: BasicMemory.cpp
