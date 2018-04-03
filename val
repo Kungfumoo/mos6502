@@ -1,2 +1,2 @@
 #!/bin/bash
-valgrind --leak-check=yes ./6502cpu
+valgrind --leak-check=yes ./mos6502

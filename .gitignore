@@ -7,3 +7,6 @@ compile.sh
 Debug/
 *.vcxproj
 *.vcxproj.filters
+*.o
+*.h.gch
+mos6502
