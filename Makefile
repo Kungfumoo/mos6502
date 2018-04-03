@@ -4,9 +4,11 @@ CC=g++
 #compiler options
 CO=-std=c++11 -c
 
-all: mos6502
+all: main.o mos6502
 
-mos6502: BasicMemory.o CommandMap.o Compiler.o CpuTest.o Exceptions.o main.o Memory.o MOS6502CPU.o OppCodeMap.o Stack.o StatusRegister.o Utility.o
+tests: test.o mos6502
+
+mos6502: BasicMemory.o CommandMap.o Compiler.o CpuTest.o Exceptions.o Memory.o MOS6502CPU.o OppCodeMap.o Stack.o StatusRegister.o Utility.o
 	$(CC) *.o -o mos6502
 
 BasicMemory.o: BasicMemory.cpp
@@ -26,6 +28,9 @@ Exceptions.o: Exceptions.cpp
 
 main.o: main.o
 	$(CC) $(CO) main.cpp
+
+test.o: test.o
+	$(CC) $(CO) test.cpp
 
 Memory.o: Memory.cpp
 	$(CC) $(CO) Memory.cpp
