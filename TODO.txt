@@ -1,4 +1,8 @@
 --TODO--
+-Input, should load a binary file via commnd line
+-Output, add console output
+   - Need to work out how this works, do peripherals look at specific areas
+     of memory? Or registers?
 -Memory Leaking:
     -Before hitting the compiler, sort out the memory leaks in the application.
     -Use valgrind, I've added a file called 'val' which is a script for this, pop it in debug where the exe is and run it to check for leaks.
