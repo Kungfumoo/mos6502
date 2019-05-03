@@ -1,1 +1,3 @@
-asm6502 -o -- test1.asm
+=== COMPILING ASM ===
+- install the xa65 package
+- run: 'xa -o <name>.bin <src>.asm'
