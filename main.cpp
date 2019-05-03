@@ -18,23 +18,13 @@ vector<byte> fetchProgram(string filename)
 
     vector<byte> program;
 
-    ifile.seekg(1); //avoid colon
-
     while(!ifile.eof())
     {
-        byte size = 2;
-        char* buffer = new char[size];
+        char buffer;
 
-        ifile.read(buffer, size);
+        ifile.read(&buffer, sizeof(char));
 
-        //TODO: probably a better way of doing this...
-        string hex(buffer);
-
-        if(hex.size() == 2)
-        {
-            byte oppcode = (byte)stoi(hex, nullptr, 16);
-            program.push_back(oppcode);
-        }
+        program.push_back((byte)buffer);
     }
 
     ifile.close();
@@ -49,7 +39,7 @@ int main(int argc, char* argv[])
 
     if(argc == 1)
     {
-        cout << "No program to run provided! Please provide a hex file to run" << endl;
+        cout << "No program to run provided! Please provide a compiled bin file to run" << endl;
         return 1;
     }
 

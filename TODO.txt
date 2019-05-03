@@ -1,5 +1,4 @@
 --TODO--
--Input, should load a binary file via commnd line
 -Output, add console output
    - Need to work out how this works, do peripherals look at specific areas
      of memory? Or registers?
