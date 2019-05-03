@@ -32,6 +32,11 @@ vector<byte> fetchProgram(string filename)
     return program;
 }
 
+void onCycle(unsigned int cycles)
+{
+    cout << "cpu cycle" << " at cycles " << cycles << endl;
+}
+
 int main(int argc, char* argv[])
 {
     BasicMemory* memory = new BasicMemory();
@@ -48,8 +53,11 @@ int main(int argc, char* argv[])
     //vector<byte> program = {0xA9, 0x2F, 0xC9, 0x2F, 0xD0, 0x03, 0x8D, 0x22, 0x00, 0x00};
     vector<byte> program = fetchProgram(filename);
 
-    for(unsigned int i = 0; i < program.size(); i++)
-        cout << "0x" << std::hex << (int)program[i] << endl;
+    //TEMP: display contents of program in hex
+    /*for(unsigned int i = 0; i < program.size(); i++)
+        cout << "0x" << std::hex << (int)program[i] << endl;*/
+
+    cpu->addCycleCallback(onCycle);
 
     cpu->execute(program);
     cpu->status(false);

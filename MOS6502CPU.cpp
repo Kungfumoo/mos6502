@@ -1588,6 +1588,8 @@ void MOS6502CPU::run()
                 stop();
 
             //Perform cyclic tasks
+            for(auto i = _onCycleCalls.begin(); i != _onCycleCalls.end(); i++)
+                (*i)(_cycles);
 
             counter += _cycles;
         }
@@ -1758,6 +1760,11 @@ void MOS6502CPU::runCommand(byte opcode)
 }
 
 //--General(public)
+void MOS6502CPU::addCycleCallback(cycleCallback callback)
+{
+    _onCycleCalls.push_back(callback);
+}
+
 void MOS6502CPU::execute(vector<byte>& program)
 {
     unsigned short memoryCounter = _programCounter;

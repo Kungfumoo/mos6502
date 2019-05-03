@@ -10,8 +10,10 @@
 
 #include <string>
 #include <vector>
+#include <functional>
 
 typedef unsigned char byte;
+typedef std::function<void(unsigned int)> cycleCallback;
 
 namespace MOS_6502
 {
@@ -44,6 +46,7 @@ namespace MOS_6502
         unsigned int _cycles;
         byte* _cycleLookup; //array storing the cycles that each procedure should take
         bool _debug;
+        std::vector<cycleCallback> _onCycleCalls;
 
         //--STATE METHODS
         void saveProgramCounter(); //pushes program counter to stack
@@ -1177,6 +1180,7 @@ namespace MOS_6502
             friend class CpuTest;
 
             //--General Methods:
+            void addCycleCallback(cycleCallback callback);
             void execute(std::vector<byte>& program); //Executes a series of instructions given in the string
             void reset(); //resets cpu state and memory
             void start(); //Starts the CPU
