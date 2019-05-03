@@ -1405,8 +1405,18 @@ void MOS6502CPU::TYA4()
 }
 
 //--General(private)
+void MOS6502CPU::handleCycles(byte cycles)
+{
+    //Perform cyclic tasks
+    for(byte c = 0; c < cycles; c++)
+        for(auto i = _onCycleCalls.begin(); i != _onCycleCalls.end(); i++)
+            (*i)();
+}
+
 void MOS6502CPU::setupCycleLookup()
 {
+    _cycleLookup = new byte[255]; //0xFF
+
     for(int i = 0; i < 255; i++)
         _cycleLookup[i] = 0;
 
@@ -1573,28 +1583,26 @@ void MOS6502CPU::run()
         //fetch op code
         byte opcode = _memory->read(_programCounter++);
 
-        //remove number of cycles from counter:
-        counter -= _cycleLookup[opcode];
-
         //execute op code
         runCommand(opcode);
 
-        if(counter <= 0)
+        //remove number of cycles from counter:
+        byte cycles = _cycleLookup[opcode];
+        handleCycles(cycles);
+        counter -= cycles;
+
+        //Perform interupts
+        //TODO: TEMP fudge to test smaller programs
+        if(_status->getB())
         {
-            //Perform interupts
-
-            //TODO: TEMP fudge to test smaller programs
-            if(_status->getB())
-                stop();
-
-            //Perform cyclic tasks
-            for(auto i = _onCycleCalls.begin(); i != _onCycleCalls.end(); i++)
-                (*i)(_cycles);
-
-            counter += _cycles;
+            stop();
+            return;
         }
 
-        counter--;
+        if(counter <= 0) {
+            //TODO: stagger cpu to match true clock speed
+            counter = _cycles;
+        }
     }
 }
 
@@ -1903,7 +1911,8 @@ MOS6502CPU::MOS6502CPU(unsigned int clockSpeedMhz, Memory* memory, bool debug)
     //Other
     _clockSpeed = (clockSpeedMhz > MAX_CLOCK_SPEED_MHZ) ? MAX_CLOCK_SPEED_MHZ: clockSpeedMhz;
     _cycles = _clockSpeed * 1000000;
-    _cycleLookup = new byte[255]; //0xFF
+    setupCycleLookup();
+
     _memory = memory;
     _stack = new Stack(this);
     _running = false;

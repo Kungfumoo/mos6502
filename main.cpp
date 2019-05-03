@@ -32,9 +32,9 @@ vector<byte> fetchProgram(string filename)
     return program;
 }
 
-void onCycle(unsigned int cycles)
+void onCycle()
 {
-    cout << "cpu cycle" << " at cycles " << cycles << endl;
+    cout << "cpu cycle" << endl;
 }
 
 int main(int argc, char* argv[])

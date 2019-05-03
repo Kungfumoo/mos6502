@@ -13,7 +13,7 @@
 #include <functional>
 
 typedef unsigned char byte;
-typedef std::function<void(unsigned int)> cycleCallback;
+typedef std::function<void()> cycleCallback;
 
 namespace MOS_6502
 {
@@ -1167,6 +1167,7 @@ namespace MOS_6502
          void TYA4();
 
          //--General(private)
+         void handleCycles(byte cycles);
          void setupCycleLookup();
          void run(); //will house the main loop for emulating the CPU
          void runCommand(byte opcode);
