@@ -26,10 +26,10 @@ CpuTest.o: CpuTest.cpp
 Exceptions.o: Exceptions.cpp
 	$(CC) $(CO) Exceptions.cpp
 
-main.o: main.o
+main.o: main.cpp
 	$(CC) $(CO) main.cpp
 
-test.o: test.o
+test.o: test.cpp
 	$(CC) $(CO) test.cpp
 
 Memory.o: Memory.cpp
