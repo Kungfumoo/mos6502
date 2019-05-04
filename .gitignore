@@ -11,3 +11,4 @@ Debug/
 *.h.gch
 mos6502
 *.bin
+*.exe

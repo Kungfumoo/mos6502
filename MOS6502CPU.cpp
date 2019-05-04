@@ -106,10 +106,10 @@ unsigned short MOS6502CPU::getZeroPageIndexed(byte regValue)
 
 unsigned short MOS6502CPU::getRelative(byte value)
 {
-    unsigned short newAddress = _programCounter;
+    unsigned short newAddress = _programCounter - 2; //-2 as all branch instructions advance the counter by 2
 
     if(value > NEGATIVE) //negative number 128 = 0, 129 = -1, 130 = -2 ...
-        newAddress += (127 - value);
+        newAddress -= NEGATIVE - (value - NEGATIVE);
     else //positive
         newAddress += value;
 
