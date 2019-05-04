@@ -18,14 +18,10 @@ vector<byte> fetchProgram(string filename)
 
     vector<byte> program;
 
-    while(!ifile.eof())
-    {
-        char buffer;
+    char buffer;
 
-        ifile.read(&buffer, sizeof(char));
-
+    while(ifile.get(buffer))
         program.push_back((byte)buffer);
-    }
 
     ifile.close();
 
