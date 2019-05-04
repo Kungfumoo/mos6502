@@ -59,7 +59,15 @@ int main(int argc, char* argv[])
 
     cpu->addCycleCallback(onCycle);
 
-    cpu->execute(program);
+    try
+    {
+        cpu->execute(program);
+    }
+    catch (exception* e)
+    {
+        cout << "EXCEPTION: " << e->what() << endl;
+    }
+
     cpu->status(false);
 
 #ifdef _WIN32
