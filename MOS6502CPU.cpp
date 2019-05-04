@@ -89,7 +89,7 @@ unsigned short MOS6502CPU::getPostIndirect()
 unsigned short MOS6502CPU::getZeroPageIndexed(byte regValue)
 {
     //Work out operand, add actual operand to value in X/Y to form the address to the value we want
-    unsigned short address =  _memory->read(_programCounter++) + regValue; //the address of the value
+    unsigned short address = _memory->read(_programCounter++) + regValue; //the address of the value
 
     /*NOTE:
      *-Should this always result in a zero-page result?
