@@ -4,4 +4,5 @@
   BRK
   BRK
 there:
+  LDX #$04
   STA $0200
