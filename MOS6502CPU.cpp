@@ -111,7 +111,7 @@ unsigned short MOS6502CPU::getRelative(byte value)
     if(value > NEGATIVE) //negative number 128 = 0, 129 = -1, 130 = -2 ...
         newAddress -= NEGATIVE - (value - NEGATIVE);
     else //positive
-        newAddress += value;
+        newAddress += value + 1;
 
     return newAddress;
 }
