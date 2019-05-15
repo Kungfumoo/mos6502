@@ -2346,7 +2346,7 @@ bool CpuTest::testBCC()
 
     //Test 2
     /*Operation: Branch to 0x6E (+110)
-     *Expected result: 0x66E, All status bits false
+     *Expected result: 0x670, All status bits false
      */
 
     //reset variables
@@ -2364,7 +2364,7 @@ bool CpuTest::testBCC()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x66E &&
+    if(!(cpu->_programCounter == 0x670 &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -2477,7 +2477,7 @@ bool CpuTest::testBCS()
 
     //Test 2
     /*Operation: Branch to 0x6E (+110)
-     *Expected result: 0x66E, C = 1, others = 0
+     *Expected result: 0x670, C = 1, others = 0
      */
 
     //reset variables
@@ -2498,7 +2498,7 @@ bool CpuTest::testBCS()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x66E &&
+    if(!(cpu->_programCounter == 0x670 &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == true &&
@@ -2610,7 +2610,7 @@ bool CpuTest::testBEQ()
 
     //Test 2
     /*Operation: Branch to 0x6E (+110)
-     *Expected result: 0x66E, Z = 1, others = 0
+     *Expected result: 0x670, Z = 1, others = 0
      */
 
     //reset variables
@@ -2631,7 +2631,7 @@ bool CpuTest::testBEQ()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x66E &&
+    if(!(cpu->_programCounter == 0x670 &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == true &&
          cpu->_status->getC() == false &&
@@ -2743,7 +2743,7 @@ bool CpuTest::testBMI()
 
     //Test 2
     /*Operation: Branch to 0x6E (+110)
-     *Expected result: 0x66E, S = 1, others = false
+     *Expected result: 0x670, S = 1, others = false
      */
 
     //reset variables
@@ -2764,7 +2764,7 @@ bool CpuTest::testBMI()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x66E &&
+    if(!(cpu->_programCounter == 0x670 &&
          cpu->_status->getS() == true &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -2875,7 +2875,7 @@ bool CpuTest::testBNE()
 
     //Test 2
     /*Operation: Branch to 0x6E (+110)
-     *Expected result: 0x66E, others = false
+     *Expected result: 0x670, others = false
      */
 
     //reset variables
@@ -2895,7 +2895,7 @@ bool CpuTest::testBNE()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x66E &&
+    if(!(cpu->_programCounter == 0x670 &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -3007,7 +3007,7 @@ bool CpuTest::testBPL()
 
     //Test 2
     /*Operation: Branch to 0x6E (+110)
-     *Expected result: 0x66E, others = false
+     *Expected result: 0x670, others = false
      */
 
     //reset variables
@@ -3027,7 +3027,7 @@ bool CpuTest::testBPL()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x66E &&
+    if(!(cpu->_programCounter == 0x670 &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -3139,7 +3139,7 @@ bool CpuTest::testBVC()
 
     //Test 2
     /*Operation: Branch to 0x6E (+110)
-     *Expected result: 0x66E, others = false
+     *Expected result: 0x670, others = false
      */
 
     //reset variables
@@ -3159,7 +3159,7 @@ bool CpuTest::testBVC()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x66E &&
+    if(!(cpu->_programCounter == 0x670 &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
@@ -3272,7 +3272,7 @@ bool CpuTest::testBVS()
 
     //Test 2
     /*Operation: Branch to 0x6E (+110)
-     *Expected result: 0x66E, others = false
+     *Expected result: 0x670, others = false
      */
 
     //reset variables
@@ -3293,7 +3293,7 @@ bool CpuTest::testBVS()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_programCounter == 0x66E &&
+    if(!(cpu->_programCounter == 0x670 &&
          cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false &&
