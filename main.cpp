@@ -3,8 +3,8 @@
 #include <stdexcept>
 #include <string>
 #include <fstream>
-#include "MOS6502CPU.h"
-#include "BasicMemory.h"
+#include "MOS6502/MOS6502CPU.h"
+#include "MOS6502/BasicMemory.h"
 
 using namespace std;
 using namespace MOS_6502;

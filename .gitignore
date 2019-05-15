@@ -9,7 +9,7 @@ Debug/
 *.vcxproj.filters
 *.o
 *.h.gch
-mos6502
+bin/mos6502
 *.bin
 *.exe
 .vscode
