@@ -1,6 +1,6 @@
 #include <iostream>
 #include <exception>
-#include "CpuTest.h"
+#include "MOS6502/CpuTest.h"
 
 using namespace std;
 using namespace MOS_6502;
