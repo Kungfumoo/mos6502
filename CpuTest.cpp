@@ -3801,7 +3801,7 @@ bool CpuTest::testCMP()
         cpu->runNext(false);
 
     //Check if result differs from expected
-    if(!(cpu->_status->getS() == true &&
+    if(!(cpu->_status->getS() == false &&
          cpu->_status->getZ() == false &&
          cpu->_status->getC() == false))
     {
