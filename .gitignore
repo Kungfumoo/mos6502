@@ -12,3 +12,4 @@ Debug/
 mos6502
 *.bin
 *.exe
+.vscode

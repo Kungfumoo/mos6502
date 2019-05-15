@@ -448,23 +448,15 @@ void MOS6502CPU::CMP(byte operand)
 {
     /* Sets status C, Z and S depending on results
      * C = if A >= O
-     * Z = if A = 0
-     * S = above is false
+     * Z = if A = O
+     * S = 0 if A = O or (A-O) is signed
      */
 
-    _status->setS(false);
-    _status->setC(false);
-    _status->setZ(false);
+    bool equal = _accumulator == operand;
 
-    if(_accumulator > operand)
-        _status->setC(true);
-    else if(_accumulator == operand)
-    {
-        _status->setC(true);
-        _status->setZ(true);
-    }
-    else
-        _status->setS(true);
+    _status->setS((equal) ? false : (_accumulator - operand) > NEGATIVE);
+    _status->setC(_accumulator >= operand);
+    _status->setZ(equal);
 }
 
 void MOS6502CPU::CMP1()
