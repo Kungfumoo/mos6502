@@ -4,8 +4,8 @@
 #include <fstream>
 #include <regex>
 #include "Exceptions.h"
-#include "CommandMap.h"
-#include "OppCodeMap.h"
+#include "CompilerAssets/CommandMap.h"
+#include "CompilerAssets/OppCodeMap.h"
 #include "MOS6502CPU.h"
 
 using namespace MOS_6502;
