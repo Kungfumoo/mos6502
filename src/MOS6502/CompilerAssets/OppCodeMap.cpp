@@ -1,5 +1,5 @@
 #include "OppCodeMap.h"
-#include "Exceptions.h"
+#include "../Exceptions.h"
 
 using namespace std;
 using namespace MOS_6502;
