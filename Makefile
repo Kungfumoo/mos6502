@@ -27,8 +27,11 @@ $(BUILD_DIR)/%.o: $(BASE_SRC_DIR)/%.cpp
 mos6502: mkdir $(BUILD_DIR)/main.o $(obj)
 	$(CC) $(BUILD_DIR)/main.o $(obj) -o $(TARGET_EXE)
 
+tests: mkdir $(BUILD_DIR)/test.o $(obj)
+	$(CC) $(BUILD_DIR)/test.o $(obj) -o $(TARGET_EXE)
+
 mkdir:
-	mkdir obj bin $(subst $(BASE_SRC_DIR), $(BUILD_DIR), $(SRC_DIRS))
+	mkdir -p obj bin $(subst $(BASE_SRC_DIR), $(BUILD_DIR), $(SRC_DIRS))
 
 clean:
 	rm -r obj bin
