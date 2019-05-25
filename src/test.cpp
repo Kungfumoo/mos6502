@@ -1,9 +1,9 @@
 #include <iostream>
 #include <exception>
-#include "MOS6502/CpuTest.h"
+#include "MOS6502/Test/CpuTest.h"
 
 using namespace std;
-using namespace MOS_6502;
+using namespace MOS_6502::Test;
 
 int main()
 {

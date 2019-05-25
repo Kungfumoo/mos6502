@@ -11,6 +11,8 @@
 #define _CPU_TEST_H_
 namespace MOS_6502
 {
+namespace Test
+{
     class CpuTest
     {
         //Constants(private)
@@ -103,5 +105,6 @@ namespace MOS_6502
 
         void runTests(); //runs all tests
     };
+}
 }
 #endif

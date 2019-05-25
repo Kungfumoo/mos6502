@@ -22,6 +22,12 @@ namespace MOS_6502
     class Memory;
     class Stack;
 
+    namespace Test
+    {
+        class CpuTest;
+    }
+    //end of forward decs
+
     class MOS6502CPU
     {
         //Constants
@@ -1178,7 +1184,7 @@ namespace MOS_6502
 
             //--Friends:
             friend class Stack;
-            friend class CpuTest;
+            friend class Test::CpuTest;
 
             //--General Methods:
             void addCycleCallback(cycleCallback callback);

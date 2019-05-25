@@ -3,7 +3,8 @@
 BASE_SRC_DIR = src
 
 #needs to include all subfolders to compile too
-SRC_DIRS = $(BASE_SRC_DIR)/MOS6502
+SRC_DIRS = $(BASE_SRC_DIR)/MOS6502 \
+		   $(BASE_SRC_DIR)/MOS6502/Test
 BUILD_DIR = obj
 TARGET_EXE = bin/mos6502
 

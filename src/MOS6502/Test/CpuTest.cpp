@@ -1,13 +1,14 @@
 //CpuTest class implementation
 #include "CpuTest.h"
-#include "MOS6502CPU.h"
-#include "BasicMemory.h"
-#include "Stack.h"
-#include "StatusRegister.h"
-#include "Utility.h"
+#include "../MOS6502CPU.h"
+#include "../BasicMemory.h"
+#include "../Stack.h"
+#include "../StatusRegister.h"
+#include "../Utility.h"
 #include <iostream>
 
 using namespace MOS_6502;
+using namespace MOS_6502::Test;
 using namespace std;
 
 //const definitions
