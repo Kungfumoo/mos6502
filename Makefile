@@ -1,8 +1,9 @@
 #Manual: https://www.gnu.org/software/make/manual/make.html
 #dirs
 BASE_SRC_DIR = src
-SRC_DIRS = $(BASE_SRC_DIR)/MOS6502 \
-		   $(BASE_SRC_DIR)/MOS6502/CompilerAssets
+
+#needs to include all subfolders to compile too
+SRC_DIRS = $(BASE_SRC_DIR)/MOS6502
 BUILD_DIR = obj
 TARGET_EXE = bin/mos6502
 
