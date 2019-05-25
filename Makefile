@@ -20,12 +20,6 @@ CC = g++
 #compiler options
 CO = -std=c++11
 
-#rule for compiling .cpp to .o
-#target: dependencies
-#	recipe
-$(BUILD_DIR)/%.o: $(BASE_SRC_DIR)/%.cpp
-	$(CC) $(CO) -c -o $@ $<
-
 mos6502: mkdir $(BUILD_DIR)/main.o $(obj)
 	$(CC) $(BUILD_DIR)/main.o $(obj) -o $(TARGET_EXE)
 
@@ -34,6 +28,16 @@ tests: mkdir $(BUILD_DIR)/test.o $(obj)
 
 mkdir:
 	mkdir -p obj bin $(subst $(BASE_SRC_DIR), $(BUILD_DIR), $(SRC_DIRS))
+
+#rule for compiling .cpp to .o
+#target: dependencies
+#	recipe
+$(BUILD_DIR)/%.o: $(BASE_SRC_DIR)/%.cpp $(BASE_SRC_DIR)/%.h
+	$(CC) $(CO) -c -o $@ $<
+
+#main and test are seperate as they have no header file dependency
+$(BUILD_DIR)/%.o: $(BASE_SRC_DIR)/%.cpp
+	$(CC) $(CO) -c -o $@ $<
 
 clean:
 	rm -r obj bin
