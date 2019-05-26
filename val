@@ -1,2 +1,2 @@
 #!/bin/bash
-valgrind --leak-check=yes ./mos6502
+valgrind --leak-check=yes ./bin/mos6502
