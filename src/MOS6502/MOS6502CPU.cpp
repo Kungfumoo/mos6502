@@ -13,7 +13,6 @@ using namespace MOS_6502;
 using namespace std;
 
 //Constant Definitions
-const byte MOS6502CPU::MAX_CLOCK_SPEED_MHZ = 2;
 const byte MOS6502CPU::NEGATIVE = 127;
 const unsigned short MOS6502CPU::DEFAULT_PC = 0x600;
 
@@ -1570,7 +1569,7 @@ void MOS6502CPU::setupCycleLookup()
 
 void MOS6502CPU::run()
 {
-    int counter = _cycles;
+    int counter = _clockSpeed;
     auto start = chrono::system_clock::now();
 
     while(_running)
@@ -1602,7 +1601,7 @@ void MOS6502CPU::run()
             this_thread::sleep_for(chrono::seconds(1) - elapsed);
 
             start = chrono::system_clock::now();
-            counter = _cycles;
+            counter = _clockSpeed;
         }
     }
 }
@@ -1907,11 +1906,10 @@ void MOS6502CPU::status(string header, bool includeStack)
 
 //--Constructors
 //Constructor
-MOS6502CPU::MOS6502CPU(unsigned int clockSpeedMhz, Memory* memory, bool debug)
+MOS6502CPU::MOS6502CPU(float clockSpeedMhz, Memory* memory, bool debug)
 {
     //Other
-    _clockSpeed = (clockSpeedMhz > MAX_CLOCK_SPEED_MHZ) ? MAX_CLOCK_SPEED_MHZ: clockSpeedMhz;
-    _cycles = _clockSpeed * 1000000;
+    _clockSpeed = (unsigned int)(clockSpeedMhz * 1e+6);
     setupCycleLookup();
 
     _memory = memory;

@@ -36,7 +36,7 @@ void onCycle()
 int main(int argc, char* argv[])
 {
     BasicMemory* memory = new BasicMemory();
-    MOS6502CPU* cpu = new MOS6502CPU(2, memory, true);
+    MOS6502CPU* cpu = new MOS6502CPU(1.19, memory, true);
 
     if(argc == 1)
     {

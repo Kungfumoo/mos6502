@@ -31,7 +31,6 @@ namespace MOS_6502
     class MOS6502CPU
     {
         //Constants
-        static const byte MAX_CLOCK_SPEED_MHZ;
         static const byte NEGATIVE; //represents the number where the CPU starts interpreting as negative
 
         //Registers
@@ -49,7 +48,6 @@ namespace MOS_6502
         //Variables
         bool _running;
         unsigned int _clockSpeed;
-        unsigned int _cycles;
         byte* _cycleLookup; //array storing the cycles that each procedure should take
         bool _debug;
         std::vector<cycleCallback> _onCycleCalls;
@@ -1206,7 +1204,7 @@ namespace MOS_6502
              *clockSpeedMhz = the clockspeed that this should operate on in Mhz(max is 2)
              *memory = A pointer to an created Memory object(represents RAM)
              */
-            MOS6502CPU(unsigned int clockSpeedMhz, Memory* memory, bool debug);
+            MOS6502CPU(float clockSpeedMhz, Memory* memory, bool debug);
 
             //Destructor
             ~MOS6502CPU();
