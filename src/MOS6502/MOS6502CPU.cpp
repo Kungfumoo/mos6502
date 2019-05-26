@@ -5,6 +5,8 @@
 #include "Stack.h"
 #include "Exceptions.h"
 #include "Utility.h"
+#include <chrono>
+#include <thread>
 #include <iostream>
 
 using namespace MOS_6502;
@@ -1569,6 +1571,7 @@ void MOS6502CPU::setupCycleLookup()
 void MOS6502CPU::run()
 {
     int counter = _cycles;
+    auto start = chrono::system_clock::now();
 
     while(_running)
     {
@@ -1591,8 +1594,14 @@ void MOS6502CPU::run()
             return;
         }
 
+        //stagger cpu to match true clock speed
         if(counter <= 0) {
-            //TODO: stagger cpu to match true clock speed
+            auto end = chrono::system_clock::now();
+            chrono::duration<double> elapsed = end - start;
+
+            this_thread::sleep_for(chrono::seconds(1) - elapsed);
+
+            start = chrono::system_clock::now();
             counter = _cycles;
         }
     }
