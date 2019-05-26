@@ -47,4 +47,4 @@ $(BUILD_DIR)/%.o: $(BASE_SRC_DIR)/%.cpp
 	$(CC) $(CO) -c -o $@ $<
 
 clean:
-	rm -r obj bin
+	rm -r -f obj bin
