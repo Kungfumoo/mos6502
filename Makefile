@@ -26,12 +26,12 @@ CC := g++
 #compiler options
 CO := -std=c++11
 
-mos6502: mkdir $(BUILD_DIR)/main.o $(obj)
-	$(CC) $(BUILD_DIR)/main.o $(obj) -o $(TARGET_EXE)
+mos6502: mkdir $(BUILD_DIR)/mosmain.o $(obj)
+	$(CC) $(BUILD_DIR)/mosmain.o $(obj) -o $(TARGET_EXE)
 
 tests: SRC_DIRS += $(TEST_DIRS) #target specific variable (Context is recipe only, rules cannot see this change)
-tests: mkdir $(BUILD_DIR)/test.o $(obj) $(testObj)
-	$(CC) $(BUILD_DIR)/test.o $(obj) -o $(TARGET_EXE)
+tests: mkdir $(BUILD_DIR)/mostest.o $(obj) $(testObj)
+	$(CC) $(BUILD_DIR)/mostest.o $(obj) -o $(TARGET_EXE)
 
 mkdir:
 	mkdir -p obj bin $(subst $(BASE_SRC_DIR), $(BUILD_DIR), $(SRC_DIRS))
