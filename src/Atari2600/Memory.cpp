@@ -6,8 +6,8 @@ using namespace Atari2600;
 
 //--Constant definition
 const unsigned short Memory::MAX_SIZE_BYTES = 8192;
-const unsigned short ROM_START_ADDR = 0x1000;
-const unsigned short ROM_END_ADDR = 0x1FFF;
+const unsigned short Memory::ROM_START_ADDR = 0x1000;
+const unsigned short Memory::ROM_END_ADDR = 0x1FFF;
 
 //--Methods
 void Memory::loadRom(std::vector<byte>& program)

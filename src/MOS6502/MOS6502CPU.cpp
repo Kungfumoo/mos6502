@@ -14,7 +14,7 @@ using namespace std;
 
 //Constant Definitions
 const byte MOS6502CPU::NEGATIVE = 127;
-const unsigned short MOS6502CPU::DEFAULT_PC = 0x600;
+const unsigned short MOS6502CPU::DEFAULT_PC = 0x1000;
 
 //--STATE METHODS(private)
 void MOS6502CPU::saveProgramCounter()

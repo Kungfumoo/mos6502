@@ -7,7 +7,8 @@
 BASE_SRC_DIR := src
 
 #needs to include all subfolders to compile too
-SRC_DIRS := $(BASE_SRC_DIR)/MOS6502
+SRC_DIRS := $(BASE_SRC_DIR)/MOS6502 \
+			$(BASE_SRC_DIR)/Atari2600
 TEST_DIRS := $(BASE_SRC_DIR)/MOS6502/Test
 BUILD_DIR := obj
 TARGET_EXE := bin/mos6502
@@ -25,6 +26,9 @@ CC := g++
 
 #compiler options
 CO := -std=c++11
+
+atari2600: mkdir $(BUILD_DIR)/main.o $(obj)
+	$(CC) $(BUILD_DIR)/main.o $(obj) -o $(TARGET_EXE)
 
 mos6502: mkdir $(BUILD_DIR)/mosmain.o $(obj)
 	$(CC) $(BUILD_DIR)/mosmain.o $(obj) -o $(TARGET_EXE)
