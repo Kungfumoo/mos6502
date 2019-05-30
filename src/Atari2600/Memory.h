@@ -2,7 +2,7 @@
 #define _AT2600_MEMORY_H_
 
 #include <vector>
-#include "BasicMemory.h"
+#include "../MOS6502/BasicMemory.h"
 
 /* 
  * NOTES:
@@ -20,9 +20,10 @@ namespace Atari2600
     {
         static const unsigned short MAX_SIZE_BYTES;
         static const unsigned short ROM_START_ADDR;
+        static const unsigned short ROM_END_ADDR;
 
     public:
-        void loadRom(std::vector<byte> program);
+        void loadRom(std::vector<byte>& program);
 
         Memory();
     };
