@@ -12,6 +12,8 @@
  *      0x0080 ~ 0x00FF = RAM (128 bytes)
  *      0x0200 ~ 0x02FF = RIOT Registers
  *      0x1000 ~ 0x1FFF = ROM
+ * 
+ * Have extended ROM for the purpose of this emulator (0xFFFF) to execute test assembly
  */
 
 namespace Atari2600
