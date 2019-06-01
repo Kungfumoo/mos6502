@@ -422,7 +422,7 @@ void MOS6502CPU::BRK4()
     _status->setI(true);
 
     //Move program counter
-	_programCounter = _memory->read(0xFFFE) | (_memory->read(0xFFFF) << 8);
+	_programCounter = 0; //TODO: should this be 0?
 }
 
 void MOS6502CPU::CLC4()
