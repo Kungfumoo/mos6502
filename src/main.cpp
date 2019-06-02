@@ -5,6 +5,7 @@
 #include <fstream>
 #include <stdexcept>
 #include "Atari2600/Memory.h"
+#include "Atari2600/TelevisionInterfaceAdapter.h"
 #include "MOS6502/MOS6502CPU.h"
 
 using namespace Atari2600;
@@ -44,7 +45,19 @@ int main(int argc, char* argv[])
     vector<byte> program = fetchProgram(filename);
 
     ATMemory* memory = new ATMemory();
-    MOS6502CPU* cpu = new MOS6502CPU(1.19, memory, true);
+    MOS6502CPU* cpu = new MOS6502CPU(TelevisionInterfaceAdapter::CLOCK_SPEED / 3, memory, true);
+    TelevisionInterfaceAdapter* tia = new TelevisionInterfaceAdapter(memory);
+
+    float cpuClockSpeed = cpu->getClockSpeedMhz();
+    int tiaCycles = TelevisionInterfaceAdapter::CLOCK_SPEED / cpuClockSpeed;
+
+    cpu->addCycleCallback([&] () {
+        cout << "CPU: cycle!" << endl;
+        
+        //advance TIA
+        for (int i = 0; i < tiaCycles; i++)
+            tia->runCycle();
+    });
 
     try
     {
@@ -58,6 +71,7 @@ int main(int argc, char* argv[])
     }
 
     delete cpu;
+    delete tia;
 
     return 0;
 }

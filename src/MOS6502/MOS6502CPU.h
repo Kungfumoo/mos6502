@@ -1185,6 +1185,7 @@ namespace MOS_6502
             friend class Test::CpuTest;
 
             //--General Methods:
+            float getClockSpeedMhz();
             void addCycleCallback(cycleCallback callback);
             void execute(std::vector<byte>& program); //Executes a series of instructions given in the string
             void reset(); //resets cpu state and memory

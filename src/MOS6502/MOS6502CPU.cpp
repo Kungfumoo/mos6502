@@ -1768,6 +1768,11 @@ void MOS6502CPU::runCommand(byte opcode)
 }
 
 //--General(public)
+float MOS6502CPU::getClockSpeedMhz()
+{
+    return (float)(_clockSpeed / 1e+6);
+}
+
 void MOS6502CPU::addCycleCallback(cycleCallback callback)
 {
     _onCycleCalls.push_back(callback);
