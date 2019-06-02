@@ -1,3 +1,4 @@
+; http://6502.org/source/sorting/bubble8.htm
 SORT8    LDY #$00
          STY $32
          LDA ($30),Y

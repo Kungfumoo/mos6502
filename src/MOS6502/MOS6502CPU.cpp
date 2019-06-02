@@ -1569,8 +1569,7 @@ void MOS6502CPU::setupCycleLookup()
 
 void MOS6502CPU::run()
 {
-    int counter = _clockSpeed;
-    auto start = chrono::system_clock::now();
+    unsigned int delayPerCycle = 1e+9 / _clockSpeed; //nanoseconds
 
     while(_running)
     {
@@ -1583,7 +1582,6 @@ void MOS6502CPU::run()
         //remove number of cycles from counter:
         byte cycles = _cycleLookup[opcode];
         handleCycles(cycles);
-        counter -= cycles;
 
         //Perform interupts
         //TODO: TEMP fudge to test smaller programs
@@ -1594,15 +1592,7 @@ void MOS6502CPU::run()
         }
 
         //stagger cpu to match true clock speed
-        if(counter <= 0) {
-            auto end = chrono::system_clock::now();
-            chrono::duration<double> elapsed = end - start;
-
-            this_thread::sleep_for(chrono::seconds(1) - elapsed);
-
-            start = chrono::system_clock::now();
-            counter = _clockSpeed;
-        }
+        this_thread::sleep_for(chrono::nanoseconds(delayPerCycle * cycles));
     }
 }
 
