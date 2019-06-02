@@ -70,8 +70,8 @@ int main(int argc, char* argv[])
         cout << "EXCEPTION: " << e->what() << endl;
     }
 
-    delete cpu;
     delete tia;
+    delete cpu;
 
     return 0;
 }
