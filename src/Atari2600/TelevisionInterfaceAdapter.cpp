@@ -12,7 +12,10 @@ const float TIA::CLOCK_SPEED = 3.58; //mhz
 
 void TIA::runCycle()
 {
-    cout << "TIA: cycle!" << endl;
+    if (_memory->isWSYNC())
+        cout << "TIA: WSYNC" << endl;
+    else
+        cout << "TIA: cycle!" << endl;
 }
 
 TIA::TelevisionInterfaceAdapter(Memory* memory)

@@ -24,8 +24,13 @@ namespace Atari2600
         static const unsigned short ROM_START_ADDR;
         static const unsigned short ROM_END_ADDR;
 
+        //strobe registers
+        bool _wsync;
+
     public:
+        bool isWSYNC(); //has WSYNC been written too
         void loadRom(std::vector<byte>& program);
+        void write(byte value, unsigned short address) override; //write to said location in memory
 
         Memory();
     };
