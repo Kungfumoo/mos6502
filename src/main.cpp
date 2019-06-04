@@ -55,8 +55,9 @@ int main(int argc, char* argv[])
         cout << "CPU: cycle!" << endl;
         
         //advance TIA
-        for (int i = 0; i < tiaCycles; i++)
-            tia->runCycle();
+        for(int i = 0; i < tiaCycles; i++)
+            if(tia->runCycle())
+                break;
     });
 
     try

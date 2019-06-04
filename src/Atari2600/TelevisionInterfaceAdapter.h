@@ -10,12 +10,15 @@ namespace Atari2600
 
     class TelevisionInterfaceAdapter
     {
+        static const byte CLOCKS_PER_SCANLINE;
+        
         Memory* _memory;
+        byte _clockCounter;
 
     public:
         static const float CLOCK_SPEED;
 
-        void runCycle();
+        bool runCycle(); //run a cycle of tia, return true to break CPU syncronisation (for things like WSYNC)
 
         TelevisionInterfaceAdapter(Memory* memory);
     };
