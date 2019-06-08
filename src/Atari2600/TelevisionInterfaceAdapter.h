@@ -11,9 +11,13 @@ namespace Atari2600
     class TelevisionInterfaceAdapter
     {
         static const byte CLOCKS_PER_SCANLINE;
+        static const unsigned short MAX_SCANLINES;
+        static const byte VERTICAL_PICTURE_THRESHOLD;
+        static const byte HORIZONTAL_PICTURE_THRESHOLD;
         
         Memory* _memory;
         byte _clockCounter;
+        byte _vScanlineCounter;
 
     public:
         static const float CLOCK_SPEED;
