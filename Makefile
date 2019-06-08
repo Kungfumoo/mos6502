@@ -8,7 +8,8 @@ BASE_SRC_DIR := src
 
 #needs to include all subfolders to compile too
 SRC_DIRS := $(BASE_SRC_DIR)/MOS6502 \
-			$(BASE_SRC_DIR)/Atari2600
+			$(BASE_SRC_DIR)/Atari2600 \
+			$(BASE_SRC_DIR)/Atari2600/DisplayAdapter
 TEST_DIRS := $(BASE_SRC_DIR)/MOS6502/Test
 BUILD_DIR := obj
 TARGET_EXE := bin/mos6502
