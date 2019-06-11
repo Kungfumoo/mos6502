@@ -8,6 +8,7 @@ namespace Atari2600
     //forward decs
     namespace DisplayAdapter
     {
+        struct Colour;
         class DisplayAdapterInterface;
     }
 
@@ -25,6 +26,9 @@ namespace Atari2600
         Memory* _memory;
         byte _clockCounter;
         byte _vScanlineCounter;
+
+        //Converts the register colour value into an RBG colour (Based on NTSC)
+        DisplayAdapter::Colour resolveColour(byte value);
 
     public:
         static const float CLOCK_SPEED;
