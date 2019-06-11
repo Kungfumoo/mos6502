@@ -24,6 +24,7 @@ namespace DisplayAdapter
     {
     public:
         virtual void renderPixel(Position& pos, Colour& colour) = 0;
+        virtual void init() = 0;
     };
 }
 }
