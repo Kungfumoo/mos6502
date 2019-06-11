@@ -5,8 +5,14 @@ typedef unsigned char byte;
 
 namespace Atari2600
 {
-    //forward dec
+    //forward decs
+    namespace DisplayAdapter
+    {
+        class DisplayAdapterInterface;
+    }
+
     class Memory;
+    //end forward decs
 
     class TelevisionInterfaceAdapter
     {
@@ -14,7 +20,8 @@ namespace Atari2600
         static const unsigned short MAX_SCANLINES;
         static const byte VERTICAL_PICTURE_THRESHOLD;
         static const byte HORIZONTAL_PICTURE_THRESHOLD;
-        
+
+        DisplayAdapter::DisplayAdapterInterface* _displayAdapter;
         Memory* _memory;
         byte _clockCounter;
         byte _vScanlineCounter;
@@ -24,7 +31,8 @@ namespace Atari2600
 
         bool runCycle(); //run a cycle of tia, return true to break CPU syncronisation (for things like WSYNC)
 
-        TelevisionInterfaceAdapter(Memory* memory);
+        TelevisionInterfaceAdapter(DisplayAdapter::DisplayAdapterInterface* displayAdapter, Memory* memory);
+        ~TelevisionInterfaceAdapter();
     };
 }
 

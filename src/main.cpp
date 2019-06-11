@@ -4,11 +4,13 @@
 #include <string>
 #include <fstream>
 #include <stdexcept>
+#include "Atari2600/DisplayAdapter/SFMLAdapter.h"
 #include "Atari2600/Memory.h"
 #include "Atari2600/TelevisionInterfaceAdapter.h"
 #include "MOS6502/MOS6502CPU.h"
 
 using namespace Atari2600;
+using namespace Atari2600::DisplayAdapter;
 using namespace MOS_6502;
 using namespace std;
 
@@ -46,7 +48,8 @@ int main(int argc, char* argv[])
 
     ATMemory* memory = new ATMemory();
     MOS6502CPU* cpu = new MOS6502CPU(TelevisionInterfaceAdapter::CLOCK_SPEED / 3, memory, true);
-    TelevisionInterfaceAdapter* tia = new TelevisionInterfaceAdapter(memory);
+    SFMLAdapter* displayAdapter = new SFMLAdapter();
+    TelevisionInterfaceAdapter* tia = new TelevisionInterfaceAdapter(displayAdapter, memory);
 
     float cpuClockSpeed = cpu->getClockSpeedMhz();
     int tiaCycles = TelevisionInterfaceAdapter::CLOCK_SPEED / cpuClockSpeed;

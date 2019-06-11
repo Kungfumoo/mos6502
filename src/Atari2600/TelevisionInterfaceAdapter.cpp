@@ -1,5 +1,6 @@
 #include "TelevisionInterfaceAdapter.h"
 #include "Memory.h"
+#include "DisplayAdapter/DisplayAdapterInterface.h"
 #include <iostream>
 
 using namespace Atari2600;
@@ -36,7 +37,7 @@ bool TIA::runCycle()
         if(_vScanlineCounter > VERTICAL_PICTURE_THRESHOLD &&
            _clockCounter > HORIZONTAL_PICTURE_THRESHOLD)
         {
-            cout << "TIA: render!" << endl;
+            //render pixel TOOD:
         }
         
         if(_clockCounter-- == 0)
@@ -52,9 +53,17 @@ bool TIA::runCycle()
     }
 }
 
-TIA::TelevisionInterfaceAdapter(Memory* memory)
+TIA::TelevisionInterfaceAdapter(DisplayAdapter::DisplayAdapterInterface* displayAdapter, Memory* memory)
 {
     _clockCounter = CLOCKS_PER_SCANLINE;
     _vScanlineCounter = 0;
     _memory = memory;
+    _displayAdapter = displayAdapter;
+
+    _displayAdapter->init();
+}
+
+TIA::~TelevisionInterfaceAdapter()
+{
+    delete _displayAdapter;
 }

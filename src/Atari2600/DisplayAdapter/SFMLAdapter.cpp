@@ -1,21 +1,16 @@
 #include "SFMLAdapter.h"
-#include <SFML/Window.hpp>
+
+#include <iostream> //TEMP
 
 using namespace Atari2600::DisplayAdapter;
 
 //Public Methods
 void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
 {
-
+    std::cout << " >>>>> RENDER PIXEL <<<<< " << std::endl;
 }
 
 void SFMLAdapter::init()
 {
-    sf::Window window;
-    window.create(sf::VideoMode(800, 600), "My window");
-
-    while(window.isOpen())
-    {
-        
-    }
+    std::cout << " >>>>> DISPLAY INIT <<<<< " << std::endl;
 }
