@@ -447,7 +447,14 @@ bool TIA::runCycle()
         if(_vScanlineCounter > VERTICAL_PICTURE_THRESHOLD &&
            _clockCounter > HORIZONTAL_PICTURE_THRESHOLD)
         {
-            //render pixel TOOD:
+            //background colour
+            auto colour = resolveColour(_memory->read(0x09));
+
+            DisplayAdapter::Position pos;
+            pos.x = 0;
+            pos.y = 0;
+
+            _displayAdapter->renderPixel(pos, colour);
         }
         
         if(_clockCounter-- == 0)
