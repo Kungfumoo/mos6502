@@ -267,6 +267,156 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
             colour.r = 0x8F; colour.g = 0xFE; colour.b = 0xFE;
             break;
 
+        case 0xA0:
+            colour.r = 0x00; colour.g = 0x1F; colour.b = 0x02;
+            break;
+        case 0xA2:
+            colour.r = 0x00; colour.g = 0x43; colour.b = 0x26;
+            break;
+        case 0xA4:
+            colour.r = 0x00; colour.g = 0x69; colour.b = 0x57;
+            break;
+        case 0xA6:
+            colour.r = 0x00; colour.g = 0x8D; colour.b = 0x7A;
+            break;
+        case 0xA8:
+            colour.r = 0x1B; colour.g = 0xB1; colour.b = 0x9E;
+            break;
+        case 0xAA:
+            colour.r = 0x3B; colour.g = 0xD7; colour.b = 0xC3;
+            break;
+        case 0xAC:
+            colour.r = 0x5D; colour.g = 0xFE; colour.b = 0xE9;
+            break;
+        case 0xAE:
+            colour.r = 0x86; colour.g = 0xFE; colour.b = 0xFE;
+            break;
+
+        case 0xB0:
+            colour.r = 0x00; colour.g = 0x24; colour.b = 0x03;
+            break;
+        case 0xB2:
+            colour.r = 0x00; colour.g = 0x4A; colour.b = 0x05;
+            break;
+        case 0xB4:
+            colour.r = 0x00; colour.g = 0x07; colour.b = 0x0C;
+            break;
+        case 0xB6:
+            colour.r = 0x09; colour.g = 0x95; colour.b = 0x2B;
+            break;
+        case 0xB8:
+            colour.r = 0x28; colour.g = 0xBA; colour.b = 0x4C;
+            break;
+        case 0xBA:
+            colour.r = 0x49; colour.g = 0xE0; colour.b = 0x6E;
+            break;
+        case 0xBC:
+            colour.r = 0x6C; colour.g = 0xFE; colour.b = 0x92;
+            break;
+        case 0xBE:
+            colour.r = 0x97; colour.g = 0xFE; colour.b = 0xB5;
+            break;
+
+        case 0xC0:
+            colour.r = 0x00; colour.g = 0x21; colour.b = 0x02;
+            break;
+        case 0xC2:
+            colour.r = 0x00; colour.g = 0x46; colour.b = 0x04;
+            break;
+        case 0xC4:
+            colour.r = 0x08; colour.g = 0x6B; colour.b = 0x00;
+            break;
+        case 0xC6:
+            colour.r = 0x28; colour.g = 0x90; colour.b = 0x00;
+            break;
+        case 0xC8:
+            colour.r = 0x49; colour.g = 0xB5; colour.b = 0x09;
+            break;
+        case 0xCA:
+            colour.r = 0x6B; colour.g = 0xDB; colour.b = 0x28;
+            break;
+        case 0xCC:
+            colour.r = 0x8F; colour.g = 0xFE; colour.b = 0x49;
+            break;
+        case 0xCE:
+            colour.r = 0xBB; colour.g = 0xFE; colour.b = 0x69;
+            break;
+
+        case 0xD0:
+            colour.r = 0x00; colour.g = 0x15; colour.b = 0x01;
+            break;
+        case 0xD2:
+            colour.r = 0x10; colour.g = 0x36; colour.b = 0x00;
+            break;
+        case 0xD4:
+            colour.r = 0x30; colour.g = 0x59; colour.b = 0x00;
+            break;
+        case 0xD6:
+            colour.r = 0x53; colour.g = 0x7E; colour.b = 0x00;
+            break;
+        case 0xD8:
+            colour.r = 0x76; colour.g = 0xA3; colour.b = 0x00;
+            break;
+        case 0xDA:
+            colour.r = 0x9A; colour.g = 0xC8; colour.b = 0x00;
+            break;
+        case 0xDC:
+            colour.r = 0xBF; colour.g = 0xEE; colour.b = 0x1E;
+            break;
+        case 0xDE:
+            colour.r = 0xE8; colour.g = 0xFE; colour.b = 0x3E;
+            break;
+
+        case 0xE0:
+            colour.r = 0x1A; colour.g = 0x02; colour.b = 0x00;
+            break;
+        case 0xE2:
+            colour.r = 0x3B; colour.g = 0x1F; colour.b = 0x00;
+            break;
+        case 0xE4:
+            colour.r = 0x5E; colour.g = 0x41; colour.b = 0x00;
+            break;
+        case 0xE6:
+            colour.r = 0x83; colour.g = 0x64; colour.b = 0x00;
+            break;
+        case 0xE8:
+            colour.r = 0xA8; colour.g = 0x88; colour.b = 0x00;
+            break;
+        case 0xEA:
+            colour.r = 0xCE; colour.g = 0xAD; colour.b = 0x00;
+            break;
+        case 0xEC:
+            colour.r = 0xF4; colour.g = 0xD2; colour.b = 0x18;
+            break;
+        case 0xEE:
+            colour.r = 0xFE; colour.g = 0xFA; colour.b = 0x40;
+            break;
+        
+        case 0xF0:
+            colour.r = 0x38; colour.g = 0x00; colour.b = 0x00;
+            break;
+        case 0xF2:
+            colour.r = 0x5F; colour.g = 0x08; colour.b = 0x00;
+            break;
+        case 0xF4:
+            colour.r = 0x84; colour.g = 0x27; colour.b = 0x00;
+            break;
+        case 0xF6:
+            colour.r = 0xAA; colour.g = 0x49; colour.b = 0x00;
+            break;
+        case 0xF8:
+            colour.r = 0xD0; colour.g = 0x6B; colour.b = 0x00;
+            break;
+        case 0xFA:
+            colour.r = 0xF6; colour.g = 0x8F; colour.b = 0x18;
+            break;
+        case 0xFC:
+            colour.r = 0xFE; colour.g = 0xB4; colour.b = 0x39;
+            break;
+        case 0xFE:
+            colour.r = 0xFE; colour.g = 0xDF; colour.b = 0x70;
+            break;
+        
         default:
             colour.r = colour.g = colour.b = 0;
     }
