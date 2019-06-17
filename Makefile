@@ -7,20 +7,22 @@
 BASE_SRC_DIR := src
 
 #needs to include all subfolders to compile too
-SRC_DIRS := $(BASE_SRC_DIR)/MOS6502 \
-			$(BASE_SRC_DIR)/Atari2600 \
-			$(BASE_SRC_DIR)/Atari2600/DisplayAdapter
+SRC_DIRS := $(BASE_SRC_DIR)/MOS6502
 TEST_DIRS := $(BASE_SRC_DIR)/MOS6502/Test
+ATARI_DIRS := $(BASE_SRC_DIR)/Atari2600 \
+			  $(BASE_SRC_DIR)/Atari2600/DisplayAdapter
 BUILD_DIR := obj
 TARGET_EXE := bin/mos6502
 
 #find all source files in the src_dirs
 src = $(foreach dir, $(SRC_DIRS), $(wildcard $(dir)/*.cpp))
 testSrc = $(foreach dir, $(TEST_DIRS), $(wildcard $(dir)/*.cpp))
+atSrc = $(foreach dir, $(ATARI_DIRS), $(wildcard $(dir)/*.cpp))
 
 #create a new list based on the src list but replace .cpp with .o and the base directory
 obj = $(patsubst $(BASE_SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(src))
 testObj = $(patsubst $(BASE_SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(testSrc))
+atObj = $(patsubst $(BASE_SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(atSrc))
 
 #compiler
 CC := g++
@@ -31,7 +33,8 @@ CO := -std=c++11
 #compiler libraries
 CL := -lsfml-window -lsfml-system
 
-atari2600: mkdir $(BUILD_DIR)/main.o $(obj)
+atari2600: SRC_DIRS += $(ATARI_DIRS)
+atari2600: mkdir $(BUILD_DIR)/main.o $(obj) $(atObj)
 	$(CC) $(CO) -o $(TARGET_EXE) $(BUILD_DIR)/main.o $(obj) $(CL) 
 
 mos6502: mkdir $(BUILD_DIR)/mosmain.o $(obj)
