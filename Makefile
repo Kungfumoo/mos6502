@@ -28,8 +28,11 @@ CC := g++
 #compiler options
 CO := -std=c++11
 
+#compiler libraries
+CL := -lsfml-window -lsfml-system
+
 atari2600: mkdir $(BUILD_DIR)/main.o $(obj)
-	$(CC) $(BUILD_DIR)/main.o $(obj) -o $(TARGET_EXE)
+	$(CC) $(CO) -o $(TARGET_EXE) $(BUILD_DIR)/main.o $(obj) $(CL) 
 
 mos6502: mkdir $(BUILD_DIR)/mosmain.o $(obj)
 	$(CC) $(BUILD_DIR)/mosmain.o $(obj) -o $(TARGET_EXE)
