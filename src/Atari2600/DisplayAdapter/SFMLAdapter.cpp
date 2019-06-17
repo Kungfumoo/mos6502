@@ -1,4 +1,5 @@
 #include "SFMLAdapter.h"
+#include <SFML/Window.hpp>
 
 #include <iostream> //TEMP
 
@@ -14,5 +15,10 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
 
 void SFMLAdapter::init()
 {
-    std::cout << " >>>>> DISPLAY INIT <<<<< " << std::endl;
+    _window = new sf::Window(sf::VideoMode(800, 600), "my window");
+}
+
+SFMLAdapter::~SFMLAdapter()
+{
+    delete _window;
 }

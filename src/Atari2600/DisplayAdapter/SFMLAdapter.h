@@ -3,15 +3,25 @@
 
 #include "DisplayAdapterInterface.h"
 
+//forward dec
+namespace sf
+{
+    class Window;
+}
+
 namespace Atari2600
 {
 namespace DisplayAdapter
 {
     class SFMLAdapter : public DisplayAdapterInterface
     {
-        public:
-            virtual void renderPixel(Position& pos, Colour& colour);
-            virtual void init();
+        sf::Window* _window;
+
+    public:
+        void renderPixel(Position& pos, Colour& colour) override;
+        void init() override;
+
+        ~SFMLAdapter() override;
     };
 }
 }
