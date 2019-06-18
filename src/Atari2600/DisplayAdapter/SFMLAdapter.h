@@ -23,7 +23,6 @@ namespace DisplayAdapter
 
         sf::RenderWindow* _window;
         sf::Texture* _texture;
-        sf::Sprite* _sprite;
         std::vector<sf::Uint8> _pixels;
 
     public:

@@ -28,8 +28,13 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     _pixels[i+3] = numeric_limits<sf::Uint8>::max(); //alpha
 
     //TODO: should drawing be here?
-    _texture->update(_pixels.data());
-    _window->draw(*_sprite);
+    if(i == PIXEL_LIMIT)
+    {
+        _texture->update(_pixels.data());
+        _window->clear();
+        _window->draw(sf::Sprite(*_texture));
+        _window->display();
+    }
 }
 
 void SFMLAdapter::init()
@@ -44,13 +49,10 @@ SFMLAdapter::SFMLAdapter()
 
     _texture = new sf::Texture();
     _texture->create(WIDTH, HEIGHT);
-
-    _sprite = new sf::Sprite(*_texture);
 }
 
 SFMLAdapter::~SFMLAdapter()
 {
     delete _window;
-    delete _sprite;
     delete _texture;
 }
