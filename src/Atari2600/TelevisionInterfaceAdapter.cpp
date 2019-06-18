@@ -451,8 +451,8 @@ bool TIA::runCycle()
             auto colour = resolveColour(_memory->read(0x09));
 
             DisplayAdapter::Position pos;
-            pos.x = 0;
-            pos.y = 0;
+            pos.x = _clockCounter - HORIZONTAL_PICTURE_THRESHOLD;
+            pos.y = _vScanlineCounter - VERTICAL_PICTURE_THRESHOLD;
 
             _displayAdapter->renderPixel(pos, colour);
         }
