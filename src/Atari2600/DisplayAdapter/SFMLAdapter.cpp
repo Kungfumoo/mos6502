@@ -2,31 +2,55 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <limits>
 
 #include <iostream> //TEMP
 
 using namespace Atari2600::DisplayAdapter;
+using namespace std;
 
-//Public Methods
+//--Private
+const unsigned int SFMLAdapter::PIXEL_LIMIT = SFMLAdapter::WIDTH * SFMLAdapter::HEIGHT * 4;
+
+//--Public
 void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
 {
     std::cout << " >>>>> RENDER PIXEL ";
     std::cout << "colour(" << (int)colour.r << "," << (int)colour.g << "," << (int)colour.b << ") ";
     std::cout << "at position (" << (int)pos.x << ',' << (int)pos.y << ") <<<<<" << std::endl;
 
-    //TODO: update pixel array
+    //update pixel array
+    int i = pos.x * pos.y * 4;
+
+    _pixels[i] = colour.r;
+    _pixels[i+1] = colour.g;
+    _pixels[i+2] = colour.b;
+    _pixels[i+3] = numeric_limits<sf::Uint8>::max(); //alpha
+
+    //TODO: should drawing be here?
+    _texture->update(_pixels.data());
+    _window->draw(*_sprite);
 }
 
 void SFMLAdapter::init()
 {
-    _window = new sf::RenderWindow(sf::VideoMode(800, 600), "my window");
-    _texture = new sf::Texture();
+    _window->create(sf::VideoMode(800, 600), "my window");
+}
 
+SFMLAdapter::SFMLAdapter()
+{
+    _window = new sf::RenderWindow();
+    _pixels = vector<sf::Uint8>(PIXEL_LIMIT, 0);
+
+    _texture = new sf::Texture();
     _texture->create(WIDTH, HEIGHT);
+
+    _sprite = new sf::Sprite(*_texture);
 }
 
 SFMLAdapter::~SFMLAdapter()
 {
     delete _window;
+    delete _sprite;
     delete _texture;
 }
