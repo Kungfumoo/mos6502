@@ -31,7 +31,7 @@ CC := g++
 CO := -std=c++11
 
 #compiler libraries
-CL := -lsfml-window -lsfml-system
+CL := -lsfml-window -lsfml-graphics -lsfml-system
 
 atari2600: SRC_DIRS += $(ATARI_DIRS)
 atari2600: mkdir $(BUILD_DIR)/main.o $(obj) $(atObj)

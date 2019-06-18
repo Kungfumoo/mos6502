@@ -6,7 +6,8 @@
 //forward dec
 namespace sf
 {
-    class Window;
+    class RenderWindow;
+    class Texture;
 }
 
 namespace Atari2600
@@ -15,7 +16,8 @@ namespace DisplayAdapter
 {
     class SFMLAdapter : public DisplayAdapterInterface
     {
-        sf::Window* _window;
+        sf::RenderWindow* _window;
+        sf::Texture* _texture;
 
     public:
         void renderPixel(Position& pos, Colour& colour) override;

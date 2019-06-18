@@ -1,5 +1,7 @@
 #include "SFMLAdapter.h"
-#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 #include <iostream> //TEMP
 
@@ -11,14 +13,20 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     std::cout << " >>>>> RENDER PIXEL ";
     std::cout << "colour(" << (int)colour.r << "," << (int)colour.g << "," << (int)colour.b << ") ";
     std::cout << "at position (" << (int)pos.x << ',' << (int)pos.y << ") <<<<<" << std::endl;
+
+    //TODO: update pixel array
 }
 
 void SFMLAdapter::init()
 {
-    _window = new sf::Window(sf::VideoMode(800, 600), "my window");
+    _window = new sf::RenderWindow(sf::VideoMode(800, 600), "my window");
+    _texture = new sf::Texture();
+
+    _texture->create(WIDTH, HEIGHT);
 }
 
 SFMLAdapter::~SFMLAdapter()
 {
     delete _window;
+    delete _texture;
 }

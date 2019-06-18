@@ -23,10 +23,13 @@ namespace DisplayAdapter
     class DisplayAdapterInterface
     {
     public:
+        static const unsigned int WIDTH;
+        static const unsigned int HEIGHT;
+
         virtual void renderPixel(Position& pos, Colour& colour) = 0;
         virtual void init() = 0;
 
-        virtual ~DisplayAdapterInterface() {};
+        virtual ~DisplayAdapterInterface();
     };
 }
 }
