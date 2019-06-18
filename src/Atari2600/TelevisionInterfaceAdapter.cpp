@@ -457,9 +457,9 @@ bool TIA::runCycle()
             _displayAdapter->renderPixel(pos, colour);
         }
         
-        if(_clockCounter-- == 0)
+        if(_clockCounter++ == CLOCKS_PER_SCANLINE)
         {
-            _clockCounter = CLOCKS_PER_SCANLINE;
+            _clockCounter = 0;
 
             //TODO: not sure what is involved when a full frame has been rendered
             if(_vScanlineCounter++ > MAX_SCANLINES)
@@ -472,7 +472,7 @@ bool TIA::runCycle()
 
 TIA::TelevisionInterfaceAdapter(DisplayAdapter::DisplayAdapterInterface* displayAdapter, Memory* memory)
 {
-    _clockCounter = CLOCKS_PER_SCANLINE;
+    _clockCounter = 0;
     _vScanlineCounter = 0;
     _memory = memory;
     _displayAdapter = displayAdapter;
