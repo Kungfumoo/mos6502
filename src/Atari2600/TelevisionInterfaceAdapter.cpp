@@ -432,8 +432,6 @@ bool TIA::runCycle()
 {
     if(_memory->isWSYNC()) //handle WSYNC
     {
-        cout << "TIA: WSYNC" << endl;
-
         byte remainingCycles = CLOCKS_PER_SCANLINE - _clockCounter;
         while(remainingCycles-- > 0)
             runCycle();
@@ -442,11 +440,9 @@ bool TIA::runCycle()
     }
     else
     {
-        cout << "TIA: cycle!" << endl;
-
         //Ready to draw visible lines
         if(_vScanlineCounter >= VERTICAL_PICTURE_THRESHOLD &&
-           _vScanlineCounter <= VERTICAL_OVERSCAN_THRESHOLD &&
+           _vScanlineCounter < VERTICAL_OVERSCAN_THRESHOLD &&
            _clockCounter >= HORIZONTAL_PICTURE_THRESHOLD)
         {
             //background colour
@@ -459,12 +455,12 @@ bool TIA::runCycle()
             _displayAdapter->renderPixel(pos, colour);
         }
         
-        if(_clockCounter++ == CLOCKS_PER_SCANLINE)
+        if(++_clockCounter == CLOCKS_PER_SCANLINE)
         {
             _clockCounter = 0;
 
             //TODO: not sure what is involved when a full frame has been rendered
-            if(_vScanlineCounter++ > MAX_SCANLINES)
+            if(++_vScanlineCounter == MAX_SCANLINES)
                 _vScanlineCounter = 0;
         }
 

@@ -55,8 +55,6 @@ int main(int argc, char* argv[])
     int tiaCycles = TelevisionInterfaceAdapter::CLOCK_SPEED / cpuClockSpeed;
 
     cpu->addCycleCallback([&] () {
-        cout << "CPU: cycle!" << endl;
-        
         //advance TIA
         for(int i = 0; i < tiaCycles; i++)
             if(tia->runCycle())

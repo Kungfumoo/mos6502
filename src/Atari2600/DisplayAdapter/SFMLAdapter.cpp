@@ -15,12 +15,14 @@ const unsigned int SFMLAdapter::PIXEL_LIMIT = SFMLAdapter::WIDTH * SFMLAdapter::
 //--Public
 void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
 {
+    /*
     std::cout << " >>>>> RENDER PIXEL ";
     std::cout << "colour(" << (int)colour.r << "," << (int)colour.g << "," << (int)colour.b << ") ";
     std::cout << "at position (" << (int)pos.x << ',' << (int)pos.y << ") <<<<<" << std::endl;
+    */
 
     //update pixel array
-    int i = pos.x * pos.y * 4;
+    int i = (pos.x + (WIDTH * pos.y)) * 4;
 
     _pixels[i] = colour.r;
     _pixels[i+1] = colour.g;
@@ -28,11 +30,11 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     _pixels[i+3] = numeric_limits<sf::Uint8>::max(); //alpha
 
     //TODO: should drawing be here?
-    if(i == PIXEL_LIMIT)
+    if(i == PIXEL_LIMIT - 4)
     {
         sf::Sprite sprite(*_texture);
         
-        sprite.setScale(800.0f / WIDTH, 600.0f / HEIGHT);
+        sprite.setScale(800.0f / WIDTH, 600.0f / HEIGHT); //scale to window size
         _texture->update(_pixels.data());
         _window->clear();
         _window->draw(sprite);
