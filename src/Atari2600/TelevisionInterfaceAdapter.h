@@ -20,6 +20,7 @@ namespace Atari2600
         static const byte CLOCKS_PER_SCANLINE;
         static const unsigned short MAX_SCANLINES;
         static const byte VERTICAL_PICTURE_THRESHOLD;
+        static const byte VERTICAL_OVERSCAN_THRESHOLD;
         static const byte HORIZONTAL_PICTURE_THRESHOLD;
 
         DisplayAdapter::DisplayAdapterInterface* _displayAdapter;

@@ -30,9 +30,11 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     //TODO: should drawing be here?
     if(i == PIXEL_LIMIT)
     {
+        sf::Sprite sprite(*_texture);
+
         _texture->update(_pixels.data());
         _window->clear();
-        _window->draw(sf::Sprite(*_texture));
+        _window->draw(sprite);
         _window->display();
     }
 }

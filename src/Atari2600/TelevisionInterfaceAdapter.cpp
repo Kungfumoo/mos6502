@@ -12,6 +12,7 @@ typedef TelevisionInterfaceAdapter TIA;
 const byte TIA::CLOCKS_PER_SCANLINE = 228;
 const unsigned short TIA::MAX_SCANLINES = 262;
 const byte TIA::VERTICAL_PICTURE_THRESHOLD = 40;
+const byte TIA::VERTICAL_OVERSCAN_THRESHOLD = 232;
 const byte TIA::HORIZONTAL_PICTURE_THRESHOLD = 68;
 
 DisplayAdapter::Colour TIA::resolveColour(byte value)
@@ -444,8 +445,9 @@ bool TIA::runCycle()
         cout << "TIA: cycle!" << endl;
 
         //Ready to draw visible lines
-        if(_vScanlineCounter > VERTICAL_PICTURE_THRESHOLD &&
-           _clockCounter > HORIZONTAL_PICTURE_THRESHOLD)
+        if(_vScanlineCounter >= VERTICAL_PICTURE_THRESHOLD &&
+           _vScanlineCounter <= VERTICAL_OVERSCAN_THRESHOLD &&
+           _clockCounter >= HORIZONTAL_PICTURE_THRESHOLD)
         {
             //background colour
             auto colour = resolveColour(_memory->read(0x09));
