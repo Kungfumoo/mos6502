@@ -31,7 +31,8 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     if(i == PIXEL_LIMIT)
     {
         sf::Sprite sprite(*_texture);
-
+        
+        sprite.setScale(800.0f / WIDTH, 600.0f / HEIGHT);
         _texture->update(_pixels.data());
         _window->clear();
         _window->draw(sprite);
