@@ -34,7 +34,7 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     {
         sf::Sprite sprite(*_texture);
         
-        sprite.setScale(800.0f / WIDTH, 600.0f / HEIGHT); //scale to window size
+        sprite.setScale((float)_windowWidth / WIDTH, (float)_windowHeight / HEIGHT); //scale to window size
         _texture->update(_pixels.data());
         _window->clear();
         _window->draw(sprite);
@@ -44,11 +44,13 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
 
 void SFMLAdapter::init()
 {
-    _window->create(sf::VideoMode(800, 600), "my window");
+    _window->create(sf::VideoMode(_windowWidth, _windowHeight), "my window");
 }
 
-SFMLAdapter::SFMLAdapter()
+SFMLAdapter::SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight)
 {
+    _windowWidth = windowWidth;
+    _windowHeight = windowHeight;
     _window = new sf::RenderWindow();
     _pixels = vector<sf::Uint8>(PIXEL_LIMIT, 0);
 

@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 
     ATMemory* memory = new ATMemory();
     MOS6502CPU* cpu = new MOS6502CPU(TelevisionInterfaceAdapter::CLOCK_SPEED / 3, memory, true);
-    SFMLAdapter* displayAdapter = new SFMLAdapter();
+    SFMLAdapter* displayAdapter = new SFMLAdapter(800, 600);
     TelevisionInterfaceAdapter* tia = new TelevisionInterfaceAdapter(displayAdapter, memory);
 
     float cpuClockSpeed = cpu->getClockSpeedMhz();

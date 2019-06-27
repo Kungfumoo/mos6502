@@ -21,6 +21,8 @@ namespace DisplayAdapter
     {
         static const unsigned int PIXEL_LIMIT;
 
+        unsigned int _windowWidth;
+        unsigned int _windowHeight;
         sf::RenderWindow* _window;
         sf::Texture* _texture;
         std::vector<sf::Uint8> _pixels;
@@ -29,7 +31,7 @@ namespace DisplayAdapter
         void renderPixel(Position& pos, Colour& colour) override;
         void init() override;
 
-        SFMLAdapter();
+        SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight);
         ~SFMLAdapter() override;
     };
 }
