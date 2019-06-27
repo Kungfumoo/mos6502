@@ -390,7 +390,7 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
             break;
         case 0xB4:
         case 0xB5:
-            colour.r = 0x00; colour.g = 0x07; colour.b = 0x0C;
+            colour.r = 0x00; colour.g = 0x70; colour.b = 0x0C;
             break;
         case 0xB6:
         case 0xB7:
