@@ -51,72 +51,6 @@ void MOS6502CPU::getLastState()
     getProgramCounter();
 }
 
-//--ADRESSING MODE METHODS(private):
-unsigned short MOS6502CPU::getAbsolute()
-{
-    //[OC][p2][p1]
-    //OC = opcode, p1 = part1 of address, p2 = part 2 of address
-    byte opp2 = _memory->read(_programCounter++);
-    byte opp1 = _memory->read(_programCounter++);
-    unsigned short address = (opp1 << 8) | opp2;
-
-    return address;
-}
-
-unsigned short MOS6502CPU::getPreIndirect()
-{
-    //get address of the start byte of the address of the operand.
-    unsigned short startAddress = _memory->read(_programCounter++) + _x;
-
-    //wrap around addition(to ensure its always a zero-page address):
-    if(startAddress > 255)
-        startAddress = startAddress - 256; //256 because 255 = 255, 256 = 0, 257 = 1
-
-    //form operand address by concatanating the value contained in start+1 and start
-    unsigned short operAddress = (_memory->read(startAddress+1) << 8) | _memory->read(startAddress);
-
-    return operAddress;
-}
-
-unsigned short MOS6502CPU::getPostIndirect()
-{
-    //form bare address from the value given in the arguement and the next address
-    unsigned short startAddress = _memory->read(_programCounter++);
-    unsigned short address = (_memory->read(startAddress+1) << 8) | _memory->read(startAddress);
-
-    return address + _y;
-}
-
-unsigned short MOS6502CPU::getZeroPageIndexed(byte regValue)
-{
-    //Work out operand, add actual operand to value in X/Y to form the address to the value we want
-    unsigned short address = _memory->read(_programCounter++) + regValue; //the address of the value
-
-    /*NOTE:
-     *-Should this always result in a zero-page result?
-     *-should this use wrap around addition?
-     *
-     *At the moment, i'm assuming it always results in a zero-page and not wrap around, i need to find out.
-     */
-
-    if(address >= 0xFF)
-        address = 0xFF;
-
-    return address;
-}
-
-unsigned short MOS6502CPU::getRelative(byte value)
-{
-    unsigned short newAddress = _programCounter;
-
-    if(value > NEGATIVE) //negative number 128 = 0, 129 = -1, 130 = -2 ...
-        newAddress -= (NEGATIVE - (value - NEGATIVE)) + 2;
-    else //positive
-        newAddress += value;
-
-    return newAddress;
-}
-
 //--ASSEMBLY PROCEDURES(private):
 void MOS6502CPU::ADC(byte operand)
 {
@@ -1755,6 +1689,72 @@ void MOS6502CPU::runCommand(byte opcode)
         default:
             throw new UnknownOpCodeException(opcode);
     }
+}
+
+//--ADRESSING MODE METHODS(protected):
+unsigned short MOS6502CPU::getAbsolute()
+{
+    //[OC][p2][p1]
+    //OC = opcode, p1 = part1 of address, p2 = part 2 of address
+    byte opp2 = _memory->read(_programCounter++);
+    byte opp1 = _memory->read(_programCounter++);
+    unsigned short address = (opp1 << 8) | opp2;
+
+    return address;
+}
+
+unsigned short MOS6502CPU::getPreIndirect()
+{
+    //get address of the start byte of the address of the operand.
+    unsigned short startAddress = _memory->read(_programCounter++) + _x;
+
+    //wrap around addition(to ensure its always a zero-page address):
+    if(startAddress > 255)
+        startAddress = startAddress - 256; //256 because 255 = 255, 256 = 0, 257 = 1
+
+    //form operand address by concatanating the value contained in start+1 and start
+    unsigned short operAddress = (_memory->read(startAddress+1) << 8) | _memory->read(startAddress);
+
+    return operAddress;
+}
+
+unsigned short MOS6502CPU::getPostIndirect()
+{
+    //form bare address from the value given in the arguement and the next address
+    unsigned short startAddress = _memory->read(_programCounter++);
+    unsigned short address = (_memory->read(startAddress+1) << 8) | _memory->read(startAddress);
+
+    return address + _y;
+}
+
+unsigned short MOS6502CPU::getZeroPageIndexed(byte regValue)
+{
+    //Work out operand, add actual operand to value in X/Y to form the address to the value we want
+    unsigned short address = _memory->read(_programCounter++) + regValue; //the address of the value
+
+    /*NOTE:
+     *-Should this always result in a zero-page result?
+     *-should this use wrap around addition?
+     *
+     *At the moment, i'm assuming it always results in a zero-page and not wrap around, i need to find out.
+     */
+
+    if(address >= 0xFF)
+        address = 0xFF;
+
+    return address;
+}
+
+unsigned short MOS6502CPU::getRelative(byte value)
+{
+    unsigned short newAddress = _programCounter;
+
+    if(value > NEGATIVE) //negative number 128 = 0, 129 = -1, 130 = -2 ...
+        newAddress -= (NEGATIVE - (value - NEGATIVE)) + 2;
+    else //positive
+        newAddress += value;
+
+    return newAddress;
 }
 
 //--General(public)

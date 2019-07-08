@@ -7,11 +7,10 @@
 #include "Atari2600/DisplayAdapter/SFMLAdapter.h"
 #include "Atari2600/Memory.h"
 #include "Atari2600/TelevisionInterfaceAdapter.h"
-#include "MOS6502/MOS6502CPU.h"
+#include "Atari2600/MOS6507.h"
 
 using namespace Atari2600;
 using namespace Atari2600::DisplayAdapter;
-using namespace MOS_6502;
 using namespace std;
 
 typedef Atari2600::Memory ATMemory;
@@ -47,7 +46,7 @@ int main(int argc, char* argv[])
     vector<byte> program = fetchProgram(filename);
 
     ATMemory* memory = new ATMemory();
-    MOS6502CPU* cpu = new MOS6502CPU(TelevisionInterfaceAdapter::CLOCK_SPEED / 3, memory, true);
+    MOS6507* cpu = new MOS6507(TelevisionInterfaceAdapter::CLOCK_SPEED / 3, memory, true);
     SFMLAdapter* displayAdapter = new SFMLAdapter(800, 600);
     TelevisionInterfaceAdapter* tia = new TelevisionInterfaceAdapter(displayAdapter, memory);
 
