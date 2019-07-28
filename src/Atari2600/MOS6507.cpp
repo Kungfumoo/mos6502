@@ -11,8 +11,9 @@ unsigned short MOS6507::getAbsolute()
 {
     unsigned short address = MOS6502CPU::getAbsolute();
 
-    if(address >= ADDRESS_LIMIT)
-        address = address << 3;
+    if(address >= ADDRESS_LIMIT) //clear last 3 bits
+        for(int n = 15; n >= 13; n--)
+            address &= ~(1UL << n);
 
     return address;
 }
