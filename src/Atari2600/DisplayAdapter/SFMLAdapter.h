@@ -11,6 +11,7 @@ namespace sf
     class RenderWindow;
     class Texture;
     class Sprite;
+    class Font;
 }
 
 namespace Atari2600
@@ -26,6 +27,10 @@ namespace DisplayAdapter
         sf::RenderWindow* _window;
         sf::Texture* _texture;
         std::vector<sf::Uint8> _pixels;
+        sf::Font* _debugFont;
+        unsigned int _frames;
+
+        void renderFps();
 
     public:
         void renderPixel(Position& pos, Colour& colour) override;
