@@ -25,8 +25,8 @@ namespace Atari2600
 
         DisplayAdapter::DisplayAdapterInterface* _displayAdapter;
         Memory* _memory;
-        byte _clockCounter;
-        byte _vScanlineCounter;
+        unsigned short _clockCounter;
+        unsigned short _vScanlineCounter;
 
         //Converts the register colour value into an RBG colour (Based on NTSC)
         DisplayAdapter::Colour resolveColour(byte value);
