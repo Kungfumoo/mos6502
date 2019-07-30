@@ -31,6 +31,8 @@ namespace Atari2600
         //Converts the register colour value into an RBG colour (Based on NTSC)
         DisplayAdapter::Colour resolveColour(byte value);
 
+        void renderScanline();
+
     public:
         static const float CLOCK_SPEED;
 

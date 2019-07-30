@@ -552,6 +552,33 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
     return colour;
 }
 
+void TIA::renderScanline()
+{
+    //Ready to draw visible lines
+    if(_vScanlineCounter >= VERTICAL_PICTURE_THRESHOLD &&
+        _vScanlineCounter < VERTICAL_OVERSCAN_THRESHOLD &&
+        _clockCounter >= HORIZONTAL_PICTURE_THRESHOLD)
+    {
+        //background colour
+        auto colour = resolveColour(_memory->read(0x09));
+
+        DisplayAdapter::Position pos;
+        pos.x = _clockCounter - HORIZONTAL_PICTURE_THRESHOLD;
+        pos.y = _vScanlineCounter - VERTICAL_PICTURE_THRESHOLD;
+
+        _displayAdapter->renderPixel(pos, colour);
+    }
+    
+    if(++_clockCounter == CLOCKS_PER_SCANLINE)
+    {
+        _clockCounter = 0;
+
+        //TODO: not sure what is involved when a full frame has been rendered
+        if(++_vScanlineCounter == MAX_SCANLINES)
+            _vScanlineCounter = 0;
+    }
+}
+
 //--Public:
 const float TIA::CLOCK_SPEED = 3.58; //mhz
 
@@ -561,36 +588,13 @@ bool TIA::runCycle()
     {
         byte remainingCycles = CLOCKS_PER_SCANLINE - _clockCounter;
         while(remainingCycles-- > 0)
-            runCycle();
+            renderScanline();
 
         return true;
     }
     else
     {
-        //Ready to draw visible lines
-        if(_vScanlineCounter >= VERTICAL_PICTURE_THRESHOLD &&
-           _vScanlineCounter < VERTICAL_OVERSCAN_THRESHOLD &&
-           _clockCounter >= HORIZONTAL_PICTURE_THRESHOLD)
-        {
-            //background colour
-            auto colour = resolveColour(_memory->read(0x09));
-
-            DisplayAdapter::Position pos;
-            pos.x = _clockCounter - HORIZONTAL_PICTURE_THRESHOLD;
-            pos.y = _vScanlineCounter - VERTICAL_PICTURE_THRESHOLD;
-
-            _displayAdapter->renderPixel(pos, colour);
-        }
-        
-        if(++_clockCounter == CLOCKS_PER_SCANLINE)
-        {
-            _clockCounter = 0;
-
-            //TODO: not sure what is involved when a full frame has been rendered
-            if(++_vScanlineCounter == MAX_SCANLINES)
-                _vScanlineCounter = 0;
-        }
-
+        renderScanline();
         return false;
     }
 }
