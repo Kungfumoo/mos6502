@@ -4,6 +4,7 @@
 #include "DisplayAdapterInterface.h"
 #include <SFML/Config.hpp>
 #include <vector>
+#include <string>
 
 //forward dec
 namespace sf
@@ -21,6 +22,7 @@ namespace DisplayAdapter
     class SFMLAdapter : public DisplayAdapterInterface
     {
         static const unsigned int PIXEL_LIMIT;
+        static const std::string FONT_FILE;
 
         unsigned int _windowWidth;
         unsigned int _windowHeight;

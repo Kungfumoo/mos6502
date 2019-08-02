@@ -13,6 +13,7 @@ using namespace std;
 
 //--Private
 const unsigned int SFMLAdapter::PIXEL_LIMIT = SFMLAdapter::WIDTH * SFMLAdapter::HEIGHT * 4;
+const string SFMLAdapter::FONT_FILE = "resources/fonts/FreeSans.ttf";
 
 
 //TODO: do this better, should start be a member variable?
@@ -86,7 +87,7 @@ SFMLAdapter::SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight)
     _texture->create(WIDTH, HEIGHT);
 
     _debugFont = new sf::Font();
-    _debugFont->loadFromFile("/usr/share/fonts/truetype/freefont/FreeSans.ttf"); //TODO: Font should be somewhere else
+    _debugFont->loadFromFile(FONT_FILE);
 }
 
 SFMLAdapter::~SFMLAdapter()
