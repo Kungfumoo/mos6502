@@ -12,7 +12,6 @@ using namespace std;
 const unsigned int SFMLAdapter::PIXEL_LIMIT = SFMLAdapter::WIDTH * SFMLAdapter::HEIGHT * 4;
 const string SFMLAdapter::FONT_FILE = "resources/fonts/FreeSans.ttf";
 
-
 //TODO: do this better, should start be a member variable?
 auto start = chrono::system_clock::now();
 
@@ -32,6 +31,23 @@ void SFMLAdapter::renderFps()
 
     start = end;
     _frames = 0;
+}
+
+void SFMLAdapter::renderWindow()
+{
+    while(_window.isOpen())
+    {
+        sf::Sprite sprite(_texture);
+        
+        sprite.setScale((float)_windowWidth / WIDTH, (float)_windowHeight / HEIGHT); //scale to window size
+        _texture.update(_pixels.data());
+        _window.clear();
+        _window.draw(sprite);
+        renderFps();
+        _window.display();
+
+        _frames++;
+    }
 }
 
 //--Public
@@ -54,32 +70,29 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     //TODO: should drawing be here?
     if(i == PIXEL_LIMIT - 4)
     {
-        sf::Sprite sprite(_texture);
-        
-        sprite.setScale((float)_windowWidth / WIDTH, (float)_windowHeight / HEIGHT); //scale to window size
         _texture.update(_pixels.data());
-        _window.clear();
-        _window.draw(sprite);
-        renderFps();
-        _window.display();
-
-        _frames++;
     }
 }
 
 void SFMLAdapter::init()
 {
     _window.create(sf::VideoMode(_windowWidth, _windowHeight), "my window");
+    _window.setActive(false);
+
+    _renderThread = std::thread(&SFMLAdapter::renderWindow, this);
 }
 
 SFMLAdapter::SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight)
     : _windowWidth(windowWidth), _windowHeight(windowHeight), _window(),
       _texture(), _pixels(PIXEL_LIMIT, 0),
-      _debugFont(), _frames(0)
+      _debugFont(), _frames(0), _renderThread()
 {
     _texture.create(WIDTH, HEIGHT);
     _debugFont.loadFromFile(FONT_FILE);
 }
 
 SFMLAdapter::~SFMLAdapter()
-{}
+{
+    if(_renderThread.joinable())
+        _renderThread.join();
+}

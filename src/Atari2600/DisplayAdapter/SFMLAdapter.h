@@ -8,6 +8,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <vector>
 #include <string>
+#include <thread>
 
 namespace Atari2600
 {
@@ -25,8 +26,10 @@ namespace DisplayAdapter
         std::vector<sf::Uint8> _pixels;
         sf::Font _debugFont;
         unsigned int _frames;
+        std::thread _renderThread;
 
         void renderFps();
+        void renderWindow();
 
     public:
         void renderPixel(Position& pos, Colour& colour) override;

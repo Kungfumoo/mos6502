@@ -28,7 +28,7 @@ atObj = $(patsubst $(BASE_SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(atSrc))
 CC := g++
 
 #compiler options
-CO := -std=c++11
+CO := -std=c++11 -pthread
 
 #compiler libraries
 CL := -lsfml-window -lsfml-graphics -lsfml-system
