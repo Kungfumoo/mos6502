@@ -3,17 +3,11 @@
 
 #include "DisplayAdapterInterface.h"
 #include <SFML/Config.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <vector>
 #include <string>
-
-//forward dec
-namespace sf
-{
-    class RenderWindow;
-    class Texture;
-    class Sprite;
-    class Font;
-}
 
 namespace Atari2600
 {
@@ -26,10 +20,10 @@ namespace DisplayAdapter
 
         unsigned int _windowWidth;
         unsigned int _windowHeight;
-        sf::RenderWindow* _window;
-        sf::Texture* _texture;
+        sf::RenderWindow _window;
+        sf::Texture _texture;
         std::vector<sf::Uint8> _pixels;
-        sf::Font* _debugFont;
+        sf::Font _debugFont;
         unsigned int _frames;
 
         void renderFps();

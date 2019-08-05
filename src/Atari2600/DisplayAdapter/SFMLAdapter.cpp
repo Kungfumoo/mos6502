@@ -1,7 +1,4 @@
 #include "SFMLAdapter.h"
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Sprite.hpp>
 #include <limits>
 #include <string>
 
@@ -26,12 +23,12 @@ void SFMLAdapter::renderFps()
     double timeInSeconds = _frames / timeTaken.count();
 
     //TODO: is it ok to create a text object at the end of every frame?
-    sf::Text text(to_string((int)timeInSeconds), *_debugFont);
+    sf::Text text(to_string((int)timeInSeconds), _debugFont);
     text.setOutlineColor(sf::Color::Black);
     text.setOutlineThickness(1);
     text.setFillColor(sf::Color::Green);
 
-    _window->draw(text);
+    _window.draw(text);
 
     start = end;
     _frames = 0;
@@ -57,14 +54,14 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     //TODO: should drawing be here?
     if(i == PIXEL_LIMIT - 4)
     {
-        sf::Sprite sprite(*_texture);
+        sf::Sprite sprite(_texture);
         
         sprite.setScale((float)_windowWidth / WIDTH, (float)_windowHeight / HEIGHT); //scale to window size
-        _texture->update(_pixels.data());
-        _window->clear();
-        _window->draw(sprite);
+        _texture.update(_pixels.data());
+        _window.clear();
+        _window.draw(sprite);
         renderFps();
-        _window->display();
+        _window.display();
 
         _frames++;
     }
@@ -72,27 +69,17 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
 
 void SFMLAdapter::init()
 {
-    _window->create(sf::VideoMode(_windowWidth, _windowHeight), "my window");
+    _window.create(sf::VideoMode(_windowWidth, _windowHeight), "my window");
 }
 
 SFMLAdapter::SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight)
+    : _windowWidth(windowWidth), _windowHeight(windowHeight), _window(),
+      _texture(), _pixels(PIXEL_LIMIT, 0),
+      _debugFont(), _frames(0)
 {
-    _windowWidth = windowWidth;
-    _windowHeight = windowHeight;
-    _window = new sf::RenderWindow();
-    _pixels = vector<sf::Uint8>(PIXEL_LIMIT, 0);
-    _frames = 0;
-
-    _texture = new sf::Texture();
-    _texture->create(WIDTH, HEIGHT);
-
-    _debugFont = new sf::Font();
-    _debugFont->loadFromFile(FONT_FILE);
+    _texture.create(WIDTH, HEIGHT);
+    _debugFont.loadFromFile(FONT_FILE);
 }
 
 SFMLAdapter::~SFMLAdapter()
-{
-    delete _window;
-    delete _texture;
-    delete _debugFont;
-}
+{}
