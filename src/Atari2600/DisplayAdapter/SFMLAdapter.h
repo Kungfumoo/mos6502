@@ -9,6 +9,9 @@
 #include <vector>
 #include <string>
 #include <thread>
+#include <stack>
+
+typedef std::vector<sf::Uint8> PixelVector;
 
 namespace Atari2600
 {
@@ -23,10 +26,11 @@ namespace DisplayAdapter
         unsigned int _windowHeight;
         sf::RenderWindow _window;
         sf::Texture _texture;
-        std::vector<sf::Uint8> _pixels;
+        PixelVector _pixels;
         sf::Font _debugFont;
         unsigned int _frames;
         std::thread _renderThread;
+        std::stack<PixelVector> _renderQueue;
 
         void renderFps();
         void renderWindow();

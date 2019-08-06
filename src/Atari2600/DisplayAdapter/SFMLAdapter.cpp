@@ -37,9 +37,16 @@ void SFMLAdapter::renderWindow()
 {
     while(_window.isOpen())
     {
-        sf::Sprite sprite(_texture);
+        if(_renderQueue.empty())
+            continue;
         
+        PixelVector pixels = _renderQueue.top();
+        _renderQueue.pop();
+
+        sf::Sprite sprite(_texture);
         sprite.setScale((float)_windowWidth / WIDTH, (float)_windowHeight / HEIGHT); //scale to window size
+
+        _texture.update(pixels.data());
         _window.clear();
         _window.draw(sprite);
         renderFps();
@@ -69,7 +76,7 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     //TODO: should drawing be here?
     if(i == PIXEL_LIMIT - 4)
     {
-        _texture.update(_pixels.data());
+        _renderQueue.push(_pixels);
     }
 }
 
@@ -84,7 +91,8 @@ void SFMLAdapter::init()
 SFMLAdapter::SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight)
     : _windowWidth(windowWidth), _windowHeight(windowHeight), _window(),
       _texture(), _pixels(PIXEL_LIMIT, 0),
-      _debugFont(), _frames(0), _renderThread()
+      _debugFont(), _frames(0), _renderThread(),
+      _renderQueue()
 {
     _texture.create(WIDTH, HEIGHT);
     _debugFont.loadFromFile(FONT_FILE);
