@@ -40,7 +40,6 @@ void SFMLAdapter::renderWindow()
         sf::Sprite sprite(_texture);
         
         sprite.setScale((float)_windowWidth / WIDTH, (float)_windowHeight / HEIGHT); //scale to window size
-        _texture.update(_pixels.data());
         _window.clear();
         _window.draw(sprite);
         renderFps();
