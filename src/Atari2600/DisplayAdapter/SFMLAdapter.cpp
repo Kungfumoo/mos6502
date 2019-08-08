@@ -10,6 +10,21 @@ using namespace std;
 const unsigned int SFMLAdapter::PIXEL_LIMIT = SFMLAdapter::WIDTH * SFMLAdapter::HEIGHT * 4;
 const string SFMLAdapter::FONT_FILE = "resources/fonts/FreeSans.ttf";
 
+void SFMLAdapter::handleEvents()
+{
+    sf::Event event;
+
+    while(_window.pollEvent(event))
+    {
+        switch(event.type)
+        {
+            case sf::Event::Closed:
+                _window.close();
+                break;
+        }
+    }
+}
+
 void SFMLAdapter::renderFps()
 {
     auto end = chrono::system_clock::now();
@@ -32,24 +47,25 @@ void SFMLAdapter::renderWindow()
 {
     while(_window.isOpen())
     {
-        if(_renderQueue.empty())
-            continue;
+        if(!_renderQueue.empty()) { //render a frame
+            _renderQueueMutex.lock();
+            PixelVector pixels = _renderQueue.top();
+            _renderQueue.pop();
+            _renderQueueMutex.unlock();
 
-        _renderQueueMutex.lock();
-        PixelVector pixels = _renderQueue.top();
-        _renderQueue.pop();
-        _renderQueueMutex.unlock();
+            sf::Sprite sprite(_texture);
+            sprite.setScale((float)_windowWidth / WIDTH, (float)_windowHeight / HEIGHT); //scale to window size
 
-        sf::Sprite sprite(_texture);
-        sprite.setScale((float)_windowWidth / WIDTH, (float)_windowHeight / HEIGHT); //scale to window size
+            _texture.update(pixels.data());
+            _window.clear();
+            _window.draw(sprite);
+            renderFps();
+            _window.display();
 
-        _texture.update(pixels.data());
-        _window.clear();
-        _window.draw(sprite);
-        renderFps();
-        _window.display();
+            _frames++;
+        }
 
-        _frames++;
+        handleEvents();
     }
 }
 
@@ -101,6 +117,8 @@ SFMLAdapter::SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight)
 
 SFMLAdapter::~SFMLAdapter()
 {
+    _window.close();
+    
     if(_renderThread.joinable())
         _renderThread.join();
 }

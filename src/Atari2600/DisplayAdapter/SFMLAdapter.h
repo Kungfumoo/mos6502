@@ -37,6 +37,7 @@ namespace DisplayAdapter
         std::mutex _renderQueueMutex;
         SystemClock _startFrame;
 
+        void handleEvents();
         void renderFps();
         void renderWindow();
 
