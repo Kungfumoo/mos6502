@@ -2,7 +2,6 @@
 #include <limits>
 
 #include <iostream> //TEMP
-#include <chrono>
 
 using namespace Atari2600::DisplayAdapter;
 using namespace std;
@@ -11,13 +10,10 @@ using namespace std;
 const unsigned int SFMLAdapter::PIXEL_LIMIT = SFMLAdapter::WIDTH * SFMLAdapter::HEIGHT * 4;
 const string SFMLAdapter::FONT_FILE = "resources/fonts/FreeSans.ttf";
 
-//TODO: do this better, should start be a member variable?
-auto start = chrono::system_clock::now();
-
 void SFMLAdapter::renderFps()
 {
     auto end = chrono::system_clock::now();
-    chrono::duration<double> timeTaken = end - start;
+    chrono::duration<double> timeTaken = end - _startFrame;
     double timeInSeconds = _frames / timeTaken.count();
 
     //TODO: is it ok to create a text object at the end of every frame?
@@ -28,7 +24,7 @@ void SFMLAdapter::renderFps()
 
     _window.draw(text);
 
-    start = end;
+    _startFrame = end;
     _frames = 0;
 }
 
@@ -88,6 +84,7 @@ void SFMLAdapter::init()
     _window.create(sf::VideoMode(_windowWidth, _windowHeight), "my window");
     _window.setActive(false);
 
+    _startFrame = chrono::system_clock::now();
     _renderThread = std::thread(&SFMLAdapter::renderWindow, this);
 }
 
@@ -95,7 +92,8 @@ SFMLAdapter::SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight)
     : _windowWidth(windowWidth), _windowHeight(windowHeight), _window(),
       _texture(), _pixels(PIXEL_LIMIT, 0),
       _debugFont(), _frames(0), _renderThread(),
-      _renderQueue(), _renderQueueMutex()
+      _renderQueue(), _renderQueueMutex(),
+      _startFrame()
 {
     _texture.create(WIDTH, HEIGHT);
     _debugFont.loadFromFile(FONT_FILE);

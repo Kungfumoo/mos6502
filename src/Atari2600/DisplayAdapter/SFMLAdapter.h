@@ -11,7 +11,9 @@
 #include <thread>
 #include <stack>
 #include <mutex>
+#include <chrono>
 
+typedef std::chrono::time_point<std::chrono::system_clock> SystemClock;
 typedef std::vector<sf::Uint8> PixelVector;
 
 namespace Atari2600
@@ -33,6 +35,7 @@ namespace DisplayAdapter
         std::thread _renderThread;
         std::stack<PixelVector> _renderQueue;
         std::mutex _renderQueueMutex;
+        SystemClock _startFrame;
 
         void renderFps();
         void renderWindow();
