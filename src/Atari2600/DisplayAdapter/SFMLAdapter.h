@@ -10,6 +10,7 @@
 #include <string>
 #include <thread>
 #include <stack>
+#include <mutex>
 
 typedef std::vector<sf::Uint8> PixelVector;
 
@@ -31,6 +32,7 @@ namespace DisplayAdapter
         unsigned int _frames;
         std::thread _renderThread;
         std::stack<PixelVector> _renderQueue;
+        std::mutex _renderQueueMutex;
 
         void renderFps();
         void renderWindow();

@@ -1,6 +1,5 @@
 #include "SFMLAdapter.h"
 #include <limits>
-#include <string>
 
 #include <iostream> //TEMP
 #include <chrono>
@@ -39,9 +38,11 @@ void SFMLAdapter::renderWindow()
     {
         if(_renderQueue.empty())
             continue;
-        
+
+        _renderQueueMutex.lock();
         PixelVector pixels = _renderQueue.top();
         _renderQueue.pop();
+        _renderQueueMutex.unlock();
 
         sf::Sprite sprite(_texture);
         sprite.setScale((float)_windowWidth / WIDTH, (float)_windowHeight / HEIGHT); //scale to window size
@@ -76,7 +77,9 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     //TODO: should drawing be here?
     if(i == PIXEL_LIMIT - 4)
     {
+        _renderQueueMutex.lock();
         _renderQueue.push(_pixels);
+        _renderQueueMutex.unlock();
     }
 }
 
@@ -92,7 +95,7 @@ SFMLAdapter::SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight)
     : _windowWidth(windowWidth), _windowHeight(windowHeight), _window(),
       _texture(), _pixels(PIXEL_LIMIT, 0),
       _debugFont(), _frames(0), _renderThread(),
-      _renderQueue()
+      _renderQueue(), _renderQueueMutex()
 {
     _texture.create(WIDTH, HEIGHT);
     _debugFont.loadFromFile(FONT_FILE);
