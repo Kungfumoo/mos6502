@@ -26,6 +26,7 @@ namespace DisplayAdapter
         static const unsigned int WIDTH;
         static const unsigned int HEIGHT;
 
+        virtual bool isRunning() = 0;
         virtual void renderPixel(Position& pos, Colour& colour) = 0;
         virtual void init() = 0;
 

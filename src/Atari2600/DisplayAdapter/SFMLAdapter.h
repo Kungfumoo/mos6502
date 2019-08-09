@@ -42,6 +42,7 @@ namespace DisplayAdapter
         void renderWindow();
 
     public:
+        bool isRunning() override;
         void renderPixel(Position& pos, Colour& colour) override;
         void init() override;
 

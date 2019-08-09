@@ -582,20 +582,23 @@ void TIA::renderScanline()
 //--Public:
 const float TIA::CLOCK_SPEED = 3.58; //mhz
 
-bool TIA::runCycle()
+TIAState TIA::runCycle()
 {
+    if(!_displayAdapter->isRunning())
+        return TIAState::DISPLAY_EXITED;
+        
     if(_memory->isWSYNC()) //handle WSYNC
     {
         byte remainingCycles = CLOCKS_PER_SCANLINE - _clockCounter;
         while(remainingCycles-- > 0)
             renderScanline();
 
-        return true;
+        return TIAState::WSYNC;
     }
     else
     {
         renderScanline();
-        return false;
+        return TIAState::OK;
     }
 }
 

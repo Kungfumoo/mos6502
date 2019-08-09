@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     cpu->addCycleCallback([&] () {
         //advance TIA
         for(int i = 0; i < tiaCycles; i++)
-            if(tia->runCycle())
+            if(tia->runCycle() == TIAState::WSYNC)
                 break;
     });
 

@@ -15,6 +15,13 @@ namespace Atari2600
     class Memory;
     //end forward decs
 
+    enum TIAState
+    {
+        OK,
+        WSYNC,
+        DISPLAY_EXITED
+    };
+
     class TelevisionInterfaceAdapter
     {
         static const byte CLOCKS_PER_SCANLINE;
@@ -36,7 +43,7 @@ namespace Atari2600
     public:
         static const float CLOCK_SPEED;
 
-        bool runCycle(); //run a cycle of tia, return true to break CPU syncronisation (for things like WSYNC)
+        TIAState runCycle(); //run a cycle of tia, return state to break CPU syncronisation (for things like WSYNC)
 
         TelevisionInterfaceAdapter(DisplayAdapter::DisplayAdapterInterface* displayAdapter, Memory* memory);
         ~TelevisionInterfaceAdapter();

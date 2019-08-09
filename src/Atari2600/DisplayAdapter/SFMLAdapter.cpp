@@ -70,6 +70,11 @@ void SFMLAdapter::renderWindow()
 }
 
 //--Public
+bool SFMLAdapter::isRunning()
+{
+    return _window.isOpen();
+}
+
 void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
 {
     /*
@@ -118,7 +123,7 @@ SFMLAdapter::SFMLAdapter(unsigned int windowWidth, unsigned int windowHeight)
 SFMLAdapter::~SFMLAdapter()
 {
     _window.close();
-    
+
     if(_renderThread.joinable())
         _renderThread.join();
 }
