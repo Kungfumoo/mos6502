@@ -596,10 +596,9 @@ TIAState TIA::runCycle()
         return TIAState::WSYNC;
     }
     else
-    {
         renderScanline();
-        return TIAState::OK;
-    }
+
+    return TIAState::OK;
 }
 
 TIA::TelevisionInterfaceAdapter(DisplayAdapter::DisplayAdapterInterface* displayAdapter, Memory* memory)
