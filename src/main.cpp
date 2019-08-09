@@ -56,8 +56,17 @@ int main(int argc, char* argv[])
     cpu->addCycleCallback([&] () {
         //advance TIA
         for(int i = 0; i < tiaCycles; i++)
-            if(tia->runCycle() == TIAState::WSYNC)
+        {
+            TIAState state = tia->runCycle();
+
+            if(state == TIAState::WSYNC)
                 break;
+            else if(state == TIAState::DISPLAY_EXITED)
+            {
+                cpu->stop();
+                break;
+            }
+        }
     });
 
     try
