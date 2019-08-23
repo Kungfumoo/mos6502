@@ -90,8 +90,7 @@ void SFMLAdapter::renderPixel(Position& pos, Colour& colour)
     _pixels[i+1] = colour.g;
     _pixels[i+2] = colour.b;
     _pixels[i+3] = numeric_limits<sf::Uint8>::max(); //alpha
-
-    //TODO: should drawing be here?
+    
     if(i == PIXEL_LIMIT - 4)
     {
         _renderQueueMutex.lock();
