@@ -650,10 +650,7 @@ void MOS6502CPU::INC(unsigned short address)
     //locals
     byte value = _memory->read(address);
 
-    if(value == 0xFF) //incrementing 255 would make 0
-        value = 0x00;
-    else
-        value++;
+    value++;
 
     _status->setS(value > NEGATIVE);
     _status->setZ(value == 0);
@@ -687,32 +684,16 @@ void MOS6502CPU::INC6()
 
 void MOS6502CPU::INX4()
 {
-    if(_x == 255)
-    {
-        _x = 0;
-        _status->setZ(true);
-    }
-    else
-    {
-        _x++;
-        _status->setS(_x > NEGATIVE);
-        _status->setZ(_x == 0);
-    }
+    _x++;
+    _status->setS(_x > NEGATIVE);
+    _status->setZ(_x == 0);
 }
 
 void MOS6502CPU::INY4()
 {
-    if(_y == 255)
-    {
-        _y = 0;
-        _status->setZ(true);
-    }
-    else
-    {
-        _y++;
-        _status->setS(_y > NEGATIVE);
-        _status->setZ(_y == 0);
-    }
+    _y++;
+    _status->setS(_y > NEGATIVE);
+    _status->setZ(_y == 0);
 }
 
 void MOS6502CPU::JMP2()
