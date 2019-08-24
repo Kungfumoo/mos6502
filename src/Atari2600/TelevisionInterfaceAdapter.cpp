@@ -11,7 +11,8 @@ typedef TelevisionInterfaceAdapter TIA;
 //--Private:
 const byte TIA::CLOCKS_PER_SCANLINE = 228;
 const unsigned short TIA::MAX_SCANLINES = 262;
-const byte TIA::VERTICAL_PICTURE_THRESHOLD = 40;
+const byte TIA::VERTICAL_SYNC_THRESHOLD = 3;
+const byte TIA::VERTICAL_PICTURE_THRESHOLD = 37 + TIA::VERTICAL_SYNC_THRESHOLD;
 const byte TIA::VERTICAL_OVERSCAN_THRESHOLD = 232;
 const byte TIA::HORIZONTAL_PICTURE_THRESHOLD = 68;
 
@@ -552,6 +553,22 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
     return colour;
 }
 
+void TIA::handleVSYNC()
+{
+    byte vsyncTrigger = _memory->read(0x00);
+
+    //vsync has been triggered by the program and the TIA isn't in vsync already
+    if(vsyncTrigger != 0 && !_vsync)
+    {
+        _clockCounter = 0;
+        _vScanlineCounter = 0;
+        _vsync = true;
+    }
+
+    if(_vScanlineCounter > VERTICAL_SYNC_THRESHOLD && _vsync)
+        _vsync = false;
+}
+
 void TIA::renderScanline()
 {
     //Ready to draw visible lines
@@ -586,7 +603,9 @@ TIAState TIA::runCycle()
 {
     if(!_displayAdapter->isRunning())
         return TIAState::DISPLAY_EXITED;
-        
+
+    handleVSYNC();
+    
     if(_memory->isWSYNC()) //handle WSYNC
     {
         byte remainingCycles = CLOCKS_PER_SCANLINE - _clockCounter;
@@ -605,6 +624,7 @@ TIA::TelevisionInterfaceAdapter(DisplayAdapter::DisplayAdapterInterface* display
 {
     _clockCounter = 0;
     _vScanlineCounter = 0;
+    _vsync = false;
     _memory = memory;
     _displayAdapter = displayAdapter;
 

@@ -26,6 +26,7 @@ namespace Atari2600
     {
         static const byte CLOCKS_PER_SCANLINE;
         static const unsigned short MAX_SCANLINES;
+        static const byte VERTICAL_SYNC_THRESHOLD;
         static const byte VERTICAL_PICTURE_THRESHOLD;
         static const byte VERTICAL_OVERSCAN_THRESHOLD;
         static const byte HORIZONTAL_PICTURE_THRESHOLD;
@@ -34,10 +35,11 @@ namespace Atari2600
         Memory* _memory;
         unsigned short _clockCounter;
         unsigned short _vScanlineCounter;
+        bool _vsync;
 
         //Converts the register colour value into an RBG colour (Based on NTSC)
         DisplayAdapter::Colour resolveColour(byte value);
-
+        void handleVSYNC();
         void renderScanline();
 
     public:
