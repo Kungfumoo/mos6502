@@ -621,13 +621,10 @@ TIAState TIA::runCycle()
 }
 
 TIA::TelevisionInterfaceAdapter(DisplayAdapter::DisplayAdapterInterface* displayAdapter, Memory* memory)
+    : _displayAdapter(displayAdapter), _memory(memory),
+      _clockCounter(0), _vScanlineCounter(0),
+      _vsync(false)
 {
-    _clockCounter = 0;
-    _vScanlineCounter = 0;
-    _vsync = false;
-    _memory = memory;
-    _displayAdapter = displayAdapter;
-
     _displayAdapter->init();
 }
 
