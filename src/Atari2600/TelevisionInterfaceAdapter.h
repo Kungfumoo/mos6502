@@ -9,6 +9,7 @@ namespace Atari2600
     namespace DisplayAdapter
     {
         struct Colour;
+        struct Position;
         class DisplayAdapterInterface;
     }
 
@@ -39,6 +40,7 @@ namespace Atari2600
 
         //Converts the register colour value into an RBG colour (Based on NTSC)
         DisplayAdapter::Colour resolveColour(byte value);
+        DisplayAdapter::Colour determinePixel(DisplayAdapter::Position pos);
         void handleVSYNC();
         void renderScanline();
 

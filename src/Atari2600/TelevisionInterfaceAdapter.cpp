@@ -553,6 +553,14 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
     return colour;
 }
 
+DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
+{
+    //playfield graphics TODO
+
+    //default to background colour
+    return resolveColour(_memory->read(0x09));
+}
+
 void TIA::handleVSYNC()
 {
     byte vsyncTrigger = _memory->read(0x00);
@@ -576,12 +584,12 @@ void TIA::renderScanline()
         _vScanlineCounter < VERTICAL_OVERSCAN_THRESHOLD &&
         _clockCounter >= HORIZONTAL_PICTURE_THRESHOLD)
     {
-        //background colour
-        auto colour = resolveColour(_memory->read(0x09));
-
         DisplayAdapter::Position pos;
         pos.x = _clockCounter - HORIZONTAL_PICTURE_THRESHOLD;
         pos.y = _vScanlineCounter - VERTICAL_PICTURE_THRESHOLD;
+
+        //determine pixel colour
+        auto colour = determinePixel(pos);
 
         _displayAdapter->renderPixel(pos, colour);
     }
