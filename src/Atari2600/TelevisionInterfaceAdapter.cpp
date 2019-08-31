@@ -2,6 +2,7 @@
 #include "Memory.h"
 #include "DisplayAdapter/DisplayAdapterInterface.h"
 #include <iostream>
+#include <cmath>
 
 using namespace Atari2600;
 using namespace std;
@@ -555,7 +556,32 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
 
 DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
 {
-    //playfield graphics TODO
+    //playfield graphics
+    byte pf0 = _memory->read(0x0D);
+    byte pf1 = _memory->read(0x0E);
+    byte pf2 = _memory->read(0x0F);
+
+    /* 20 bits determine one half of the playfield
+     * 4 clocks happen per bit, work out what bit we are currently on
+     * The order of bits are:
+     * PF0: 4 ~ 7 (0 ~ 3)
+     * PF1: 7 ~ 0 (4 ~ 11)
+     * PF2: 0 ~ 7 (12 ~ 19)
+     */
+    int currentBit = (int)((_clockCounter - HORIZONTAL_PICTURE_THRESHOLD) / 4);
+
+    //TODO: here muck around with the currentBit value to determine reflection/duplication
+    //Duplication: Just reset the bit back to 0 after 20 and re render the first 20
+    if(currentBit > 19)
+        currentBit -= 20;
+
+    bool renderPlayfield = false;
+
+    //Now check if the current playfield bit is true
+    if(currentBit <= 3) //pf0
+        renderPlayfield = pf0 >= pow(2, currentBit + 4);
+    else if(currentBit <= 11)
+        renderPlayfield = pf1 >= pow(2, currentBit + (3 - ((currentBit - 4) * 2)));
 
     //default to background colour
     return resolveColour(_memory->read(0x09));
