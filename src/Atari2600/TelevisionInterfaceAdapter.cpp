@@ -579,9 +579,20 @@ DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
 
     //Now check if the current playfield bit is true
     if(currentBit <= 3) //pf0
-        renderPlayfield = pf0 >= pow(2, currentBit + 4);
+    {
+        int bitValue = pow(2, currentBit + 4);
+        renderPlayfield = (pf0 & bitValue) == bitValue;
+    }
     else if(currentBit <= 11)
-        renderPlayfield = pf1 >= pow(2, currentBit + (3 - ((currentBit - 4) * 2)));
+    {
+        int bitValue = pow(2, currentBit + (3 - ((currentBit - 4) * 2)));
+        renderPlayfield = (pf1 & bitValue) == bitValue;
+    }
+    else if(currentBit <= 19)
+    {
+        int bitValue = pow(2, currentBit - 12);
+        renderPlayfield = (pf2 & bitValue) == bitValue;
+    }
 
     //default to background colour
     return resolveColour(_memory->read(0x09));
