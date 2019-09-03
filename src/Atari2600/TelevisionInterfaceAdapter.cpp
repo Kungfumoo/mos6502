@@ -594,6 +594,9 @@ DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
         renderPlayfield = (pf2 & bitValue) == bitValue;
     }
 
+    if(renderPlayfield)
+        return resolveColour(_memory->read(0x08));
+
     //default to background colour
     return resolveColour(_memory->read(0x09));
 }
