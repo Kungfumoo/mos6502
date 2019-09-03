@@ -32,6 +32,15 @@ namespace Atari2600
         static const byte VERTICAL_OVERSCAN_THRESHOLD;
         static const byte HORIZONTAL_PICTURE_THRESHOLD;
 
+        //register constants
+        static const byte VSYNC;
+        static const byte COLUPF;
+        static const byte COLUBK;
+        static const byte CTRLPF;
+        static const byte PF0;
+        static const byte PF1;
+        static const byte PF2;
+
         DisplayAdapter::DisplayAdapterInterface* _displayAdapter;
         Memory* _memory;
         unsigned short _clockCounter;

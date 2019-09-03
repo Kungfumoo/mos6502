@@ -17,13 +17,17 @@ const byte TIA::VERTICAL_PICTURE_THRESHOLD = 37 + TIA::VERTICAL_SYNC_THRESHOLD;
 const byte TIA::VERTICAL_OVERSCAN_THRESHOLD = 232;
 const byte TIA::HORIZONTAL_PICTURE_THRESHOLD = 68;
 
+//register constants
+const byte TIA::VSYNC = 0x00;
+const byte TIA::COLUPF = 0x08;
+const byte TIA::COLUBK = 0x09;
+const byte TIA::CTRLPF = 0x0A;
+const byte TIA::PF0 = 0x0D;
+const byte TIA::PF1 = 0x0E;
+const byte TIA::PF2 = 0x0F;
+
 bool TIA::shouldRenderPlayfield()
 {
-    //playfield graphics
-    byte pf0 = _memory->read(0x0D);
-    byte pf1 = _memory->read(0x0E);
-    byte pf2 = _memory->read(0x0F);
-
     /* 20 bits determine one half of the playfield
      * 4 clocks happen per bit, work out what bit we are currently on
      * The order of bits are:
@@ -43,17 +47,23 @@ bool TIA::shouldRenderPlayfield()
     //Now check if the current playfield bit is true
     if(currentBit <= 3) //pf0
     {
+        byte pf0 = _memory->read(PF0);
         int bitValue = pow(2, currentBit + 4);
+
         renderPlayfield = (pf0 & bitValue) == bitValue;
     }
     else if(currentBit <= 11)
     {
+        byte pf1 = _memory->read(PF1);
         int bitValue = pow(2, currentBit + (3 - ((currentBit - 4) * 2)));
+
         renderPlayfield = (pf1 & bitValue) == bitValue;
     }
     else if(currentBit <= 19)
     {
+        byte pf2 = _memory->read(PF2);
         int bitValue = pow(2, currentBit - 12);
+
         renderPlayfield = (pf2 & bitValue) == bitValue;
     }
 
@@ -600,15 +610,15 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
 DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
 {
     if(shouldRenderPlayfield())
-        return resolveColour(_memory->read(0x08));
-        
+        return resolveColour(_memory->read(COLUPF));
+
     //default to background colour
-    return resolveColour(_memory->read(0x09));
+    return resolveColour(_memory->read(COLUBK));
 }
 
 void TIA::handleVSYNC()
 {
-    byte vsyncTrigger = _memory->read(0x00);
+    byte vsyncTrigger = _memory->read(VSYNC);
 
     //vsync has been triggered by the program and the TIA isn't in vsync already
     if(vsyncTrigger != 0 && !_vsync)
