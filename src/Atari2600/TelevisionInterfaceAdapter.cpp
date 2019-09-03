@@ -17,6 +17,49 @@ const byte TIA::VERTICAL_PICTURE_THRESHOLD = 37 + TIA::VERTICAL_SYNC_THRESHOLD;
 const byte TIA::VERTICAL_OVERSCAN_THRESHOLD = 232;
 const byte TIA::HORIZONTAL_PICTURE_THRESHOLD = 68;
 
+bool TIA::shouldRenderPlayfield()
+{
+    //playfield graphics
+    byte pf0 = _memory->read(0x0D);
+    byte pf1 = _memory->read(0x0E);
+    byte pf2 = _memory->read(0x0F);
+
+    /* 20 bits determine one half of the playfield
+     * 4 clocks happen per bit, work out what bit we are currently on
+     * The order of bits are:
+     * PF0: 4 ~ 7 (0 ~ 3)
+     * PF1: 7 ~ 0 (4 ~ 11)
+     * PF2: 0 ~ 7 (12 ~ 19)
+     */
+    int currentBit = (int)((_clockCounter - HORIZONTAL_PICTURE_THRESHOLD) / 4);
+
+    //TODO: here muck around with the currentBit value to determine reflection/duplication
+    //Duplication: Just reset the bit back to 0 after 20 and re render the first 20
+    if(currentBit > 19)
+        currentBit -= 20;
+
+    bool renderPlayfield = false;
+
+    //Now check if the current playfield bit is true
+    if(currentBit <= 3) //pf0
+    {
+        int bitValue = pow(2, currentBit + 4);
+        renderPlayfield = (pf0 & bitValue) == bitValue;
+    }
+    else if(currentBit <= 11)
+    {
+        int bitValue = pow(2, currentBit + (3 - ((currentBit - 4) * 2)));
+        renderPlayfield = (pf1 & bitValue) == bitValue;
+    }
+    else if(currentBit <= 19)
+    {
+        int bitValue = pow(2, currentBit - 12);
+        renderPlayfield = (pf2 & bitValue) == bitValue;
+    }
+
+    return renderPlayfield;
+}
+
 DisplayAdapter::Colour TIA::resolveColour(byte value)
 {
     DisplayAdapter::Colour colour;
@@ -556,47 +599,9 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
 
 DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
 {
-    //playfield graphics
-    byte pf0 = _memory->read(0x0D);
-    byte pf1 = _memory->read(0x0E);
-    byte pf2 = _memory->read(0x0F);
-
-    /* 20 bits determine one half of the playfield
-     * 4 clocks happen per bit, work out what bit we are currently on
-     * The order of bits are:
-     * PF0: 4 ~ 7 (0 ~ 3)
-     * PF1: 7 ~ 0 (4 ~ 11)
-     * PF2: 0 ~ 7 (12 ~ 19)
-     */
-    int currentBit = (int)((_clockCounter - HORIZONTAL_PICTURE_THRESHOLD) / 4);
-
-    //TODO: here muck around with the currentBit value to determine reflection/duplication
-    //Duplication: Just reset the bit back to 0 after 20 and re render the first 20
-    if(currentBit > 19)
-        currentBit -= 20;
-
-    bool renderPlayfield = false;
-
-    //Now check if the current playfield bit is true
-    if(currentBit <= 3) //pf0
-    {
-        int bitValue = pow(2, currentBit + 4);
-        renderPlayfield = (pf0 & bitValue) == bitValue;
-    }
-    else if(currentBit <= 11)
-    {
-        int bitValue = pow(2, currentBit + (3 - ((currentBit - 4) * 2)));
-        renderPlayfield = (pf1 & bitValue) == bitValue;
-    }
-    else if(currentBit <= 19)
-    {
-        int bitValue = pow(2, currentBit - 12);
-        renderPlayfield = (pf2 & bitValue) == bitValue;
-    }
-
-    if(renderPlayfield)
+    if(shouldRenderPlayfield())
         return resolveColour(_memory->read(0x08));
-
+        
     //default to background colour
     return resolveColour(_memory->read(0x09));
 }

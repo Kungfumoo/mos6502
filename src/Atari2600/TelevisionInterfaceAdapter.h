@@ -38,8 +38,8 @@ namespace Atari2600
         unsigned short _vScanlineCounter;
         bool _vsync;
 
-        //Converts the register colour value into an RBG colour (Based on NTSC)
-        DisplayAdapter::Colour resolveColour(byte value);
+        bool shouldRenderPlayfield();
+        DisplayAdapter::Colour resolveColour(byte value); //Converts the register colour value into an RBG colour (Based on NTSC)
         DisplayAdapter::Colour determinePixel(DisplayAdapter::Position pos);
         void handleVSYNC();
         void renderScanline();
