@@ -31,6 +31,7 @@ namespace Atari2600
         static const byte VERTICAL_PICTURE_THRESHOLD;
         static const byte VERTICAL_OVERSCAN_THRESHOLD;
         static const byte HORIZONTAL_PICTURE_THRESHOLD;
+        static const byte PLAYFIELD_HALF;
 
         //register constants
         static const byte VSYNC;

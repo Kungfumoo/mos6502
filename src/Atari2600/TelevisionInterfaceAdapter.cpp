@@ -16,6 +16,7 @@ const byte TIA::VERTICAL_SYNC_THRESHOLD = 3;
 const byte TIA::VERTICAL_PICTURE_THRESHOLD = 37 + TIA::VERTICAL_SYNC_THRESHOLD;
 const byte TIA::VERTICAL_OVERSCAN_THRESHOLD = 232;
 const byte TIA::HORIZONTAL_PICTURE_THRESHOLD = 68;
+const byte TIA::PLAYFIELD_HALF = 19;
 
 //register constants
 const byte TIA::VSYNC = 0x00;
@@ -36,30 +37,34 @@ bool TIA::shouldRenderPlayfield()
      * PF2: 0 ~ 7 (12 ~ 19)
      */
     int currentBit = (int)((_clockCounter - HORIZONTAL_PICTURE_THRESHOLD) / 4);
+    byte ctrlValue = _memory->read(CTRLPF);
+    bool reflection = ctrlValue & 1 == 1;
 
-    //TODO: here muck around with the currentBit value to determine reflection/duplication
-    //Duplication: Just reset the bit back to 0 after 20 and re render the first 20
-    if(currentBit > 19)
-        currentBit -= 20;
+    //muck around with the currentBit value to determine reflection/duplication
+    if(currentBit > PLAYFIELD_HALF)
+        if(reflection) //Reflection: decrement currentBit back to 0
+            currentBit = PLAYFIELD_HALF - (currentBit - PLAYFIELD_HALF + 1);
+        else //Duplication: Just reset the bit back to 0 after 20 and re render the first 20
+            currentBit -= PLAYFIELD_HALF + 1;
 
     bool renderPlayfield = false;
 
     //Now check if the current playfield bit is true
-    if(currentBit <= 3) //pf0
+    if(currentBit <= PLAYFIELD_HALF - 16) //pf0
     {
         byte pf0 = _memory->read(PF0);
         int bitValue = pow(2, currentBit + 4);
 
         renderPlayfield = (pf0 & bitValue) == bitValue;
     }
-    else if(currentBit <= 11)
+    else if(currentBit <= PLAYFIELD_HALF - 8)
     {
         byte pf1 = _memory->read(PF1);
         int bitValue = pow(2, currentBit + (3 - ((currentBit - 4) * 2)));
 
         renderPlayfield = (pf1 & bitValue) == bitValue;
     }
-    else if(currentBit <= 19)
+    else if(currentBit <= PLAYFIELD_HALF)
     {
         byte pf2 = _memory->read(PF2);
         int bitValue = pow(2, currentBit - 12);
