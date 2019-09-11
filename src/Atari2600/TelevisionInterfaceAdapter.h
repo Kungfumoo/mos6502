@@ -41,6 +41,8 @@ namespace Atari2600
         static const byte PF0;
         static const byte PF1;
         static const byte PF2;
+        static const byte COLUP0;
+        static const byte COLUP1;
 
         DisplayAdapter::DisplayAdapterInterface* _displayAdapter;
         Memory* _memory;

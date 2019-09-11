@@ -26,6 +26,8 @@ const byte TIA::CTRLPF = 0x0A;
 const byte TIA::PF0 = 0x0D;
 const byte TIA::PF1 = 0x0E;
 const byte TIA::PF2 = 0x0F;
+const byte TIA::COLUP0 = 0x06;
+const byte TIA::COLUP1 = 0x07;
 
 bool TIA::shouldRenderPlayfield()
 {
@@ -37,8 +39,7 @@ bool TIA::shouldRenderPlayfield()
      * PF2: 0 ~ 7 (12 ~ 19)
      */
     int currentBit = (int)((_clockCounter - HORIZONTAL_PICTURE_THRESHOLD) / 4);
-    byte ctrlValue = _memory->read(CTRLPF);
-    bool reflection = ctrlValue & 1 == 1;
+    bool reflection = _memory->read(CTRLPF) & 1 == 1;
 
     //muck around with the currentBit value to determine reflection/duplication
     if(currentBit > PLAYFIELD_HALF)
@@ -615,7 +616,21 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
 DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
 {
     if(shouldRenderPlayfield())
+    {
+        bool usePlayerColours = _memory->read(CTRLPF) & 2 == 2;
+
+        if(usePlayerColours)
+        {
+            bool isFirstHalf = ((_clockCounter - HORIZONTAL_PICTURE_THRESHOLD) / 4) <= PLAYFIELD_HALF;
+
+            if(isFirstHalf) //use player 1 colour
+                return resolveColour(_memory->read(COLUP0));
+            else //use player 2 colour
+                return resolveColour(_memory->read(COLUP1));
+        }
+        
         return resolveColour(_memory->read(COLUPF));
+    }
 
     //default to background colour
     return resolveColour(_memory->read(COLUBK));
