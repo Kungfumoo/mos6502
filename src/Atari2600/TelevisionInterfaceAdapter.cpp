@@ -44,7 +44,7 @@ bool TIA::shouldRenderPlayfield()
     //muck around with the currentBit value to determine reflection/duplication
     if(currentBit > PLAYFIELD_HALF)
         if(reflection) //Reflection: decrement currentBit back to 0
-            currentBit = PLAYFIELD_HALF - (currentBit - PLAYFIELD_HALF + 1);
+            currentBit = PLAYFIELD_HALF - (currentBit - PLAYFIELD_HALF - 1);
         else //Duplication: Just reset the bit back to 0 after 20 and re render the first 20
             currentBit -= PLAYFIELD_HALF + 1;
 
