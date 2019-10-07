@@ -39,7 +39,7 @@ bool TIA::shouldRenderPlayfield()
      * PF2: 0 ~ 7 (12 ~ 19)
      */
     int currentBit = (int)((_clockCounter - HORIZONTAL_PICTURE_THRESHOLD) / 4);
-    bool reflection = _memory->read(CTRLPF) & 1 == 1;
+    bool reflection = (_memory->read(CTRLPF) & 1) == 1;
 
     //muck around with the currentBit value to determine reflection/duplication
     if(currentBit > PLAYFIELD_HALF)
@@ -617,7 +617,7 @@ DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
 {
     if(shouldRenderPlayfield())
     {
-        bool usePlayerColours = _memory->read(CTRLPF) & 2 == 2;
+        bool usePlayerColours = (_memory->read(CTRLPF) & 2) == 2;
 
         if(usePlayerColours)
         {
