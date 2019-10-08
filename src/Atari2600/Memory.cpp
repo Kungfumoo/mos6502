@@ -21,6 +21,28 @@ bool Memory::isWSYNC()
     return false;
 }
 
+bool Memory::isResp0()
+{
+    if(_resp0)
+    {
+        _resp0 = false;
+        return true;
+    }
+
+    return false;
+}
+
+bool Memory::isResp1()
+{
+    if(_resp1)
+    {
+        _resp1 = false;
+        return true;
+    }
+
+    return false;
+}
+
 void Memory::loadRom(std::vector<byte>& program)
 {
     if(program.size() > (ROM_END_ADDR - ROM_START_ADDR))

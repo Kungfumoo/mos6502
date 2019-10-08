@@ -26,9 +26,14 @@ namespace Atari2600
 
         //strobe registers
         bool _wsync;
+        bool _resp0;
+        bool _resp1;
 
     public:
         bool isWSYNC(); //has WSYNC been written too
+        bool isResp0();
+        bool isResp1();
+
         void loadRom(std::vector<byte>& program);
         void write(byte value, unsigned short address) override; //write to said location in memory
 

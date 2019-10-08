@@ -28,6 +28,13 @@ const byte TIA::PF1 = 0x0E;
 const byte TIA::PF2 = 0x0F;
 const byte TIA::COLUP0 = 0x06;
 const byte TIA::COLUP1 = 0x07;
+const byte TIA::GRP0 = 0x1B;
+const byte TIA::GRP1 = 0x1C;
+
+bool TIA::shouldRenderPlayer()
+{
+    return false; //TODO
+}
 
 bool TIA::shouldRenderPlayfield()
 {

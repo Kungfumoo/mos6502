@@ -43,6 +43,8 @@ namespace Atari2600
         static const byte PF2;
         static const byte COLUP0;
         static const byte COLUP1;
+        static const byte GRP0;
+        static const byte GRP1;
 
         DisplayAdapter::DisplayAdapterInterface* _displayAdapter;
         Memory* _memory;
@@ -50,6 +52,7 @@ namespace Atari2600
         unsigned short _vScanlineCounter;
         bool _vsync;
 
+        bool shouldRenderPlayer();
         bool shouldRenderPlayfield();
         DisplayAdapter::Colour resolveColour(byte value); //Converts the register colour value into an RBG colour (Based on NTSC)
         DisplayAdapter::Colour determinePixel(DisplayAdapter::Position pos);
