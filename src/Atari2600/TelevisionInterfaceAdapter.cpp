@@ -16,7 +16,8 @@ const byte TIA::VERTICAL_SYNC_THRESHOLD = 3;
 const byte TIA::VERTICAL_PICTURE_THRESHOLD = 37 + TIA::VERTICAL_SYNC_THRESHOLD;
 const byte TIA::VERTICAL_OVERSCAN_THRESHOLD = 232;
 const byte TIA::HORIZONTAL_PICTURE_THRESHOLD = 68;
-const byte TIA::PLAYFIELD_HALF = 19;
+const byte TIA::PLAYFIELD_HALF = 19; //20, 0 index
+const byte TIA::PLAYER_MAX_BITS = 7; //8, 0 index
 
 //register constants
 const byte TIA::VSYNC = 0x00;
@@ -33,7 +34,15 @@ const byte TIA::GRP1 = 0x1C;
 
 bool TIA::shouldRenderPlayer()
 {
-    return false; //TODO
+    /* 8 bits determine the player for this specific scanline
+     * A player sprite can only be 8 pixels wide but can be as high as possible
+     * unless the REFP0 bit is set it goes from bit 7 to 0
+     */
+    int currentBit = _renderCounter++;
+    byte regValue = (_renderState == RenderState::PLAYER_1) ? _memory->read(GRP0) : _memory->read(GRP1);
+    int bitValue = pow(2, currentBit + (PLAYER_MAX_BITS - (2 * currentBit)));
+
+    return (regValue & bitValue) == bitValue;
 }
 
 bool TIA::shouldRenderPlayfield()
@@ -622,6 +631,20 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
 
 DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
 {
+    if((_renderState == RenderState::PLAYER_1 || _renderState == RenderState::PLAYER_2) &&
+        shouldRenderPlayer())
+    {
+        bool isPlayer1 = _renderState == RenderState::PLAYER_1;
+
+        if(_renderCounter == PLAYER_MAX_BITS)
+        {
+            _renderState = RenderState::BACKGROUND;
+            _renderCounter = 0;
+        }
+
+        return resolveColour((isPlayer1) ? _memory->read(COLUP0) : _memory->read(COLUP1));
+    }
+
     if(shouldRenderPlayfield())
     {
         bool usePlayerColours = (_memory->read(CTRLPF) & 2) == 2;
@@ -657,6 +680,14 @@ void TIA::handleVSYNC()
 
     if(_vScanlineCounter > VERTICAL_SYNC_THRESHOLD && _vsync)
         _vsync = false;
+}
+
+void TIA::handleRenderState()
+{
+    if(_memory->isResp0())
+        _renderState = RenderState::PLAYER_1;
+    else if(_memory->isResp1())
+        _renderState = RenderState::PLAYER_2;
 }
 
 void TIA::renderScanline()
@@ -695,6 +726,7 @@ TIAState TIA::runCycle()
         return TIAState::DISPLAY_EXITED;
 
     handleVSYNC();
+    handleRenderState();
     
     if(_memory->isWSYNC()) //handle WSYNC
     {
@@ -713,7 +745,8 @@ TIAState TIA::runCycle()
 TIA::TelevisionInterfaceAdapter(DisplayAdapter::DisplayAdapterInterface* displayAdapter, Memory* memory)
     : _displayAdapter(displayAdapter), _memory(memory),
       _clockCounter(0), _vScanlineCounter(0),
-      _vsync(false)
+      _vsync(false), _renderState(RenderState::BACKGROUND),
+      _renderCounter(0)
 {
     _displayAdapter->init();
 }

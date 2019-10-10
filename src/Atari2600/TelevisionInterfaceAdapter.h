@@ -23,6 +23,13 @@ namespace Atari2600
         DISPLAY_EXITED
     };
 
+    enum RenderState
+    {
+        PLAYER_1,
+        PLAYER_2,
+        BACKGROUND
+    };
+
     class TelevisionInterfaceAdapter
     {
         static const byte CLOCKS_PER_SCANLINE;
@@ -32,6 +39,7 @@ namespace Atari2600
         static const byte VERTICAL_OVERSCAN_THRESHOLD;
         static const byte HORIZONTAL_PICTURE_THRESHOLD;
         static const byte PLAYFIELD_HALF;
+        static const byte PLAYER_MAX_BITS;
 
         //register constants
         static const byte VSYNC;
@@ -51,12 +59,15 @@ namespace Atari2600
         unsigned short _clockCounter;
         unsigned short _vScanlineCounter;
         bool _vsync;
+        RenderState _renderState;
+        byte _renderCounter;
 
         bool shouldRenderPlayer();
         bool shouldRenderPlayfield();
         DisplayAdapter::Colour resolveColour(byte value); //Converts the register colour value into an RBG colour (Based on NTSC)
         DisplayAdapter::Colour determinePixel(DisplayAdapter::Position pos);
         void handleVSYNC();
+        void handleRenderState();
         void renderScanline();
 
     public:

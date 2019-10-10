@@ -69,6 +69,12 @@ void Memory::write(byte value, unsigned short address)
         case 0x02: //WSYNC
             _wsync = true;
             break;
+        case 0x10: //RESP0
+            _resp0 = true;
+            break;
+        case 0x11: //RESP1
+            _resp1 = true;
+            break;
     }
 }
 
@@ -76,4 +82,6 @@ void Memory::write(byte value, unsigned short address)
 Memory::Memory() : MOS_6502::BasicMemory(MAX_SIZE_BYTES) 
 {
     _wsync = false;
+    _resp0 = false;
+    _resp1 = false;
 }
