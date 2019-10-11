@@ -42,6 +42,12 @@ bool TIA::shouldRenderPlayer()
     byte regValue = (_renderState == RenderState::PLAYER_1) ? _memory->read(GRP0) : _memory->read(GRP1);
     int bitValue = pow(2, currentBit + (PLAYER_MAX_BITS - (2 * currentBit)));
 
+    if(_renderCounter >= PLAYER_MAX_BITS)
+    {
+        _renderState = RenderState::BACKGROUND;
+        _renderCounter = 0;
+    }
+
     return (regValue & bitValue) == bitValue;
 }
 
@@ -631,18 +637,14 @@ DisplayAdapter::Colour TIA::resolveColour(byte value)
 
 DisplayAdapter::Colour TIA::determinePixel(DisplayAdapter::Position pos)
 {
-    if((_renderState == RenderState::PLAYER_1 || _renderState == RenderState::PLAYER_2) &&
-        shouldRenderPlayer())
+    if(_renderState == RenderState::PLAYER_1 || _renderState == RenderState::PLAYER_2)
     {
-        bool isPlayer1 = _renderState == RenderState::PLAYER_1;
-
-        if(_renderCounter == PLAYER_MAX_BITS)
+        if(shouldRenderPlayer())
         {
-            _renderState = RenderState::BACKGROUND;
-            _renderCounter = 0;
+            bool isPlayer1 = _renderState == RenderState::PLAYER_1;
+            
+            return resolveColour((isPlayer1) ? _memory->read(COLUP0) : _memory->read(COLUP1));
         }
-
-        return resolveColour((isPlayer1) ? _memory->read(COLUP0) : _memory->read(COLUP1));
     }
 
     if(shouldRenderPlayfield())
